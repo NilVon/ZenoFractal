@@ -5,174 +5,155 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ZenoFractal | Futuristic Landing Page</title>
     <style>
+        /* General Styling */
         body {
             background: black;
             color: white;
             font-family: Arial, sans-serif;
             text-align: center;
             overflow: hidden;
+            margin: 0;
+            padding: 0;
         }
+
+        /* Heading */
         h1 {
             font-size: 3rem;
             margin-top: 20px;
             text-shadow: 0 0 10px cyan;
         }
-        p {
+
+        /* Typewriter Effect */
+        #tagline {
             font-size: 1.5rem;
             text-shadow: 0 0 5px cyan;
+            white-space: nowrap;
+            overflow: hidden;
+            display: inline-block;
+            border-right: 2px solid cyan;
+            animation: blinkCursor 0.7s infinite;
         }
+        @keyframes blinkCursor {
+            50% { border-color: transparent; }
+        }
+
+        /* Logo */
         .logo {
             width: 150px;
             margin-top: 20px;
+            transition: transform 0.2s ease-out;
         }
+
+        /* Cursor Trail */
         .trail {
             position: absolute;
-            width: 5px;
-            height: 5px;
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
             pointer-events: none;
-            opacity: 0.7;
-            animation: fadeOut 0.5s linear forwards;
-        }
-        @keyframes fadeOut {
-            from { opacity: 1; }
-            to { opacity: 0; }
+            opacity: 0.8;
+            transition: background-color 0.1s linear;
         }
 
-        /* 1️⃣ Typewriter Effect */
-#tagline {
-    font-size: 1.5rem;
-    text-shadow: 0 0 5px cyan;
-    white-space: nowrap;
-    overflow: hidden;
-    display: inline-block;
-    border-right: 2px solid cyan;
-    animation: blinkCursor 0.7s infinite;
-}
-@keyframes blinkCursor {
-    50% { border-color: transparent; }
-}
-
-/* 2️⃣ Floating Particles */
-.particle {
-    position: absolute;
-    width: 6px;
-    height: 6px;
-    background: cyan;
-    border-radius: 50%;
-    box-shadow: 0 0 10px cyan;
-    transition: transform 3s linear;
-}
-
-/* 3️⃣ Click Ripple Effect */
-.ripple {
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    background: rgba(0, 255, 255, 0.5);
-    border-radius: 50%;
-    transform: scale(0);
-    animation: rippleEffect 1s linear forwards;
-}
-@keyframes rippleEffect {
-    to {
-        transform: scale(15);
-        opacity: 0;
-    }
-}
-
-/* 4️⃣ Smooth Parallax Scrolling */
-.logo {
-    transition: transform 0.2s ease-out;
-}
-
+        /* Floating Particles */
+        .particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            pointer-events: none;
+            transition: transform 0.2s ease-out, background-color 0.2s linear;
+        }
     </style>
 </head>
 <body>
+    <!-- Logo -->
     <img src="logo.webp" alt="ZenoFractal Logo" class="logo">
+    
+    <!-- Heading & Tagline -->
     <h1>Welcome to ZenoFractal</h1>
-    <p>The Future of Innovation</p>
+    <p id="tagline"></p>
+
     <script>
-        const colors = ["cyan", "magenta", "lime", "yellow", "orange", "blue", "pink"];
-        let colorIndex = 0;
-        let lastX, lastY;
+        // Typewriter Effect
+        const text = "The Future of Innovation";
+        let index = 0;
+        function typeWriter() {
+            if (index < text.length) {
+                document.getElementById("tagline").innerHTML += text.charAt(index);
+                index++;
+                setTimeout(typeWriter, 100);
+            }
+        }
+        window.onload = typeWriter;
+
+        // RGB Color Generator
+        function rgbCycle(progress) {
+            let r = Math.sin(progress * 2 * Math.PI) * 127 + 128;
+            let g = Math.sin((progress + 1 / 3) * 2 * Math.PI) * 127 + 128;
+            let b = Math.sin((progress + 2 / 3) * 2 * Math.PI) * 127 + 128;
+            return `rgb(${Math.floor(r)}, ${Math.floor(g)}, ${Math.floor(b)})`;
+        }
+
+        let particles = [];
+        for (let i = 0; i < 20; i++) {
+            let particle = document.createElement("div");
+            particle.classList.add("particle");
+            document.body.appendChild(particle);
+            particles.push({ element: particle, x: 0, y: 0 });
+        }
+
+        let lastX, lastY, progress = 0;
 
         document.addEventListener("mousemove", (e) => {
+            let color = rgbCycle(progress);
+            progress += 0.01; // Adjust speed of color change
+
             if (lastX !== undefined && lastY !== undefined) {
                 let dx = e.pageX - lastX;
                 let dy = e.pageY - lastY;
                 let distance = Math.sqrt(dx * dx + dy * dy);
                 let steps = Math.max(1, Math.floor(distance / 5));
-                
+
                 for (let i = 0; i < steps; i++) {
                     let trail = document.createElement("div");
                     trail.classList.add("trail");
                     document.body.appendChild(trail);
-                    
-                    let progress = i / steps;
-                    let x = lastX + dx * progress;
-                    let y = lastY + dy * progress;
-                    
+
+                    let ratio = i / steps;
+                    let x = lastX + dx * ratio;
+                    let y = lastY + dy * ratio;
+
                     trail.style.left = `${x}px`;
                     trail.style.top = `${y}px`;
-                    trail.style.backgroundColor = colors[colorIndex];
-                    trail.style.boxShadow = `0 0 5px ${colors[colorIndex]}, 0 0 10px ${colors[colorIndex]}`;
-                    
-                    setTimeout(() => {
-                        trail.remove();
-                    }, 500);
+                    trail.style.backgroundColor = color;
+                    trail.style.boxShadow = `0 0 5px ${color}, 0 0 10px ${color}`;
+
+                    setTimeout(() => trail.remove(), 500);
                 }
-                colorIndex = (colorIndex + 1) % colors.length;
             }
+
+            // Update particles to follow cursor
+            particles.forEach((p, i) => {
+                let delay = i * 5;
+                setTimeout(() => {
+                    p.x += (e.pageX - p.x) * 0.2;
+                    p.y += (e.pageY - p.y) * 0.2;
+                    p.element.style.transform = `translate(${p.x}px, ${p.y}px)`;
+                    p.element.style.backgroundColor = color;
+                    p.element.style.boxShadow = `0 0 5px ${color}, 0 0 10px ${color}`;
+                }, delay);
+            });
+
             lastX = e.pageX;
             lastY = e.pageY;
         });
+
+        // Parallax Scrolling
+        document.addEventListener("scroll", () => {
+            let scrollPos = window.scrollY;
+            document.querySelector(".logo").style.transform = `translateY(${scrollPos * 0.5}px)`;
+        });
     </script>
-       <script>
-// 1️⃣ Typewriter Effect for the tagline
-const text = "The Future of Innovation";
-let index = 0;
-function typeWriter() {
-    if (index < text.length) {
-        document.getElementById("tagline").innerHTML += text.charAt(index);
-        index++;
-        setTimeout(typeWriter, 100);
-    }
-}
-window.onload = typeWriter;
-
-// 2️⃣ Floating Particles Effect
-const particles = [];
-for (let i = 0; i < 30; i++) {
-    let particle = document.createElement("div");
-    particle.classList.add("particle");
-    document.body.appendChild(particle);
-    particles.push(particle);
-}
-function moveParticles() {
-    particles.forEach(p => {
-        let x = Math.random() * window.innerWidth;
-        let y = Math.random() * window.innerHeight;
-        p.style.transform = `translate(${x}px, ${y}px)`;
-    });
-}
-setInterval(moveParticles, 3000);
-
-// 3️⃣ Click Ripple Effect
-document.addEventListener("click", (e) => {
-    let ripple = document.createElement("div");
-    ripple.classList.add("ripple");
-    ripple.style.left = `${e.pageX}px`;
-    ripple.style.top = `${e.pageY}px`;
-    document.body.appendChild(ripple);
-    setTimeout(() => ripple.remove(), 1000);
-});
-
-// 4️⃣ Parallax Scrolling
-document.addEventListener("scroll", () => {
-    let scrollPos = window.scrollY;
-    document.querySelector(".logo").style.transform = `translateY(${scrollPos * 0.5}px)`;
-});
-</script>
 </body>
 </html>
