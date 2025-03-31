@@ -211,9 +211,28 @@
             box-shadow: 0 0 10px violet;
         }
 
+
+        /* Stopwatch Style */
+.stopwatch {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    font-size: 20px;
+    font-family: 'Courier New', Courier, monospace;
+    color: neon pink;
+    text-shadow: 0 0 10px pink, 0 0 20px pink;
+    z-index: 1000;
+}
+
     </style>
 </head>
 <body>
+
+    
+    <div id="stopwatch" class="stopwatch">
+    00:00
+</div>
+
 
     <!-- Background -->
     <div id="dynamic-bg"></div>
@@ -302,6 +321,20 @@
         function toggleChat() {
             chatContainer.style.display = "none";
         }
+
+        // Stopwatch Logic
+let timeSpent = 0; // in seconds
+const stopwatch = document.getElementById("stopwatch");
+
+function updateStopwatch() {
+    timeSpent++;
+    const minutes = Math.floor(timeSpent / 60);
+    const seconds = timeSpent % 60;
+    stopwatch.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+}
+
+setInterval(updateStopwatch, 1000); // Update every second
+
     </script>
 
 </body>
