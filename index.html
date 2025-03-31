@@ -112,6 +112,74 @@ h1 {
     100% { transform: translateX(2px) skewX(5deg); filter: hue-rotate(-10deg); }
 }
 
+
+        /* Floating Chatbot Orb */
+#chatbot-orb {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    background: radial-gradient(circle, cyan, blue);
+    border-radius: 50%;
+    box-shadow: 0 0 15px cyan;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+}
+
+#chatbot-orb:hover {
+    transform: scale(1.1);
+}
+
+/* Chatbox Styling */
+#chat-container {
+    display: none;
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    width: 250px;
+    background: rgba(0, 0, 50, 0.9);
+    border-radius: 10px;
+    box-shadow: 0 0 10px cyan;
+    overflow: hidden;
+    z-index: 1000;
+}
+
+#chat-box {
+    display: flex;
+    flex-direction: column;
+}
+
+#chat-header {
+    background: cyan;
+    color: black;
+    padding: 10px;
+    text-align: center;
+    font-weight: bold;
+}
+
+#close-chat {
+    float: right;
+    cursor: pointer;
+}
+
+#chat-content {
+    height: 150px;
+    overflow-y: auto;
+    padding: 10px;
+    color: white;
+    font-size: 14px;
+}
+
+#chat-input {
+    width: calc(100% - 20px);
+    margin: 10px;
+    padding: 5px;
+    border: none;
+    outline: none;
+    border-radius: 5px;
+}
+
     </style>
 </head>
 <body>
@@ -197,6 +265,62 @@ logo.addEventListener("click", () => {
     setTimeout(() => logo.classList.remove("glitch"), 400);
 });
 
+
+        // Handle Chatbot Toggle
+const chatbotOrb = document.getElementById("chatbot-orb");
+const chatContainer = document.getElementById("chat-container");
+const closeChat = document.getElementById("close-chat");
+
+chatbotOrb.addEventListener("click", () => {
+    chatContainer.style.display = "block";
+});
+
+closeChat.addEventListener("click", () => {
+    chatContainer.style.display = "none";
+});
+
+// Chatbot Responses
+const chatInput = document.getElementById("chat-input");
+const chatContent = document.getElementById("chat-content");
+
+const responses = {
+    "what is zenofractal": "ZenoFractal is where futuristic digital solutions meet excellence. We turn ideas into reality. 🚀",
+    "what services do you offer": "We specialize in **cutting-edge digital services**, including branding, web development, video editing, and beyond. Whatever you need, we deliver with precision. ⚡",
+    "how can zenofractal help my business": "We provide **top-tier branding, design, and digital services** to give your business an unbeatable edge in today's market. 🌟",
+    "why choose zenofractal": "Because we combine **expertise, innovation, and high-quality execution** to ensure your project stands out. No compromises, only results. 🔥",
+    "how do i get started": "Simple! Just reach out, and we'll craft a **custom digital solution** tailored to your needs. Let's build something amazing together. 💡",
+    "who are you": "I am ZenoBot, your AI guide to all things ZenoFractal. Need digital solutions? I'm here to help. 🤖",
+    "where does the future lead": "With ZenoFractal, the future leads to **limitless possibilities** in digital innovation. 🚀",
+    "give me a stock market prediction": "I see growth, I see trends... but the best investment? Your business. Let’s take it to the next level. 📈",
+    "hello": "Hey there! Ready to experience next-level digital services? Ask away! 👋"
+};
+
+chatInput.addEventListener("keypress", function (e) {
+    if (e.key === "Enter") {
+        let userInput = chatInput.value.toLowerCase().trim();
+        chatInput.value = "";
+
+        let botResponse = responses[userInput] || "That's an interesting question! Let's talk about how ZenoFractal can help. 🤔";
+
+        chatContent.innerHTML += `<p><strong>You:</strong> ${userInput}</p>`;
+        chatContent.innerHTML += `<p><strong>ZenoBot:</strong> ${botResponse}</p>`;
+
+        chatContent.scrollTop = chatContent.scrollHeight;
+    }
+});
+
     </script>
+
+
+    <!-- AI Chatbot Floating Orb -->
+<div id="chatbot-orb"></div>
+<div id="chat-container">
+    <div id="chat-box">
+        <div id="chat-header">🤖 ZenoBot <span id="close-chat">✖</span></div>
+        <div id="chat-content"></div>
+        <input type="text" id="chat-input" placeholder="Ask me something..." />
+    </div>
+</div>
+
 </body>
 </html>
