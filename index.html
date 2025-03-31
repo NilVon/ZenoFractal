@@ -3,37 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZenoFractal | Cyber Future</title>
+    <title>ZenoFractal | The Future is Now</title>
     <style>
-        /* General Styling */
+        /* General Styles */
         body {
             margin: 0;
             padding: 0;
             background: black;
             font-family: 'Arial', sans-serif;
             color: white;
-            overflow-x: hidden;
+            overflow: hidden;
         }
 
-        /* Cyberpunk Glitch Background */
-        #dynamic-bg {
+        /* Background Rain and Thunder */
+        #background {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, rgba(0, 0, 50, 0.8), black);
+            background: url('https://i.imgur.com/8J0Hj3J.gif') center center / cover no-repeat;
+            z-index: -2;
+        }
+
+        @keyframes flash {
+            0% { opacity: 0; }
+            50% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        #thunder {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            opacity: 0;
             z-index: -1;
-            animation: bgGlitch 8s infinite alternate ease-in-out;
         }
 
-        @keyframes bgGlitch {
-            0% { filter: hue-rotate(0deg) brightness(1); }
-            100% { filter: hue-rotate(360deg) brightness(1.2); }
-        }
-
-        /* Floating Navigation Bar */
-        .nav {
+        /* Cyberpunk Navbar */
+        .navbar {
             position: fixed;
             top: 10px;
             left: 50%;
@@ -46,14 +57,14 @@
             box-shadow: 0 0 15px cyan;
         }
 
-        .nav a {
+        .navbar a {
             color: cyan;
             text-decoration: none;
             font-size: 16px;
             transition: 0.3s;
         }
 
-        .nav a:hover {
+        .navbar a:hover {
             color: lime;
             text-shadow: 0 0 5px lime;
         }
@@ -66,17 +77,12 @@
             align-items: center;
             height: 100vh;
             text-align: center;
+            position: relative;
         }
 
         .hero h1 {
             font-size: 3em;
             text-shadow: 0 0 10px cyan;
-            animation: neon-glow 1.5s infinite alternate;
-        }
-
-        @keyframes neon-glow {
-            0% { text-shadow: 0 0 5px cyan, 0 0 10px cyan; }
-            100% { text-shadow: 0 0 15px cyan, 0 0 25px cyan; }
         }
 
         .hero p {
@@ -84,8 +90,48 @@
             color: lightgray;
         }
 
-        /* Floating AI Bot */
-        #chatbot-orb {
+        /* Glitchy Button */
+        .btn {
+            background: linear-gradient(45deg, cyan, blue);
+            padding: 15px 30px;
+            color: black;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 0 10px cyan;
+            border: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background: white;
+            opacity: 0.1;
+            mix-blend-mode: difference;
+            animation: glitch 0.8s infinite linear alternate-reverse;
+        }
+
+        @keyframes glitch {
+            0% { transform: skewX(0deg); }
+            50% { transform: skewX(10deg); }
+            100% { transform: skewX(0deg); }
+        }
+
+        .btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px cyan;
+        }
+
+        /* AI Chatbot */
+        #chatbot {
             position: fixed;
             bottom: 20px;
             right: 20px;
@@ -98,9 +144,9 @@
             transition: transform 0.2s ease-in-out;
         }
 
-        #chatbot-orb:hover { transform: scale(1.1); }
+        #chatbot:hover { transform: scale(1.1); }
 
-        /* Chatbot */
+        /* Chatbox */
         #chat-container {
             display: none;
             position: fixed;
@@ -113,7 +159,6 @@
             z-index: 1000;
             padding: 10px;
             color: white;
-            overflow-y: auto;
         }
 
         #chat-header {
@@ -125,42 +170,38 @@
             cursor: pointer;
         }
 
-        .faq-question {
+        .faq {
             padding: 10px;
-            background-color: #222;
+            background: #222;
             color: cyan;
-            border: none;
             border-radius: 5px;
             cursor: pointer;
             margin-bottom: 10px;
             font-size: 16px;
-            text-align: left;
-            width: 100%;
-            box-sizing: border-box;
         }
 
-        .faq-question:hover {
-            background-color: #333;
+        .faq:hover {
+            background: #333;
         }
 
-        .answer {
+        .faq-answer {
             display: none;
-            background-color: rgba(0, 0, 50, 0.9);
+            background: rgba(0, 0, 50, 0.9);
             color: white;
             padding: 10px;
             margin-top: 5px;
             border-radius: 5px;
         }
-
     </style>
 </head>
 <body>
 
     <!-- Background -->
-    <div id="dynamic-bg"></div>
+    <div id="background"></div>
+    <div id="thunder"></div>
 
-    <!-- Navigation -->
-    <div class="nav">
+    <!-- Navbar -->
+    <div class="navbar">
         <a href="#">Home</a>
         <a href="#">Services</a>
         <a href="#">About</a>
@@ -170,40 +211,44 @@
     <!-- Hero Section -->
     <div class="hero">
         <h1>Welcome to ZenoFractal</h1>
-        <p>Step into the Future of Digital Innovation</p>
+        <p>Experience the Future of Digital Innovation</p>
+        <button class="btn">Explore</button>
     </div>
 
-    <!-- AI Chatbot Orb -->
-    <div id="chatbot-orb" onclick="toggleChat()"></div>
-
     <!-- Chatbot -->
+    <div id="chatbot"></div>
+
+    <!-- Chat Container -->
     <div id="chat-container">
         <div id="chat-header" onclick="toggleChat()">🤖 ZenoBot ✖</div>
         <div id="chat-content">
-            <!-- FAQ Questions -->
-            <button class="faq-question" onclick="toggleAnswer('answer1')">What is ZenoFractal?</button>
-            <div id="answer1" class="answer">ZenoFractal is a cutting-edge digital solutions company focused on futuristic innovation. 🚀</div>
+            <div class="faq" onclick="toggleAnswer('faq1')">What is ZenoFractal?</div>
+            <div id="faq1" class="faq-answer">ZenoFractal is a futuristic digital solutions powerhouse. 🚀</div>
 
-            <button class="faq-question" onclick="toggleAnswer('answer2')">What services do you offer?</button>
-            <div id="answer2" class="answer">We specialize in web development, video editing, branding, and more! ⚡</div>
+            <div class="faq" onclick="toggleAnswer('faq2')">What services do you offer?</div>
+            <div id="faq2" class="faq-answer">Web development, branding, AI solutions, and more. ⚡</div>
 
-            <button class="faq-question" onclick="toggleAnswer('answer3')">Why should I choose ZenoFractal?</button>
-            <div id="answer3" class="answer">We fuse creativity, technology, and high-quality execution to deliver the best digital experiences. 🔥</div>
-
-            <button class="faq-question" onclick="toggleAnswer('answer4')">How can I get started?</button>
-            <div id="answer4" class="answer">Just contact us, and we'll craft a custom digital solution tailored to your needs. 💡</div>
+            <div class="faq" onclick="toggleAnswer('faq3')">Why choose us?</div>
+            <div id="faq3" class="faq-answer">We combine tech, design, and innovation to redefine digital experiences. 🔥</div>
         </div>
     </div>
 
     <script>
-        function toggleChat() {
-            let chat = document.getElementById("chat-container");
-            chat.style.display = chat.style.display === "block" ? "none" : "block";
-        }
+        // Thunder effect
+        setInterval(() => {
+            document.getElementById("thunder").style.animation = "flash 0.3s linear";
+            setTimeout(() => document.getElementById("thunder").style.animation = "", 300);
+        }, Math.random() * 5000 + 3000);
+
+        // Chatbot Toggle
+        document.getElementById("chatbot").addEventListener("click", () => {
+            document.getElementById("chat-container").style.display = 
+                document.getElementById("chat-container").style.display === "block" ? "none" : "block";
+        });
 
         function toggleAnswer(id) {
-            let answer = document.getElementById(id);
-            answer.style.display = answer.style.display === "block" ? "none" : "block";
+            const ans = document.getElementById(id);
+            ans.style.display = ans.style.display === "block" ? "none" : "block";
         }
     </script>
 
