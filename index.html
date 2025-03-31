@@ -15,46 +15,44 @@
             padding: 0;
             min-height: 200vh; /* Allows scrolling */
             overflow-x: hidden;
-            position: relative;
         }
 
-        /* Shooting Stars Effect */
-        #shooting-stars {
+        /* Dynamic Background */
+        #dynamic-bg {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            pointer-events: none;
+            background: radial-gradient(circle, rgba(0, 0, 50, 0.8) 0%, black 80%);
             z-index: -1;
+            animation: bgShift 10s infinite alternate ease-in-out;
         }
 
-        .star {
+        /* Background Animation */
+        @keyframes bgShift {
+            0% { filter: hue-rotate(0deg) brightness(1); }
+            100% { filter: hue-rotate(360deg) brightness(1.2); }
+        }
+
+        /* Shooting Stars */
+        .shooting-star {
             position: absolute;
-            background: white;
-            border-radius: 50%;
-            animation: moveStar 5s linear infinite, fadeTrail 2s linear forwards;
+            width: 2px;
+            height: 2px;
+            background-color: white;
+            opacity: 0;
+            animation: shoot 1s linear infinite;
         }
 
-        /* Shooting Star Movement */
-        @keyframes moveStar {
-            0% {
-                transform: translateX(0) translateY(0);
-                opacity: 1;
-            }
-            100% {
-                transform: translateX(1000px) translateY(1000px);
-                opacity: 0;
-            }
-        }
-
-        /* Fade Trail Effect */
-        @keyframes fadeTrail {
+        @keyframes shoot {
             0% {
                 opacity: 1;
+                transform: translate(0, 0) rotate(45deg);
             }
             100% {
                 opacity: 0;
+                transform: translate(500px, 500px) rotate(45deg);
             }
         }
 
@@ -63,14 +61,6 @@
             width: 150px;
             margin-top: 20px;
             transition: transform 0.3s ease-in-out;
-        }
-
-        /* Logo Hover & Glitch */
-        .logo:hover { transform: scale(1.1) rotate(2deg); }
-        .glitch { animation: glitchAnim 0.2s infinite alternate; }
-        @keyframes glitchAnim {
-            0% { transform: translateX(-2px) skewX(-5deg); filter: hue-rotate(10deg); }
-            100% { transform: translateX(2px) skewX(5deg); filter: hue-rotate(-10deg); }
         }
 
         /* Floating Chatbot Orb */
@@ -120,19 +110,40 @@
             font-size: 14px;
         }
 
-        #chat-input {
-            width: calc(100% - 20px);
-            margin: 10px;
-            padding: 5px;
+        /* FAQ Question Styling */
+        .faq-question {
+            padding: 10px;
+            background-color: #222;
+            color: cyan;
             border: none;
-            outline: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 10px;
+            font-size: 16px;
+            text-align: left;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .faq-question:hover {
+            background-color: #333;
+        }
+
+        /* Answer Styling */
+        .answer {
+            display: none;
+            background-color: rgba(0, 0, 50, 0.9);
+            color: white;
+            padding: 10px;
+            margin-top: 5px;
             border-radius: 5px;
         }
+
     </style>
 </head>
 <body>
-    <!-- Shooting Stars Background -->
-    <div id="shooting-stars"></div>
+    <!-- Background -->
+    <div id="dynamic-bg"></div>
 
     <!-- Logo -->
     <img src="logo.webp" alt="ZenoFractal Logo" class="logo" id="logo">
@@ -144,43 +155,35 @@
     <div id="chatbot-orb"></div>
     <div id="chat-container">
         <div id="chat-header">🤖 ZenoBot ✖</div>
-        <div id="chat-content"></div>
-        <input type="text" id="chat-input" placeholder="Ask me something..." />
+        <div id="chat-content">
+            <!-- FAQ Questions -->
+            <button class="faq-question" onclick="toggleAnswer('answer1')">What is ZenoFractal?</button>
+            <div id="answer1" class="answer">ZenoFractal is where futuristic digital solutions meet excellence. 🚀</div>
+
+            <button class="faq-question" onclick="toggleAnswer('answer2')">What services do you offer?</button>
+            <div id="answer2" class="answer">We specialize in **branding, web development, video editing, and beyond**. ⚡</div>
+
+            <button class="faq-question" onclick="toggleAnswer('answer3')">How can ZenoFractal help my business?</button>
+            <div id="answer3" class="answer">We provide **top-tier branding, design, and digital services** to give your business an unbeatable edge. 🌟</div>
+
+            <button class="faq-question" onclick="toggleAnswer('answer4')">Why choose ZenoFractal?</button>
+            <div id="answer4" class="answer">Because we combine **expertise, innovation, and high-quality execution** to ensure your project stands out. 🔥</div>
+
+            <button class="faq-question" onclick="toggleAnswer('answer5')">How do I get started?</button>
+            <div id="answer5" class="answer">Just reach out, and we’ll craft a **custom digital solution** tailored to your needs. 💡</div>
+
+            <button class="faq-question" onclick="toggleAnswer('answer6')">Who are you?</button>
+            <div id="answer6" class="answer">I am ZenoBot, your AI guide to all things ZenoFractal. 🤖</div>
+
+            <button class="faq-question" onclick="toggleAnswer('answer7')">Where does the future lead?</button>
+            <div id="answer7" class="answer">With ZenoFractal, the future leads to **limitless possibilities** in digital innovation. 🚀</div>
+
+            <button class="faq-question" onclick="toggleAnswer('answer8')">Hello</button>
+            <div id="answer8" class="answer">Hey there! Ready to experience next-level digital services? 👋</div>
+        </div>
     </div>
 
     <script>
-        // Generate Shooting Stars with Trails
-        const shootingStarsContainer = document.getElementById('shooting-stars');
-
-        function generateShootingStar() {
-            const star = document.createElement('div');
-            star.classList.add('star');
-
-            // Random position and size for the shooting star
-            const size = Math.random() * 3 + 1; // Random size between 1px and 3px
-            const left = Math.random() * 100 + 'vw'; // Random horizontal position
-            const top = Math.random() * 100 + 'vh'; // Random vertical position
-
-            star.style.width = size + 'px';
-            star.style.height = size + 'px';
-            star.style.left = left;
-            star.style.top = top;
-
-            // Random animation duration for each star
-            const duration = Math.random() * 2 + 3; // Random duration between 3s and 5s
-            star.style.animationDuration = duration + 's';
-
-            shootingStarsContainer.appendChild(star);
-
-            // Remove the star after the animation
-            setTimeout(() => {
-                shootingStarsContainer.removeChild(star);
-            }, duration * 1000);
-        }
-
-        // Continuously generate shooting stars
-        setInterval(generateShootingStar, 100);
-
         // Chatbot Toggle
         const chatbotOrb = document.getElementById("chatbot-orb");
         const chatContainer = document.getElementById("chat-container");
@@ -194,35 +197,43 @@
             chatContainer.style.display = "none";
         });
 
-        // Chatbot Responses
-        const chatInput = document.getElementById("chat-input");
-        const chatContent = document.getElementById("chat-content");
-
-        const responses = {
-            "what is zenofractal": "ZenoFractal is where futuristic digital solutions meet excellence. 🚀",
-            "what services do you offer": "We specialize in **branding, web development, video editing, and beyond**. ⚡",
-            "how can zenofractal help my business": "We provide **top-tier branding, design, and digital services** to give your business an unbeatable edge. 🌟",
-            "why choose zenofractal": "Because we combine **expertise, innovation, and high-quality execution** to ensure your project stands out. 🔥",
-            "how do i get started": "Just reach out, and we’ll craft a **custom digital solution** tailored to your needs. 💡",
-            "who are you": "I am ZenoBot, your AI guide to all things ZenoFractal. 🤖",
-            "where does the future lead": "With ZenoFractal, the future leads to **limitless possibilities** in digital innovation. 🚀",
-            "hello": "Hey there! Ready to experience next-level digital services? 👋"
-        };
-
-        chatInput.addEventListener("keypress", function (e) {
-            if (e.key === "Enter") {
-                processUserInput(chatInput.value);
-            }
-        });
-
-        function processUserInput(userInput) {
-            userInput = userInput.toLowerCase().trim();
-            chatInput.value = "";
-            let botResponse = responses[userInput] || "Let's talk about how ZenoFractal can help. 🤔";
-            chatContent.innerHTML += `<p><strong>You:</strong> ${userInput}</p>`;
-            chatContent.innerHTML += `<p><strong>ZenoBot:</strong> ${botResponse}</p>`;
-            chatContent.scrollTop = chatContent.scrollHeight;
+        // Toggle FAQ Answer Visibility
+        function toggleAnswer(answerId) {
+            const answer = document.getElementById(answerId);
+            const allAnswers = document.querySelectorAll('.answer');
+            allAnswers.forEach((ans) => {
+                if (ans !== answer) {
+                    ans.style.display = 'none';  // Hide other answers
+                }
+            });
+            answer.style.display = answer.style.display === 'block' ? 'none' : 'block';  // Toggle the clicked answer
         }
+
+        // Shooting Star Effect
+        function createShootingStar() {
+            const star = document.createElement('div');
+            star.classList.add('shooting-star');
+            document.body.appendChild(star);
+
+            const startX = Math.random() * window.innerWidth;
+            const startY = Math.random() * window.innerHeight;
+            const endX = Math.random() * window.innerWidth;
+            const endY = Math.random() * window.innerHeight;
+
+            const duration = Math.random() * 1 + 1; // Random duration for movement (between 1s and 2s)
+            const delay = Math.random() * 2; // Random delay before shooting star starts
+
+            star.style.left = `${startX}px`;
+            star.style.top = `${startY}px`;
+
+            star.style.animation = `shoot ${duration}s linear ${delay}s infinite`;
+
+            setTimeout(() => {
+                star.remove();
+            }, (duration + delay) * 1000);
+        }
+
+        setInterval(createShootingStar, 200); // Creates a shooting star every 200ms
     </script>
 </body>
 </html>
