@@ -15,50 +15,36 @@
             padding: 0;
             min-height: 200vh; /* Allows scrolling */
             overflow-x: hidden;
+            position: relative;
         }
 
-        /* 3D Wave Background */
-        #dynamic-bg {
+        /* Shooting Stars Effect */
+        #shooting-stars {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
+            pointer-events: none;
             z-index: -1;
-            overflow: hidden;
         }
 
-        .wave {
+        .star {
             position: absolute;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(270deg, #ff0066, #00cc99, #6600ff);
-            animation: waveAnimation 10s ease-in-out infinite;
-            transform: rotateX(0deg) translateZ(0);
-            opacity: 0.6;
-            will-change: transform;
+            background: white;
+            border-radius: 50%;
+            animation: moveStar 5s linear infinite;
         }
 
-        .wave:nth-child(2) {
-            animation-delay: -5s;
-            opacity: 0.5;
-        }
-
-        .wave:nth-child(3) {
-            animation-delay: -2.5s;
-            opacity: 0.7;
-        }
-
-        /* 3D Wave Animation */
-        @keyframes waveAnimation {
+        /* Shooting Star Animation */
+        @keyframes moveStar {
             0% {
-                transform: translateY(0) rotateX(0) scale(1);
-            }
-            50% {
-                transform: translateY(-50px) rotateX(10deg) scale(1.1);
+                transform: translateX(0) translateY(0);
+                opacity: 1;
             }
             100% {
-                transform: translateY(0) rotateX(0) scale(1);
+                transform: translateX(1000px) translateY(1000px);
+                opacity: 0;
             }
         }
 
@@ -135,12 +121,8 @@
     </style>
 </head>
 <body>
-    <!-- Background -->
-    <div id="dynamic-bg">
-        <div class="wave"></div>
-        <div class="wave"></div>
-        <div class="wave"></div>
-    </div>
+    <!-- Shooting Stars Background -->
+    <div id="shooting-stars"></div>
 
     <!-- Logo -->
     <img src="logo.webp" alt="ZenoFractal Logo" class="logo" id="logo">
@@ -157,6 +139,38 @@
     </div>
 
     <script>
+        // Generate Shooting Stars
+        const shootingStarsContainer = document.getElementById('shooting-stars');
+
+        function generateShootingStar() {
+            const star = document.createElement('div');
+            star.classList.add('star');
+
+            // Random position and size for the shooting star
+            const size = Math.random() * 3 + 1; // Random size between 1px and 3px
+            const left = Math.random() * 100 + 'vw'; // Random horizontal position
+            const top = Math.random() * 100 + 'vh'; // Random vertical position
+
+            star.style.width = size + 'px';
+            star.style.height = size + 'px';
+            star.style.left = left;
+            star.style.top = top;
+
+            // Random animation duration for each star
+            const duration = Math.random() * 2 + 3; // Random duration between 3s and 5s
+            star.style.animationDuration = duration + 's';
+
+            shootingStarsContainer.appendChild(star);
+
+            // Remove the star after the animation
+            setTimeout(() => {
+                shootingStarsContainer.removeChild(star);
+            }, duration * 1000);
+        }
+
+        // Continuously generate shooting stars
+        setInterval(generateShootingStar, 100);
+
         // Chatbot Toggle
         const chatbotOrb = document.getElementById("chatbot-orb");
         const chatContainer = document.getElementById("chat-container");
