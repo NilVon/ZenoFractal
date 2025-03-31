@@ -253,6 +253,56 @@
     100% { transform: rotate(360deg); }
 }
 
+
+        /* Big Crunch & Explosion Effect */
+* {
+    transition: transform 0.5s ease, opacity 0.5s ease;
+    position: relative;
+}
+
+.collapsing {
+    transform: scale(0) translateZ(0);
+    opacity: 0;
+}
+
+.exploding {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform-origin: center center;
+    animation: explode 1s forwards;
+    opacity: 1;
+}
+
+@keyframes explode {
+    0% {
+        transform: scale(0) translate(0, 0);
+    }
+    100% {
+        transform: scale(1) translate(150px, 150px);
+    }
+}
+
+.falling {
+    animation: fall 2s forwards;
+}
+
+@keyframes fall {
+    to {
+        transform: translateY(100vh);
+    }
+}
+
+#explosion-point {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: white;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 1000;
+}
+
     </style>
 </head>
 <body>
@@ -375,6 +425,59 @@ setInterval(updateStopwatch, 1000); // Update every second
 window.onload = () => {
     document.getElementById("loading-screen").style.display = "none";
 };
+
+
+        let isPressing = false;
+let explosionPoint = document.createElement('div');
+explosionPoint.id = "explosion-point";
+document.body.appendChild(explosionPoint);
+
+document.addEventListener('mousedown', (e) => {
+    isPressing = true;
+    let clickX = e.clientX;
+    let clickY = e.clientY;
+
+    // Move the explosion point to the click position
+    explosionPoint.style.left = `${clickX - 10}px`;
+    explosionPoint.style.top = `${clickY - 10}px`;
+
+    // Add collapsing effect to all elements
+    document.querySelectorAll('*').forEach(element => {
+        element.classList.add('collapsing');
+        element.style.transformOrigin = `${clickX}px ${clickY}px`;
+    });
+});
+
+document.addEventListener('mouseup', () => {
+    if (!isPressing) return;
+    isPressing = false;
+
+    // Explosion effect - elements go random after release
+    document.querySelectorAll('*').forEach(element => {
+        element.classList.remove('collapsing');
+        element.classList.add('exploding');
+        
+        // Apply random direction for each element to explode
+        const randomX = Math.random() * 200 - 100;
+        const randomY = Math.random() * 200 - 100;
+        element.style.transform = `translate(${randomX}px, ${randomY}px)`;
+    });
+
+    // Make elements fall to the bottom of the page after explosion
+    setTimeout(() => {
+        document.querySelectorAll('*').forEach(element => {
+            element.classList.add('falling');
+        });
+    }, 200); // delay explosion before falling
+
+    // Reset after animation
+    setTimeout(() => {
+        document.querySelectorAll('*').forEach(element => {
+            element.classList.remove('exploding');
+            element.style.transform = '';
+        });
+    }, 3000);
+});
 
 
     </script>
