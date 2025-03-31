@@ -71,6 +71,12 @@
         .hero h1 {
             font-size: 3em;
             text-shadow: 0 0 10px cyan;
+            animation: neon-glow 1.5s infinite alternate;
+        }
+
+        @keyframes neon-glow {
+            0% { text-shadow: 0 0 5px cyan, 0 0 10px cyan; }
+            100% { text-shadow: 0 0 15px cyan, 0 0 25px cyan; }
         }
 
         .hero p {
@@ -78,7 +84,7 @@
             color: lightgray;
         }
 
-        /* Glowing Cyber Button */
+        /* Glitchy Cyber Button */
         .btn {
             background: linear-gradient(45deg, cyan, blue);
             padding: 15px 30px;
@@ -90,6 +96,24 @@
             transition: 0.3s;
             box-shadow: 0 0 10px cyan;
             border: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: skewX(-20deg);
+            transition: 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
         }
 
         .btn:hover {
@@ -113,7 +137,7 @@
 
         #chatbot-orb:hover { transform: scale(1.1); }
 
-        /* Chatbox Container */
+        /* Chatbot */
         #chat-container {
             display: none;
             position: fixed;
@@ -136,13 +160,6 @@
             text-align: center;
             font-weight: bold;
             cursor: pointer;
-        }
-
-        #chat-content {
-            height: 250px;
-            overflow-y: auto;
-            padding: 10px;
-            font-size: 14px;
         }
 
         .faq-question {
@@ -172,28 +189,6 @@
             border-radius: 5px;
         }
 
-        /* Shooting Stars */
-        .shooting-star {
-            position: fixed;
-            width: 2px;
-            height: 2px;
-            background: white;
-            opacity: 0.8;
-            box-shadow: 0 0 5px white;
-            animation: shoot 2s linear infinite;
-        }
-
-        @keyframes shoot {
-            0% {
-                transform: translate(100vw, 0);
-                opacity: 1;
-            }
-            100% {
-                transform: translate(-100vw, 100vh);
-                opacity: 0;
-            }
-        }
-
     </style>
 </head>
 <body>
@@ -206,14 +201,16 @@
         <a href="#">Home</a>
         <a href="#">Services</a>
         <a href="#">About</a>
-        <a href="#">Contact</a>
+        <a href="https://www.instagram.com/zenofractal/?hl=en" target="_blank">Contact us</a>
     </div>
 
     <!-- Hero Section -->
     <div class="hero">
         <h1>Welcome to ZenoFractal</h1>
         <p>Step into the Future of Digital Innovation</p>
-        <button class="btn">Explore</button>
+        <a href="https://www.instagram.com/zenofractal/?hl=en" target="_blank">
+            <button class="btn">Contact Us</button>
+        </a>
     </div>
 
     <!-- AI Chatbot Orb -->
@@ -225,13 +222,13 @@
         <div id="chat-content">
             <!-- FAQ Questions -->
             <button class="faq-question" onclick="toggleAnswer('answer1')">What is ZenoFractal?</button>
-            <div id="answer1" class="answer">ZenoFractal is a leading edge digital solutions provider, focusing on futuristic innovation. 🚀</div>
+            <div id="answer1" class="answer">ZenoFractal is a cutting-edge digital solutions company focused on futuristic innovation. 🚀</div>
 
             <button class="faq-question" onclick="toggleAnswer('answer2')">What services do you offer?</button>
             <div id="answer2" class="answer">We specialize in web development, video editing, branding, and more! ⚡</div>
 
             <button class="faq-question" onclick="toggleAnswer('answer3')">Why should I choose ZenoFractal?</button>
-            <div id="answer3" class="answer">Because we fuse creativity, cutting-edge technology, and high-quality execution. 🔥</div>
+            <div id="answer3" class="answer">We fuse creativity, technology, and high-quality execution to deliver the best digital experiences. 🔥</div>
 
             <button class="faq-question" onclick="toggleAnswer('answer4')">How can I get started?</button>
             <div id="answer4" class="answer">Just contact us, and we'll craft a custom digital solution tailored to your needs. 💡</div>
@@ -239,35 +236,14 @@
     </div>
 
     <script>
-        // Shooting Stars Generator
-        function createShootingStar() {
-            const star = document.createElement("div");
-            star.classList.add("shooting-star");
-            star.style.top = Math.random() * window.innerHeight + "px";
-            star.style.left = Math.random() * window.innerWidth + "px";
-            document.body.appendChild(star);
-            setTimeout(() => star.remove(), 2000);
-        }
-
-        setInterval(createShootingStar, 500);
-
-        // Toggle Chat Window
-        const chatbotOrb = document.getElementById("chatbot-orb");
-        const chatContainer = document.getElementById("chat-container");
-
-        chatbotOrb.addEventListener("click", () => {
-            chatContainer.style.display = chatContainer.style.display === "block" ? "none" : "block";
-        });
-
-        // Toggle FAQ Answers
-        function toggleAnswer(id) {
-            const answer = document.getElementById(id);
-            answer.style.display = answer.style.display === "block" ? "none" : "block";
-        }
-
-        // Close Chat on Header Click
         function toggleChat() {
-            chatContainer.style.display = "none";
+            let chat = document.getElementById("chat-container");
+            chat.style.display = chat.style.display === "block" ? "none" : "block";
+        }
+
+        function toggleAnswer(id) {
+            let answer = document.getElementById(id);
+            answer.style.display = answer.style.display === "block" ? "none" : "block";
         }
     </script>
 
