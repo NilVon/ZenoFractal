@@ -80,5 +80,51 @@
             lastY = e.pageY;
         });
     </script>
+       <script>
+// 1️⃣ Typewriter Effect for the tagline
+const text = "The Future of Innovation";
+let index = 0;
+function typeWriter() {
+    if (index < text.length) {
+        document.getElementById("tagline").innerHTML += text.charAt(index);
+        index++;
+        setTimeout(typeWriter, 100);
+    }
+}
+window.onload = typeWriter;
+
+// 2️⃣ Floating Particles Effect
+const particles = [];
+for (let i = 0; i < 30; i++) {
+    let particle = document.createElement("div");
+    particle.classList.add("particle");
+    document.body.appendChild(particle);
+    particles.push(particle);
+}
+function moveParticles() {
+    particles.forEach(p => {
+        let x = Math.random() * window.innerWidth;
+        let y = Math.random() * window.innerHeight;
+        p.style.transform = `translate(${x}px, ${y}px)`;
+    });
+}
+setInterval(moveParticles, 3000);
+
+// 3️⃣ Click Ripple Effect
+document.addEventListener("click", (e) => {
+    let ripple = document.createElement("div");
+    ripple.classList.add("ripple");
+    ripple.style.left = `${e.pageX}px`;
+    ripple.style.top = `${e.pageY}px`;
+    document.body.appendChild(ripple);
+    setTimeout(() => ripple.remove(), 1000);
+});
+
+// 4️⃣ Parallax Scrolling
+document.addEventListener("scroll", () => {
+    let scrollPos = window.scrollY;
+    document.querySelector(".logo").style.transform = `translateY(${scrollPos * 0.5}px)`;
+});
+</script>
 </body>
 </html>
