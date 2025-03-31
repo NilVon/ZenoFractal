@@ -139,11 +139,11 @@
             chatContainer.style.display = "none";
         });
 
-        // Chatbot Responses
+        // Chatbot Responses (FAQ-based)
         const chatInput = document.getElementById("chat-input");
         const chatContent = document.getElementById("chat-content");
 
-        const responses = {
+        const faqResponses = {
             "what is zenofractal": "ZenoFractal is where futuristic digital solutions meet excellence. 🚀",
             "what services do you offer": "We specialize in **branding, web development, video editing, and beyond**. ⚡",
             "how can zenofractal help my business": "We provide **top-tier branding, design, and digital services** to give your business an unbeatable edge. 🌟",
@@ -163,61 +163,10 @@
         function processUserInput(userInput) {
             userInput = userInput.toLowerCase().trim();
             chatInput.value = "";
-            let botResponse = responses[userInput] || "Let's talk about how ZenoFractal can help. 🤔";
+            let botResponse = faqResponses[userInput] || "Let's talk about how ZenoFractal can help. 🤔";
             chatContent.innerHTML += `<p><strong>You:</strong> ${userInput}</p>`;
             chatContent.innerHTML += `<p><strong>ZenoBot:</strong> ${botResponse}</p>`;
             chatContent.scrollTop = chatContent.scrollHeight;
-
-            // Speak the bot's response
-            speakResponse(botResponse);
-        }
-
-        // Speak Response Function
-        function speakResponse(text) {
-            const speech = new SpeechSynthesisUtterance(text);
-            speech.volume = 1; // Max volume
-            speech.rate = 1; // Normal speed
-            speech.pitch = 1; // Normal pitch
-
-            // You can set a specific voice here
-            const voices = speechSynthesis.getVoices();
-            const selectedVoice = voices.find(voice => voice.name === 'Google UK English Male'); // You can change the voice name here
-            if (selectedVoice) {
-                speech.voice = selectedVoice;
-            }
-
-            speechSynthesis.speak(speech);
-        }
-
-        // Voice Recognition
-        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-        if (SpeechRecognition) {
-            const recognition = new SpeechRecognition();
-            recognition.continuous = false;
-            recognition.lang = "en-US";
-
-            chatbotOrb.addEventListener("mousedown", () => {
-                recognition.start();
-                chatbotOrb.style.transform = "scale(0.9)";
-                chatbotOrb.style.boxShadow = "0 0 25px cyan";
-            });
-
-            chatbotOrb.addEventListener("mouseup", () => {
-                recognition.stop();
-                chatbotOrb.style.transform = "scale(1)";
-                chatbotOrb.style.boxShadow = "0 0 15px cyan";
-            });
-
-            recognition.onresult = (event) => {
-                const speechResult = event.results[0][0].transcript;
-                processUserInput(speechResult);
-            };
-
-            recognition.onerror = (event) => {
-                console.error("Speech recognition error:", event.error);
-            };
-        } else {
-            console.warn("Speech recognition is not supported in this browser.");
         }
     </script>
 </body>
