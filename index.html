@@ -27,41 +27,57 @@
         }
         .trail {
             position: absolute;
-            width: 10px;
-            height: 10px;
+            width: 5px;
+            height: 5px;
             border-radius: 50%;
             pointer-events: none;
+            opacity: 0.7;
             animation: fadeOut 0.5s linear forwards;
         }
         @keyframes fadeOut {
-            from { opacity: 1; transform: scale(1); }
-            to { opacity: 0; transform: scale(0.5); }
+            from { opacity: 1; }
+            to { opacity: 0; }
         }
     </style>
 </head>
 <body>
-    <img src="logo.png" alt="ZenoFractal Logo" class="logo">
+    <img src="logo.webp" alt="ZenoFractal Logo" class="logo">
     <h1>Welcome to ZenoFractal</h1>
     <p>The Future of Innovation</p>
     <script>
         const colors = ["cyan", "magenta", "lime", "yellow", "orange", "blue", "pink"];
         let colorIndex = 0;
+        let lastX, lastY;
 
         document.addEventListener("mousemove", (e) => {
-            let trail = document.createElement("div");
-            trail.classList.add("trail");
-            document.body.appendChild(trail);
-            
-            trail.style.left = `${e.pageX}px`;
-            trail.style.top = `${e.pageY}px`;
-            trail.style.backgroundColor = colors[colorIndex];
-            trail.style.boxShadow = `0 0 10px ${colors[colorIndex]}, 0 0 20px ${colors[colorIndex]}`;
-            
-            colorIndex = (colorIndex + 1) % colors.length;
-            
-            setTimeout(() => {
-                trail.remove();
-            }, 500);
+            if (lastX !== undefined && lastY !== undefined) {
+                let dx = e.pageX - lastX;
+                let dy = e.pageY - lastY;
+                let distance = Math.sqrt(dx * dx + dy * dy);
+                let steps = Math.max(1, Math.floor(distance / 5));
+                
+                for (let i = 0; i < steps; i++) {
+                    let trail = document.createElement("div");
+                    trail.classList.add("trail");
+                    document.body.appendChild(trail);
+                    
+                    let progress = i / steps;
+                    let x = lastX + dx * progress;
+                    let y = lastY + dy * progress;
+                    
+                    trail.style.left = `${x}px`;
+                    trail.style.top = `${y}px`;
+                    trail.style.backgroundColor = colors[colorIndex];
+                    trail.style.boxShadow = `0 0 5px ${colors[colorIndex]}, 0 0 10px ${colors[colorIndex]}`;
+                    
+                    setTimeout(() => {
+                        trail.remove();
+                    }, 500);
+                }
+                colorIndex = (colorIndex + 1) % colors.length;
+            }
+            lastX = e.pageX;
+            lastY = e.pageY;
         });
     </script>
 </body>
