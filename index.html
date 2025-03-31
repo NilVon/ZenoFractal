@@ -11,9 +11,9 @@
             color: white;
             font-family: Arial, sans-serif;
             text-align: center;
-            overflow: hidden;
             margin: 0;
             padding: 0;
+            min-height: 200vh; /* Allows scrolling */
         }
 
         /* Heading */
@@ -47,8 +47,6 @@
         /* Cursor Trail */
         .trail {
             position: absolute;
-            width: 8px;
-            height: 8px;
             border-radius: 50%;
             pointer-events: none;
             opacity: 0.8;
@@ -58,11 +56,11 @@
         /* Floating Particles */
         .particle {
             position: absolute;
-            width: 6px;
-            height: 6px;
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
             pointer-events: none;
-            transition: transform 0.2s ease-out, background-color 0.2s linear;
+            transition: transform 2s linear, background-color 0.5s linear;
         }
     </style>
 </head>
@@ -96,16 +94,17 @@
         }
 
         let particles = [];
-        for (let i = 0; i < 20; i++) {
+        for (let i = 0; i < 30; i++) {
             let particle = document.createElement("div");
             particle.classList.add("particle");
             document.body.appendChild(particle);
-            particles.push({ element: particle, x: 0, y: 0 });
+            particles.push({ element: particle, x: Math.random() * window.innerWidth, y: Math.random() * window.innerHeight });
         }
 
-        let lastX, lastY, progress = 0;
+        let lastX, lastY, progress = 0, isMoving = false;
 
         document.addEventListener("mousemove", (e) => {
+            isMoving = true;
             let color = rgbCycle(progress);
             progress += 0.01; // Adjust speed of color change
 
@@ -118,17 +117,16 @@
                 for (let i = 0; i < steps; i++) {
                     let trail = document.createElement("div");
                     trail.classList.add("trail");
-                    document.body.appendChild(trail);
-
-                    let ratio = i / steps;
-                    let x = lastX + dx * ratio;
-                    let y = lastY + dy * ratio;
-
-                    trail.style.left = `${x}px`;
-                    trail.style.top = `${y}px`;
+                    let size = 10 - (i / steps) * 8; // Makes the head bigger and tail smaller
+                    trail.style.width = `${size}px`;
+                    trail.style.height = `${size}px`;
+                    trail.style.position = "absolute";
+                    trail.style.left = `${lastX + dx * (i / steps)}px`;
+                    trail.style.top = `${lastY + dy * (i / steps)}px`;
                     trail.style.backgroundColor = color;
                     trail.style.boxShadow = `0 0 5px ${color}, 0 0 10px ${color}`;
 
+                    document.body.appendChild(trail);
                     setTimeout(() => trail.remove(), 500);
                 }
             }
@@ -147,7 +145,23 @@
 
             lastX = e.pageX;
             lastY = e.pageY;
+            clearTimeout(stopMovingTimeout);
+            stopMovingTimeout = setTimeout(() => { isMoving = false; }, 100);
         });
+
+        let stopMovingTimeout;
+        function moveParticlesRandomly() {
+            if (!isMoving) {
+                particles.forEach(p => {
+                    let x = Math.random() * window.innerWidth;
+                    let y = Math.random() * window.innerHeight;
+                    p.x = x;
+                    p.y = y;
+                    p.element.style.transform = `translate(${x}px, ${y}px)`;
+                });
+            }
+        }
+        setInterval(moveParticlesRandomly, 3000);
 
         // Parallax Scrolling
         document.addEventListener("scroll", () => {
