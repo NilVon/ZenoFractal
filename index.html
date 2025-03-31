@@ -51,22 +51,22 @@
             transform: translateX(-50%);
             display: flex;
             gap: 20px;
-            background: rgba(0, 0, 50, 0.7);
+            background: rgba(50, 0, 75, 0.7);
             padding: 10px 20px;
             border-radius: 10px;
-            box-shadow: 0 0 15px cyan;
+            box-shadow: 0 0 15px violet;
         }
 
         .navbar a {
-            color: cyan;
+            color: violet;
             text-decoration: none;
             font-size: 16px;
             transition: 0.3s;
         }
 
         .navbar a:hover {
-            color: lime;
-            text-shadow: 0 0 5px lime;
+            color: magenta;
+            text-shadow: 0 0 5px magenta;
         }
 
         /* Hero Section */
@@ -82,7 +82,7 @@
 
         .hero h1 {
             font-size: 3em;
-            text-shadow: 0 0 10px cyan;
+            text-shadow: 0 0 15px violet;
         }
 
         .hero p {
@@ -92,15 +92,15 @@
 
         /* Glitchy Button */
         .btn {
-            background: linear-gradient(45deg, cyan, blue);
+            background: linear-gradient(45deg, violet, purple);
             padding: 15px 30px;
-            color: black;
+            color: white;
             font-size: 18px;
             font-weight: bold;
             border-radius: 8px;
             cursor: pointer;
             transition: 0.3s;
-            box-shadow: 0 0 10px cyan;
+            box-shadow: 0 0 15px violet;
             border: none;
             position: relative;
             overflow: hidden;
@@ -127,7 +127,7 @@
 
         .btn:hover {
             transform: scale(1.1);
-            box-shadow: 0 0 20px cyan;
+            box-shadow: 0 0 25px magenta;
         }
 
         /* AI Chatbot */
@@ -137,9 +137,9 @@
             right: 20px;
             width: 60px;
             height: 60px;
-            background: radial-gradient(circle, cyan, blue);
+            background: radial-gradient(circle, violet, purple);
             border-radius: 50%;
-            box-shadow: 0 0 15px cyan;
+            box-shadow: 0 0 20px violet;
             cursor: pointer;
             transition: transform 0.2s ease-in-out;
         }
@@ -153,16 +153,16 @@
             bottom: 90px;
             right: 20px;
             width: 280px;
-            background: rgba(0, 0, 50, 0.9);
+            background: rgba(50, 0, 75, 0.9);
             border-radius: 10px;
-            box-shadow: 0 0 15px cyan;
+            box-shadow: 0 0 15px violet;
             z-index: 1000;
             padding: 10px;
             color: white;
         }
 
         #chat-header {
-            background: cyan;
+            background: violet;
             color: black;
             padding: 10px;
             text-align: center;
@@ -173,7 +173,7 @@
         .faq {
             padding: 10px;
             background: #222;
-            color: cyan;
+            color: violet;
             border-radius: 5px;
             cursor: pointer;
             margin-bottom: 10px;
@@ -186,7 +186,7 @@
 
         .faq-answer {
             display: none;
-            background: rgba(0, 0, 50, 0.9);
+            background: rgba(50, 0, 75, 0.9);
             color: white;
             padding: 10px;
             margin-top: 5px;
@@ -212,7 +212,7 @@
     <div class="hero">
         <h1>Welcome to ZenoFractal</h1>
         <p>Experience the Future of Digital Innovation</p>
-        <button class="btn">Explore</button>
+        <button class="btn" onclick="alert('Feature coming soon!')">Explore</button>
     </div>
 
     <!-- Chatbot -->
