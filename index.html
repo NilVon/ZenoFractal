@@ -14,20 +14,22 @@
         }
         h1 {
             font-size: 3rem;
-            margin-top: 50px;
+            margin-top: 20px;
             text-shadow: 0 0 10px cyan;
         }
         p {
             font-size: 1.5rem;
             text-shadow: 0 0 5px cyan;
         }
+        .logo {
+            width: 150px;
+            margin-top: 20px;
+        }
         .trail {
             position: absolute;
             width: 10px;
             height: 10px;
-            background: cyan;
             border-radius: 50%;
-            box-shadow: 0 0 10px cyan, 0 0 20px cyan;
             pointer-events: none;
             animation: fadeOut 0.5s linear forwards;
         }
@@ -38,9 +40,13 @@
     </style>
 </head>
 <body>
+    <img src="logo.png" alt="ZenoFractal Logo" class="logo">
     <h1>Welcome to ZenoFractal</h1>
-    <p>TRIAL!!!</p>
+    <p>The Future of Innovation</p>
     <script>
+        const colors = ["cyan", "magenta", "lime", "yellow", "orange", "blue", "pink"];
+        let colorIndex = 0;
+
         document.addEventListener("mousemove", (e) => {
             let trail = document.createElement("div");
             trail.classList.add("trail");
@@ -48,6 +54,10 @@
             
             trail.style.left = `${e.pageX}px`;
             trail.style.top = `${e.pageY}px`;
+            trail.style.backgroundColor = colors[colorIndex];
+            trail.style.boxShadow = `0 0 10px ${colors[colorIndex]}, 0 0 20px ${colors[colorIndex]}`;
+            
+            colorIndex = (colorIndex + 1) % colors.length;
             
             setTimeout(() => {
                 trail.remove();
