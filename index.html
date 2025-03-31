@@ -33,10 +33,10 @@
             position: absolute;
             background: white;
             border-radius: 50%;
-            animation: moveStar 5s linear infinite;
+            animation: moveStar 5s linear infinite, fadeTrail 2s linear forwards;
         }
 
-        /* Shooting Star Animation */
+        /* Shooting Star Movement */
         @keyframes moveStar {
             0% {
                 transform: translateX(0) translateY(0);
@@ -44,6 +44,16 @@
             }
             100% {
                 transform: translateX(1000px) translateY(1000px);
+                opacity: 0;
+            }
+        }
+
+        /* Fade Trail Effect */
+        @keyframes fadeTrail {
+            0% {
+                opacity: 1;
+            }
+            100% {
                 opacity: 0;
             }
         }
@@ -139,7 +149,7 @@
     </div>
 
     <script>
-        // Generate Shooting Stars
+        // Generate Shooting Stars with Trails
         const shootingStarsContainer = document.getElementById('shooting-stars');
 
         function generateShootingStar() {
