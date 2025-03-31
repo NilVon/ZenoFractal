@@ -38,6 +38,54 @@
             from { opacity: 1; }
             to { opacity: 0; }
         }
+
+        /* 1️⃣ Typewriter Effect */
+#tagline {
+    font-size: 1.5rem;
+    text-shadow: 0 0 5px cyan;
+    white-space: nowrap;
+    overflow: hidden;
+    display: inline-block;
+    border-right: 2px solid cyan;
+    animation: blinkCursor 0.7s infinite;
+}
+@keyframes blinkCursor {
+    50% { border-color: transparent; }
+}
+
+/* 2️⃣ Floating Particles */
+.particle {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: cyan;
+    border-radius: 50%;
+    box-shadow: 0 0 10px cyan;
+    transition: transform 3s linear;
+}
+
+/* 3️⃣ Click Ripple Effect */
+.ripple {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: rgba(0, 255, 255, 0.5);
+    border-radius: 50%;
+    transform: scale(0);
+    animation: rippleEffect 1s linear forwards;
+}
+@keyframes rippleEffect {
+    to {
+        transform: scale(15);
+        opacity: 0;
+    }
+}
+
+/* 4️⃣ Smooth Parallax Scrolling */
+.logo {
+    transition: transform 0.2s ease-out;
+}
+
     </style>
 </head>
 <body>
