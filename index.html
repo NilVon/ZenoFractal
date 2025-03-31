@@ -14,213 +14,132 @@
             margin: 0;
             padding: 0;
             min-height: 200vh; /* Allows scrolling */
-            overflow: hidden;
+            overflow-x: hidden;
         }
 
-        /* Heading */
-        h1 {
-            font-size: 3rem;
-            margin-top: 20px;
-            text-shadow: 0 0 10px cyan;
+        /* Dynamic Background */
+        #dynamic-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(0, 0, 50, 0.8) 0%, black 80%);
+            z-index: -1;
+            animation: bgShift 10s infinite alternate ease-in-out;
+        }
+
+        /* Background Animation */
+        @keyframes bgShift {
+            0% { filter: hue-rotate(0deg) brightness(1); }
+            100% { filter: hue-rotate(360deg) brightness(1.2); }
         }
 
         /* Logo */
         .logo {
             width: 150px;
             margin-top: 20px;
+            transition: transform 0.3s ease-in-out;
         }
 
-        /* Cursor Trail */
-        .trail {
-            position: absolute;
-            width: 2px;
-            height: 2px;
-            background-color: white;
-            pointer-events: none;
-            opacity: 0.9;
+        /* Logo Hover & Glitch */
+        .logo:hover { transform: scale(1.1) rotate(2deg); }
+        .glitch { animation: glitchAnim 0.2s infinite alternate; }
+        @keyframes glitchAnim {
+            0% { transform: translateX(-2px) skewX(-5deg); filter: hue-rotate(10deg); }
+            100% { transform: translateX(2px) skewX(5deg); filter: hue-rotate(-10deg); }
         }
 
-        /* Glowing Embers */
+        /* Floating Particles */
         .particle {
             position: absolute;
-            width: 6px;
-            height: 6px;
+            width: 5px;
+            height: 5px;
             border-radius: 50%;
             background-color: orange;
             box-shadow: 0 0 8px rgba(255, 140, 0, 0.8);
             pointer-events: none;
-            transition: transform 0.1s linear;
         }
 
-        /* General Styling */
-body {
-    background: black;
-    color: white;
-    font-family: Arial, sans-serif;
-    text-align: center;
-    margin: 0;
-    padding: 0;
-    min-height: 200vh;
-    overflow: hidden;
-}
-
-/* Dynamic Background */
-#dynamic-bg {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: radial-gradient(circle, rgba(0, 0, 50, 0.8) 0%, black 80%);
-    z-index: -1;
-    animation: bgShift 10s infinite alternate ease-in-out;
-}
-
-/* Background Animation */
-@keyframes bgShift {
-    0% { filter: hue-rotate(0deg) brightness(1); }
-    100% { filter: hue-rotate(360deg) brightness(1.2); }
-}
-
-/* Hero Section */
-h1 {
-    font-size: 3rem;
-    margin-top: 20px;
-    text-shadow: 0 0 10px cyan;
-}
-
-/* Interactive Logo */
-.logo {
-    width: 150px;
-    margin-top: 20px;
-    transition: transform 0.3s ease-in-out, filter 0.2s;
-}
-
-/* Logo Pulse Effect */
-.logo:hover {
-    transform: scale(1.1) rotate(2deg);
-}
-
-/* Logo Glitch Effect */
-.glitch {
-    animation: glitchAnim 0.2s infinite alternate;
-}
-
-/* Glitch Keyframes */
-@keyframes glitchAnim {
-    0% { transform: translateX(-2px) skewX(-5deg); filter: hue-rotate(10deg); }
-    100% { transform: translateX(2px) skewX(5deg); filter: hue-rotate(-10deg); }
-}
-
-
         /* Floating Chatbot Orb */
-#chatbot-orb {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    width: 50px;
-    height: 50px;
-    background: radial-gradient(circle, cyan, blue);
-    border-radius: 50%;
-    box-shadow: 0 0 15px cyan;
-    cursor: pointer;
-    transition: transform 0.2s ease-in-out;
-}
+        #chatbot-orb {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: radial-gradient(circle, cyan, blue);
+            border-radius: 50%;
+            box-shadow: 0 0 15px cyan;
+            cursor: pointer;
+            transition: transform 0.2s ease-in-out;
+        }
 
-#chatbot-orb:hover {
-    transform: scale(1.1);
-}
+        #chatbot-orb:hover { transform: scale(1.1); }
 
-/* Chatbox Styling */
-#chat-container {
-    display: none;
-    position: fixed;
-    bottom: 80px;
-    right: 20px;
-    width: 250px;
-    background: rgba(0, 0, 50, 0.9);
-    border-radius: 10px;
-    box-shadow: 0 0 10px cyan;
-    overflow: hidden;
-    z-index: 1000;
-}
+        /* Chatbox Styling */
+        #chat-container {
+            display: none;
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 250px;
+            background: rgba(0, 0, 50, 0.9);
+            border-radius: 10px;
+            box-shadow: 0 0 10px cyan;
+            overflow: hidden;
+            z-index: 1000;
+        }
 
-#chat-box {
-    display: flex;
-    flex-direction: column;
-}
+        #chat-header {
+            background: cyan;
+            color: black;
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
+            cursor: pointer;
+        }
 
-#chat-header {
-    background: cyan;
-    color: black;
-    padding: 10px;
-    text-align: center;
-    font-weight: bold;
-}
+        #chat-content {
+            height: 150px;
+            overflow-y: auto;
+            padding: 10px;
+            color: white;
+            font-size: 14px;
+        }
 
-#close-chat {
-    float: right;
-    cursor: pointer;
-}
-
-#chat-content {
-    height: 150px;
-    overflow-y: auto;
-    padding: 10px;
-    color: white;
-    font-size: 14px;
-}
-
-#chat-input {
-    width: calc(100% - 20px);
-    margin: 10px;
-    padding: 5px;
-    border: none;
-    outline: none;
-    border-radius: 5px;
-}
-
+        #chat-input {
+            width: calc(100% - 20px);
+            margin: 10px;
+            padding: 5px;
+            border: none;
+            outline: none;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
+    <!-- Background -->
+    <div id="dynamic-bg"></div>
+
     <!-- Logo -->
-    <img src="logo.webp" alt="ZenoFractal Logo" class="logo">
+    <img src="logo.webp" alt="ZenoFractal Logo" class="logo" id="logo">
     
     <!-- Heading -->
     <h1>Welcome to ZenoFractal</h1>
 
+    <!-- AI Chatbot Floating Orb -->
+    <div id="chatbot-orb"></div>
+    <div id="chat-container">
+        <div id="chat-header">🤖 ZenoBot ✖</div>
+        <div id="chat-content"></div>
+        <input type="text" id="chat-input" placeholder="Ask me something..." />
+    </div>
+
     <script>
-        // Cursor Thin White Trail
-        let lastX, lastY;
-        document.addEventListener("mousemove", (e) => {
-            if (lastX !== undefined && lastY !== undefined) {
-                let dx = e.pageX - lastX;
-                let dy = e.pageY - lastY;
-                let distance = Math.sqrt(dx * dx + dy * dy);
-                let steps = Math.max(1, Math.floor(distance / 3));
-
-                for (let i = 0; i < steps; i++) {
-                    let trail = document.createElement("div");
-                    trail.classList.add("trail");
-                    document.body.appendChild(trail);
-
-                    let progress = i / steps;
-                    let x = lastX + dx * progress;
-                    let y = lastY + dy * progress;
-
-                    trail.style.left = `${x}px`;
-                    trail.style.top = `${y}px`;
-
-                    setTimeout(() => trail.remove(), 200);
-                }
-            }
-            lastX = e.pageX;
-            lastY = e.pageY;
-        });
-
-        // Glowing Ember Particles
-        let particles = [];
-        let numParticles = 20;
+        // Floating Particles
+        const numParticles = 20;
+        const particles = [];
 
         for (let i = 0; i < numParticles; i++) {
             let particle = document.createElement("div");
@@ -252,75 +171,52 @@ h1 {
 
         updateParticles();
 
-        // Add Dynamic Background
-const bgDiv = document.createElement("div");
-bgDiv.id = "dynamic-bg";
-document.body.prepend(bgDiv);
+        // Logo Glitch Effect on Click
+        const logo = document.getElementById("logo");
+        logo.addEventListener("click", () => {
+            logo.classList.add("glitch");
+            setTimeout(() => logo.classList.remove("glitch"), 400);
+        });
 
-// Logo Glitch Effect on Click
-const logo = document.querySelector(".logo");
+        // Chatbot Toggle
+        const chatbotOrb = document.getElementById("chatbot-orb");
+        const chatContainer = document.getElementById("chat-container");
+        const chatHeader = document.getElementById("chat-header");
 
-logo.addEventListener("click", () => {
-    logo.classList.add("glitch");
-    setTimeout(() => logo.classList.remove("glitch"), 400);
-});
+        chatbotOrb.addEventListener("click", () => {
+            chatContainer.style.display = chatContainer.style.display === "block" ? "none" : "block";
+        });
 
+        chatHeader.addEventListener("click", () => {
+            chatContainer.style.display = "none";
+        });
 
-        // Handle Chatbot Toggle
-const chatbotOrb = document.getElementById("chatbot-orb");
-const chatContainer = document.getElementById("chat-container");
-const closeChat = document.getElementById("close-chat");
+        // Chatbot Responses
+        const chatInput = document.getElementById("chat-input");
+        const chatContent = document.getElementById("chat-content");
 
-chatbotOrb.addEventListener("click", () => {
-    chatContainer.style.display = "block";
-});
+        const responses = {
+            "what is zenofractal": "ZenoFractal is where futuristic digital solutions meet excellence. 🚀",
+            "what services do you offer": "We specialize in **branding, web development, video editing, and beyond**. ⚡",
+            "how can zenofractal help my business": "We provide **top-tier branding, design, and digital services** to give your business an unbeatable edge. 🌟",
+            "why choose zenofractal": "Because we combine **expertise, innovation, and high-quality execution** to ensure your project stands out. 🔥",
+            "how do i get started": "Just reach out, and we’ll craft a **custom digital solution** tailored to your needs. 💡",
+            "who are you": "I am ZenoBot, your AI guide to all things ZenoFractal. 🤖",
+            "where does the future lead": "With ZenoFractal, the future leads to **limitless possibilities** in digital innovation. 🚀",
+            "hello": "Hey there! Ready to experience next-level digital services? 👋"
+        };
 
-closeChat.addEventListener("click", () => {
-    chatContainer.style.display = "none";
-});
-
-// Chatbot Responses
-const chatInput = document.getElementById("chat-input");
-const chatContent = document.getElementById("chat-content");
-
-const responses = {
-    "what is zenofractal": "ZenoFractal is where futuristic digital solutions meet excellence. We turn ideas into reality. 🚀",
-    "what services do you offer": "We specialize in **cutting-edge digital services**, including branding, web development, video editing, and beyond. Whatever you need, we deliver with precision. ⚡",
-    "how can zenofractal help my business": "We provide **top-tier branding, design, and digital services** to give your business an unbeatable edge in today's market. 🌟",
-    "why choose zenofractal": "Because we combine **expertise, innovation, and high-quality execution** to ensure your project stands out. No compromises, only results. 🔥",
-    "how do i get started": "Simple! Just reach out, and we'll craft a **custom digital solution** tailored to your needs. Let's build something amazing together. 💡",
-    "who are you": "I am ZenoBot, your AI guide to all things ZenoFractal. Need digital solutions? I'm here to help. 🤖",
-    "where does the future lead": "With ZenoFractal, the future leads to **limitless possibilities** in digital innovation. 🚀",
-    "give me a stock market prediction": "I see growth, I see trends... but the best investment? Your business. Let’s take it to the next level. 📈",
-    "hello": "Hey there! Ready to experience next-level digital services? Ask away! 👋"
-};
-
-chatInput.addEventListener("keypress", function (e) {
-    if (e.key === "Enter") {
-        let userInput = chatInput.value.toLowerCase().trim();
-        chatInput.value = "";
-
-        let botResponse = responses[userInput] || "That's an interesting question! Let's talk about how ZenoFractal can help. 🤔";
-
-        chatContent.innerHTML += `<p><strong>You:</strong> ${userInput}</p>`;
-        chatContent.innerHTML += `<p><strong>ZenoBot:</strong> ${botResponse}</p>`;
-
-        chatContent.scrollTop = chatContent.scrollHeight;
-    }
-});
+        chatInput.addEventListener("keypress", function (e) {
+            if (e.key === "Enter") {
+                let userInput = chatInput.value.toLowerCase().trim();
+                chatInput.value = "";
+                let botResponse = responses[userInput] || "Let's talk about how ZenoFractal can help. 🤔";
+                chatContent.innerHTML += `<p><strong>You:</strong> ${userInput}</p>`;
+                chatContent.innerHTML += `<p><strong>ZenoBot:</strong> ${botResponse}</p>`;
+                chatContent.scrollTop = chatContent.scrollHeight;
+            }
+        });
 
     </script>
-
-
-    <!-- AI Chatbot Floating Orb -->
-<div id="chatbot-orb"></div>
-<div id="chat-container">
-    <div id="chat-box">
-        <div id="chat-header">🤖 ZenoBot <span id="close-chat">✖</span></div>
-        <div id="chat-content"></div>
-        <input type="text" id="chat-input" placeholder="Ask me something..." />
-    </div>
-</div>
-
 </body>
 </html>
