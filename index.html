@@ -242,6 +242,15 @@
         <div id="chat-content">
             <button class="faq-question" onclick="toggleAnswer('answer1')">What is ZenoFractal?</button>
             <div id="answer1" class="answer">ZenoFractal is a cutting-edge digital solutions provider. 🚀</div>
+
+            <button class="faq-question" onclick="toggleAnswer('answer2')">What services do you offer?</button>
+            <div id="answer2" class="answer">We specialize in web development, video editing, branding, and more! ⚡</div>
+
+            <button class="faq-question" onclick="toggleAnswer('answer3')">Why should I choose ZenoFractal?</button>
+            <div id="answer3" class="answer">Because we fuse creativity, cutting-edge technology, and high-quality execution. 🔥</div>
+
+            <button class="faq-question" onclick="toggleAnswer('answer4')">How can I get started?</button>
+            <div id="answer4" class="answer">Just contact us, and we'll craft a custom digital solution tailored to your needs. 💡</div>
         </div>
     </div>
 
@@ -258,6 +267,7 @@
     <script>
         let audio = document.getElementById("bg-music");
 
+        // Toggle music play/pause
         function toggleMusic() {
             let button = document.getElementById("toggle-music");
             if (audio.paused) {
@@ -269,8 +279,28 @@
             }
         }
 
+        // Set music volume
         function setVolume(value) {
             audio.volume = value;
+        }
+
+        // Toggle Chat Window
+        const chatbotOrb = document.getElementById("zenobot");
+        const chatContainer = document.getElementById("chat-container");
+
+        chatbotOrb.addEventListener("click", () => {
+            chatContainer.style.display = chatContainer.style.display === "block" ? "none" : "block";
+        });
+
+        // Toggle FAQ Answers
+        function toggleAnswer(id) {
+            const answer = document.getElementById(id);
+            answer.style.display = answer.style.display === "block" ? "none" : "block";
+        }
+
+        // Close Chat on Header Click
+        function toggleChat() {
+            chatContainer.style.display = "none";
         }
     </script>
 
