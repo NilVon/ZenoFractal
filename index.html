@@ -167,6 +167,26 @@
             chatContent.innerHTML += `<p><strong>You:</strong> ${userInput}</p>`;
             chatContent.innerHTML += `<p><strong>ZenoBot:</strong> ${botResponse}</p>`;
             chatContent.scrollTop = chatContent.scrollHeight;
+
+            // Speak the bot's response
+            speakResponse(botResponse);
+        }
+
+        // Speak Response Function
+        function speakResponse(text) {
+            const speech = new SpeechSynthesisUtterance(text);
+            speech.volume = 1; // Max volume
+            speech.rate = 1; // Normal speed
+            speech.pitch = 1; // Normal pitch
+
+            // You can set a specific voice here
+            const voices = speechSynthesis.getVoices();
+            const selectedVoice = voices.find(voice => voice.name === 'Google UK English Male'); // You can change the voice name here
+            if (selectedVoice) {
+                speech.voice = selectedVoice;
+            }
+
+            speechSynthesis.speak(speech);
         }
 
         // Voice Recognition
