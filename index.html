@@ -17,51 +17,50 @@
             overflow-x: hidden;
         }
 
-/* 3D Wave Background */
-#dynamic-bg {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-    overflow: hidden;
-}
+        /* 3D Wave Background */
+        #dynamic-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
 
-.wave {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(270deg, #ff0066, #00cc99, #6600ff);
-    animation: waveAnimation 10s ease-in-out infinite;
-    transform: rotateX(0deg) translateZ(0);
-    opacity: 0.6;
-    will-change: transform;
-}
+        .wave {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(270deg, #ff0066, #00cc99, #6600ff);
+            animation: waveAnimation 10s ease-in-out infinite;
+            transform: rotateX(0deg) translateZ(0);
+            opacity: 0.6;
+            will-change: transform;
+        }
 
-.wave:nth-child(2) {
-    animation-delay: -5s;
-    opacity: 0.5;
-}
+        .wave:nth-child(2) {
+            animation-delay: -5s;
+            opacity: 0.5;
+        }
 
-.wave:nth-child(3) {
-    animation-delay: -2.5s;
-    opacity: 0.7;
-}
+        .wave:nth-child(3) {
+            animation-delay: -2.5s;
+            opacity: 0.7;
+        }
 
-/* 3D Wave Animation */
-@keyframes waveAnimation {
-    0% {
-        transform: translateY(0) rotateX(0) scale(1);
-    }
-    50% {
-        transform: translateY(-50px) rotateX(10deg) scale(1.1);
-    }
-    100% {
-        transform: translateY(0) rotateX(0) scale(1);
-    }
-}
-
+        /* 3D Wave Animation */
+        @keyframes waveAnimation {
+            0% {
+                transform: translateY(0) rotateX(0) scale(1);
+            }
+            50% {
+                transform: translateY(-50px) rotateX(10deg) scale(1.1);
+            }
+            100% {
+                transform: translateY(0) rotateX(0) scale(1);
+            }
+        }
 
         /* Logo */
         .logo {
@@ -125,40 +124,23 @@
             font-size: 14px;
         }
 
-        /* FAQ Question Styling */
-        .faq-question {
-            padding: 10px;
-            background-color: #222;
-            color: cyan;
+        #chat-input {
+            width: calc(100% - 20px);
+            margin: 10px;
+            padding: 5px;
             border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-bottom: 10px;
-            font-size: 16px;
-            text-align: left;
-            width: 100%;
-            box-sizing: border-box;
-        }
-
-        .faq-question:hover {
-            background-color: #333;
-        }
-
-        /* Answer Styling */
-        .answer {
-            display: none;
-            background-color: rgba(0, 0, 50, 0.9);
-            color: white;
-            padding: 10px;
-            margin-top: 5px;
+            outline: none;
             border-radius: 5px;
         }
-
     </style>
 </head>
 <body>
     <!-- Background -->
-    <div id="dynamic-bg"></div>
+    <div id="dynamic-bg">
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+    </div>
 
     <!-- Logo -->
     <img src="logo.webp" alt="ZenoFractal Logo" class="logo" id="logo">
@@ -170,32 +152,8 @@
     <div id="chatbot-orb"></div>
     <div id="chat-container">
         <div id="chat-header">🤖 ZenoBot ✖</div>
-        <div id="chat-content">
-            <!-- FAQ Questions -->
-            <button class="faq-question" onclick="toggleAnswer('answer1')">What is ZenoFractal?</button>
-            <div id="answer1" class="answer">ZenoFractal is where futuristic digital solutions meet excellence. 🚀</div>
-
-            <button class="faq-question" onclick="toggleAnswer('answer2')">What services do you offer?</button>
-            <div id="answer2" class="answer">We specialize in **branding, web development, video editing, and beyond**. ⚡</div>
-
-            <button class="faq-question" onclick="toggleAnswer('answer3')">How can ZenoFractal help my business?</button>
-            <div id="answer3" class="answer">We provide **top-tier branding, design, and digital services** to give your business an unbeatable edge. 🌟</div>
-
-            <button class="faq-question" onclick="toggleAnswer('answer4')">Why choose ZenoFractal?</button>
-            <div id="answer4" class="answer">Because we combine **expertise, innovation, and high-quality execution** to ensure your project stands out. 🔥</div>
-
-            <button class="faq-question" onclick="toggleAnswer('answer5')">How do I get started?</button>
-            <div id="answer5" class="answer">Just reach out, and we’ll craft a **custom digital solution** tailored to your needs. 💡</div>
-
-            <button class="faq-question" onclick="toggleAnswer('answer6')">Who are you?</button>
-            <div id="answer6" class="answer">I am ZenoBot, your AI guide to all things ZenoFractal. 🤖</div>
-
-            <button class="faq-question" onclick="toggleAnswer('answer7')">Where does the future lead?</button>
-            <div id="answer7" class="answer">With ZenoFractal, the future leads to **limitless possibilities** in digital innovation. 🚀</div>
-
-            <button class="faq-question" onclick="toggleAnswer('answer8')">Hello</button>
-            <div id="answer8" class="answer">Hey there! Ready to experience next-level digital services? 👋</div>
-        </div>
+        <div id="chat-content"></div>
+        <input type="text" id="chat-input" placeholder="Ask me something..." />
     </div>
 
     <script>
@@ -212,16 +170,34 @@
             chatContainer.style.display = "none";
         });
 
-        // Toggle FAQ Answer Visibility
-        function toggleAnswer(answerId) {
-            const answer = document.getElementById(answerId);
-            const allAnswers = document.querySelectorAll('.answer');
-            allAnswers.forEach((ans) => {
-                if (ans !== answer) {
-                    ans.style.display = 'none';  // Hide other answers
-                }
-            });
-            answer.style.display = answer.style.display === 'block' ? 'none' : 'block';  // Toggle the clicked answer
+        // Chatbot Responses
+        const chatInput = document.getElementById("chat-input");
+        const chatContent = document.getElementById("chat-content");
+
+        const responses = {
+            "what is zenofractal": "ZenoFractal is where futuristic digital solutions meet excellence. 🚀",
+            "what services do you offer": "We specialize in **branding, web development, video editing, and beyond**. ⚡",
+            "how can zenofractal help my business": "We provide **top-tier branding, design, and digital services** to give your business an unbeatable edge. 🌟",
+            "why choose zenofractal": "Because we combine **expertise, innovation, and high-quality execution** to ensure your project stands out. 🔥",
+            "how do i get started": "Just reach out, and we’ll craft a **custom digital solution** tailored to your needs. 💡",
+            "who are you": "I am ZenoBot, your AI guide to all things ZenoFractal. 🤖",
+            "where does the future lead": "With ZenoFractal, the future leads to **limitless possibilities** in digital innovation. 🚀",
+            "hello": "Hey there! Ready to experience next-level digital services? 👋"
+        };
+
+        chatInput.addEventListener("keypress", function (e) {
+            if (e.key === "Enter") {
+                processUserInput(chatInput.value);
+            }
+        });
+
+        function processUserInput(userInput) {
+            userInput = userInput.toLowerCase().trim();
+            chatInput.value = "";
+            let botResponse = responses[userInput] || "Let's talk about how ZenoFractal can help. 🤔";
+            chatContent.innerHTML += `<p><strong>You:</strong> ${userInput}</p>`;
+            chatContent.innerHTML += `<p><strong>ZenoBot:</strong> ${botResponse}</p>`;
+            chatContent.scrollTop = chatContent.scrollHeight;
         }
     </script>
 </body>
