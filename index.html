@@ -84,43 +84,6 @@
             color: lightgray;
         }
 
-        /* Glitchy Cyber Button */
-        .btn {
-            background: linear-gradient(45deg, cyan, blue);
-            padding: 15px 30px;
-            color: black;
-            font-size: 18px;
-            font-weight: bold;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: 0.3s;
-            box-shadow: 0 0 10px cyan;
-            border: none;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: rgba(255, 255, 255, 0.2);
-            transform: skewX(-20deg);
-            transition: 0.5s;
-        }
-
-        .btn:hover::before {
-            left: 100%;
-        }
-
-        .btn:hover {
-            transform: scale(1.1);
-            box-shadow: 0 0 20px cyan;
-        }
-
         /* Floating AI Bot */
         #chatbot-orb {
             position: fixed;
@@ -201,20 +164,17 @@
         <a href="#">Home</a>
         <a href="#">Services</a>
         <a href="#">About</a>
-        <a href="https://www.instagram.com/zenofractal/?hl=en" target="_blank">Contact us</a>
+        <a href="https://www.instagram.com/zenofractal/?hl=en" target="_blank">Contact</a>
     </div>
 
     <!-- Hero Section -->
     <div class="hero">
         <h1>Welcome to ZenoFractal</h1>
         <p>Step into the Future of Digital Innovation</p>
-        <a href="https://www.instagram.com/zenofractal/?hl=en" target="_blank">
-            <button class="btn">Contact Us</button>
-        </a>
     </div>
 
     <!-- AI Chatbot Orb -->
-    <div id="chatbot-orb"></div>
+    <div id="chatbot-orb" onclick="toggleChat()"></div>
 
     <!-- Chatbot -->
     <div id="chat-container">
