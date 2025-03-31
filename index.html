@@ -15,7 +15,7 @@
             overflow-x: hidden;
         }
 
-        /* Cyberpunk Glitch Background */
+        /* Background - NO FILTERS */
         #dynamic-bg {
             position: fixed;
             top: 0;
@@ -23,13 +23,8 @@
             width: 100%;
             height: 100%;
             background: url('https://media1.tenor.com/m/Z5lIBiOdagsAAAAC/purple-aesthetic-rain.gif') no-repeat center center fixed;
+            background-size: cover;
             z-index: -1;
-            animation: bgGlitch 8s infinite alternate ease-in-out;
-        }
-
-        @keyframes bgGlitch {
-            0% { filter: hue-rotate(0deg) brightness(1); }
-            100% { filter: hue-rotate(360deg) brightness(1.2); }
         }
 
         /* Navigation Bar */
@@ -40,22 +35,22 @@
             transform: translateX(-50%);
             display: flex;
             gap: 20px;
-            background: rgba(0, 0, 50, 0.7);
-            padding: 10px 20px;
+            background: rgba(50, 0, 80, 0.8);
+            padding: 12px 25px;
             border-radius: 10px;
-            box-shadow: 0 0 15px cyan;
+            box-shadow: 0 0 20px purple;
         }
 
         .nav a {
-            color: cyan;
+            color: violet;
             text-decoration: none;
             font-size: 16px;
             transition: 0.3s;
         }
 
         .nav a:hover {
-            color: lime;
-            text-shadow: 0 0 5px lime;
+            color: cyan;
+            text-shadow: 0 0 5px cyan;
         }
 
         /* Hero Section */
@@ -70,7 +65,7 @@
 
         .hero h1 {
             font-size: 3em;
-            text-shadow: 0 0 10px cyan;
+            text-shadow: 0 0 10px purple;
         }
 
         .hero p {
@@ -78,81 +73,98 @@
             color: lightgray;
         }
 
-        /* Glowing Cyber Button */
+        /* Cyberpunk Button */
         .btn {
-            background: linear-gradient(45deg, cyan, blue);
+            background: linear-gradient(45deg, purple, violet);
             padding: 15px 30px;
-            color: black;
+            color: white;
             font-size: 18px;
             font-weight: bold;
             border-radius: 8px;
             cursor: pointer;
             transition: 0.3s;
-            box-shadow: 0 0 10px cyan;
+            box-shadow: 0 0 15px purple;
             border: none;
         }
 
         .btn:hover {
             transform: scale(1.1);
-            box-shadow: 0 0 20px cyan;
+            box-shadow: 0 0 25px violet;
         }
 
-        /* Sound Toggle Button */
-        #sound-toggle {
+        /* ZenoBot - Cyber Orb */
+        #zenobot {
             position: fixed;
             bottom: 20px;
-            left: 20px;
-            background: neon cyan;
-            padding: 15px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: radial-gradient(circle, cyan, blue);
             border-radius: 50%;
-            box-shadow: 0 0 10px cyan;
+            box-shadow: 0 0 15px cyan;
             cursor: pointer;
-            transition: background 0.3s ease, transform 0.3s ease;
+            transition: transform 0.2s ease-in-out;
         }
 
-        #sound-toggle.on {
-            background: neon cyan;
-        }
+        #zenobot:hover { transform: scale(1.1); }
 
-        #sound-toggle.off {
-            background: neon pink;
-        }
-
-        #sound-toggle:hover {
-            transform: scale(1.1);
-        }
-
-        /* Volume Slider */
-        #volume-slider {
+        /* ZenoBot Chat Window */
+        #chat-container {
+            display: none;
             position: fixed;
-            bottom: 80px;
-            left: 20px;
-            width: 120px;
-            background: rgba(255, 255, 255, 0.2);
+            bottom: 90px;
+            right: 20px;
+            width: 280px;
+            background: rgba(50, 0, 80, 0.9);
             border-radius: 10px;
+            box-shadow: 0 0 15px cyan;
+            z-index: 1000;
+            padding: 10px;
+            color: white;
+            overflow-y: auto;
         }
 
-        input[type="range"] {
-            -webkit-appearance: none;
-            width: 100%;
-            height: 5px;
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 10px;
-            outline: none;
-        }
-
-        input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 20px;
-            height: 20px;
+        #chat-header {
             background: cyan;
-            border-radius: 50%;
+            color: black;
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
             cursor: pointer;
-            transition: background 0.3s;
         }
 
-        input[type="range"]::-webkit-slider-thumb:hover {
-            background: lime;
+        #chat-content {
+            height: 250px;
+            overflow-y: auto;
+            padding: 10px;
+            font-size: 14px;
+        }
+
+        .faq-question {
+            padding: 10px;
+            background-color: #222;
+            color: cyan;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 10px;
+            font-size: 16px;
+            text-align: left;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .faq-question:hover {
+            background-color: #333;
+        }
+
+        .answer {
+            display: none;
+            background-color: rgba(50, 0, 80, 0.9);
+            color: white;
+            padding: 10px;
+            margin-top: 5px;
+            border-radius: 5px;
         }
 
     </style>
@@ -177,39 +189,47 @@
         <button class="btn">Explore</button>
     </div>
 
-    <!-- Sound Toggle Button -->
-    <div id="sound-toggle" class="on"></div>
+    <!-- ZenoBot -->
+    <div id="zenobot"></div>
 
-    <!-- Volume Slider -->
-    <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.5">
+    <!-- Chatbot -->
+    <div id="chat-container">
+        <div id="chat-header" onclick="toggleChat()">🤖 ZenoBot ✖</div>
+        <div id="chat-content">
+            <!-- FAQ Questions -->
+            <button class="faq-question" onclick="toggleAnswer('answer1')">What is ZenoFractal?</button>
+            <div id="answer1" class="answer">ZenoFractal is a cutting-edge digital solutions provider, focusing on futuristic innovation. 🚀</div>
 
-    <!-- Audio -->
-    <audio id="audio" loop>
-        <source src="https://raw.githubusercontent.com/your-github-repo-link/audio.mp4" type="audio/mp4">
-        Your browser does not support the audio element.
-    </audio>
+            <button class="faq-question" onclick="toggleAnswer('answer2')">What services do you offer?</button>
+            <div id="answer2" class="answer">We specialize in web development, video editing, branding, and more! ⚡</div>
+
+            <button class="faq-question" onclick="toggleAnswer('answer3')">Why should I choose ZenoFractal?</button>
+            <div id="answer3" class="answer">Because we fuse creativity, cutting-edge technology, and high-quality execution. 🔥</div>
+
+            <button class="faq-question" onclick="toggleAnswer('answer4')">How can I get started?</button>
+            <div id="answer4" class="answer">Just contact us, and we'll craft a custom digital solution tailored to your needs. 💡</div>
+        </div>
+    </div>
 
     <script>
-        // Sound Toggle and Volume Control
-        const soundToggle = document.getElementById("sound-toggle");
-        const audio = document.getElementById("audio");
-        const volumeSlider = document.getElementById("volume-slider");
+        // Toggle Chat Window
+        const chatbotOrb = document.getElementById("zenobot");
+        const chatContainer = document.getElementById("chat-container");
 
-        soundToggle.addEventListener("click", () => {
-            if (audio.paused) {
-                audio.play();
-                soundToggle.classList.remove("off");
-                soundToggle.classList.add("on");
-            } else {
-                audio.pause();
-                soundToggle.classList.remove("on");
-                soundToggle.classList.add("off");
-            }
+        chatbotOrb.addEventListener("click", () => {
+            chatContainer.style.display = chatContainer.style.display === "block" ? "none" : "block";
         });
 
-        volumeSlider.addEventListener("input", (e) => {
-            audio.volume = e.target.value;
-        });
+        // Toggle FAQ Answers
+        function toggleAnswer(id) {
+            const answer = document.getElementById(id);
+            answer.style.display = answer.style.display === "block" ? "none" : "block";
+        }
+
+        // Close Chat on Header Click
+        function toggleChat() {
+            chatContainer.style.display = "none";
+        }
     </script>
 
 </body>
