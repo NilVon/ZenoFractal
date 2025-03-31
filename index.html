@@ -14,6 +14,7 @@
             margin: 0;
             padding: 0;
             min-height: 200vh; /* Allows scrolling */
+            overflow: hidden;
         }
 
         /* Heading */
@@ -23,44 +24,32 @@
             text-shadow: 0 0 10px cyan;
         }
 
-        /* Typewriter Effect */
-        #tagline {
-            font-size: 1.5rem;
-            text-shadow: 0 0 5px cyan;
-            white-space: nowrap;
-            overflow: hidden;
-            display: inline-block;
-            border-right: 2px solid cyan;
-            animation: blinkCursor 0.7s infinite;
-        }
-        @keyframes blinkCursor {
-            50% { border-color: transparent; }
-        }
-
         /* Logo */
         .logo {
             width: 150px;
             margin-top: 20px;
-            transition: transform 0.2s ease-out;
         }
 
         /* Cursor Trail */
         .trail {
             position: absolute;
-            border-radius: 50%;
+            width: 2px;
+            height: 2px;
+            background-color: white;
             pointer-events: none;
-            opacity: 0.8;
-            transition: background-color 0.1s linear;
+            opacity: 0.9;
         }
 
-        /* Floating Particles */
+        /* Glowing Embers */
         .particle {
             position: absolute;
-            width: 8px;
-            height: 8px;
+            width: 6px;
+            height: 6px;
             border-radius: 50%;
+            background-color: orange;
+            box-shadow: 0 0 8px rgba(255, 140, 0, 0.8);
             pointer-events: none;
-            transition: transform 2s linear, background-color 0.5s linear;
+            transition: transform 0.1s linear;
         }
     </style>
 </head>
@@ -68,106 +57,71 @@
     <!-- Logo -->
     <img src="logo.webp" alt="ZenoFractal Logo" class="logo">
     
-    <!-- Heading & Tagline -->
+    <!-- Heading -->
     <h1>Welcome to ZenoFractal</h1>
-    <p id="tagline"></p>
 
     <script>
-        // Typewriter Effect
-        const text = "The Future of Innovation";
-        let index = 0;
-        function typeWriter() {
-            if (index < text.length) {
-                document.getElementById("tagline").innerHTML += text.charAt(index);
-                index++;
-                setTimeout(typeWriter, 100);
-            }
-        }
-        window.onload = typeWriter;
-
-        // RGB Color Generator
-        function rgbCycle(progress) {
-            let r = Math.sin(progress * 2 * Math.PI) * 127 + 128;
-            let g = Math.sin((progress + 1 / 3) * 2 * Math.PI) * 127 + 128;
-            let b = Math.sin((progress + 2 / 3) * 2 * Math.PI) * 127 + 128;
-            return `rgb(${Math.floor(r)}, ${Math.floor(g)}, ${Math.floor(b)})`;
-        }
-
-        let particles = [];
-        for (let i = 0; i < 30; i++) {
-            let particle = document.createElement("div");
-            particle.classList.add("particle");
-            document.body.appendChild(particle);
-            particles.push({ element: particle, x: Math.random() * window.innerWidth, y: Math.random() * window.innerHeight });
-        }
-
-        let lastX, lastY, progress = 0, isMoving = false;
-
+        // Cursor Thin White Trail
+        let lastX, lastY;
         document.addEventListener("mousemove", (e) => {
-            isMoving = true;
-            let color = rgbCycle(progress);
-            progress += 0.01; // Adjust speed of color change
-
             if (lastX !== undefined && lastY !== undefined) {
                 let dx = e.pageX - lastX;
                 let dy = e.pageY - lastY;
                 let distance = Math.sqrt(dx * dx + dy * dy);
-                let steps = Math.max(1, Math.floor(distance / 5));
+                let steps = Math.max(1, Math.floor(distance / 3));
 
                 for (let i = 0; i < steps; i++) {
                     let trail = document.createElement("div");
                     trail.classList.add("trail");
-                    let size = 10 - (i / steps) * 8; // Makes the head bigger and tail smaller
-                    trail.style.width = `${size}px`;
-                    trail.style.height = `${size}px`;
-                    trail.style.position = "absolute";
-                    trail.style.left = `${lastX + dx * (i / steps)}px`;
-                    trail.style.top = `${lastY + dy * (i / steps)}px`;
-                    trail.style.backgroundColor = color;
-                    trail.style.boxShadow = `0 0 5px ${color}, 0 0 10px ${color}`;
-
                     document.body.appendChild(trail);
-                    setTimeout(() => trail.remove(), 500);
+
+                    let progress = i / steps;
+                    let x = lastX + dx * progress;
+                    let y = lastY + dy * progress;
+
+                    trail.style.left = `${x}px`;
+                    trail.style.top = `${y}px`;
+
+                    setTimeout(() => trail.remove(), 200);
                 }
             }
-
-            // Update particles to follow cursor
-            particles.forEach((p, i) => {
-                let delay = i * 5;
-                setTimeout(() => {
-                    p.x += (e.pageX - p.x) * 0.2;
-                    p.y += (e.pageY - p.y) * 0.2;
-                    p.element.style.transform = `translate(${p.x}px, ${p.y}px)`;
-                    p.element.style.backgroundColor = color;
-                    p.element.style.boxShadow = `0 0 5px ${color}, 0 0 10px ${color}`;
-                }, delay);
-            });
-
             lastX = e.pageX;
             lastY = e.pageY;
-            clearTimeout(stopMovingTimeout);
-            stopMovingTimeout = setTimeout(() => { isMoving = false; }, 100);
         });
 
-        let stopMovingTimeout;
-        function moveParticlesRandomly() {
-            if (!isMoving) {
-                particles.forEach(p => {
-                    let x = Math.random() * window.innerWidth;
-                    let y = Math.random() * window.innerHeight;
-                    p.x = x;
-                    p.y = y;
-                    p.element.style.transform = `translate(${x}px, ${y}px)`;
-                });
-            }
+        // Glowing Ember Particles
+        let particles = [];
+        let numParticles = 20;
+
+        for (let i = 0; i < numParticles; i++) {
+            let particle = document.createElement("div");
+            particle.classList.add("particle");
+            document.body.appendChild(particle);
+
+            let x = Math.random() * window.innerWidth;
+            let y = Math.random() * window.innerHeight;
+            let speedX = (Math.random() - 0.5) * 2;
+            let speedY = (Math.random() - 0.5) * 2;
+
+            particles.push({ element: particle, x, y, speedX, speedY });
         }
-        setInterval(moveParticlesRandomly, 3000);
 
-        // Parallax Scrolling
-        document.addEventListener("scroll", () => {
-            let scrollPos = window.scrollY;
-            document.querySelector(".logo").style.transform = `translateY(${scrollPos * 0.5}px)`;
-        });
+        function updateParticles() {
+            particles.forEach(p => {
+                p.x += p.speedX;
+                p.y += p.speedY;
+
+                // Collision with screen edges
+                if (p.x <= 0 || p.x >= window.innerWidth) p.speedX *= -1;
+                if (p.y <= 0 || p.y >= window.innerHeight) p.speedY *= -1;
+
+                p.element.style.transform = `translate(${p.x}px, ${p.y}px)`;
+            });
+
+            requestAnimationFrame(updateParticles);
+        }
+
+        updateParticles();
     </script>
 </body>
 </html>
