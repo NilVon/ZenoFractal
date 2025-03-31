@@ -3,70 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZenoFractal | The Future is Now</title>
+    <title>ZenoFractal | Cyber Future</title>
     <style>
-        /* General Styles */
+        /* General Styling */
         body {
             margin: 0;
             padding: 0;
             background: black;
             font-family: 'Arial', sans-serif;
             color: white;
-            overflow: hidden;
+            overflow-x: hidden;
         }
 
-        /* Background Rain and Thunder */
-        #background {
+        /* Cyberpunk Glitch Background */
+        #dynamic-bg {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: url('https://media1.tenor.com/m/Z5lIBiOdagsAAAAC/purple-aesthetic-rain.gif') center center / cover no-repeat;
-            z-index: -2;
-        }
-
-        @keyframes flash {
-            0% { opacity: 0; }
-            50% { opacity: 1; }
-            100% { opacity: 0; }
-        }
-
-        #thunder {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: white;
-            opacity: 0;
+            background: url('https://media1.tenor.com/m/Z5lIBiOdagsAAAAC/purple-aesthetic-rain.gif') no-repeat center center fixed;
             z-index: -1;
+            animation: bgGlitch 8s infinite alternate ease-in-out;
         }
 
-        /* Cyberpunk Navbar */
-        .navbar {
+        @keyframes bgGlitch {
+            0% { filter: hue-rotate(0deg) brightness(1); }
+            100% { filter: hue-rotate(360deg) brightness(1.2); }
+        }
+
+        /* Navigation Bar */
+        .nav {
             position: fixed;
             top: 10px;
             left: 50%;
             transform: translateX(-50%);
             display: flex;
             gap: 20px;
-            background: rgba(50, 0, 75, 0.7);
+            background: rgba(0, 0, 50, 0.7);
             padding: 10px 20px;
             border-radius: 10px;
-            box-shadow: 0 0 15px violet;
+            box-shadow: 0 0 15px cyan;
         }
 
-        .navbar a {
-            color: violet;
+        .nav a {
+            color: cyan;
             text-decoration: none;
             font-size: 16px;
             transition: 0.3s;
         }
 
-        .navbar a:hover {
-            color: magenta;
-            text-shadow: 0 0 5px magenta;
+        .nav a:hover {
+            color: lime;
+            text-shadow: 0 0 5px lime;
         }
 
         /* Hero Section */
@@ -77,12 +66,11 @@
             align-items: center;
             height: 100vh;
             text-align: center;
-            position: relative;
         }
 
         .hero h1 {
             font-size: 3em;
-            text-shadow: 0 0 15px violet;
+            text-shadow: 0 0 10px cyan;
         }
 
         .hero p {
@@ -90,77 +78,81 @@
             color: lightgray;
         }
 
-        /* Glitchy Button */
+        /* Glowing Cyber Button */
         .btn {
-            background: linear-gradient(45deg, violet, purple);
+            background: linear-gradient(45deg, cyan, blue);
             padding: 15px 30px;
-            color: white;
+            color: black;
             font-size: 18px;
             font-weight: bold;
             border-radius: 8px;
             cursor: pointer;
             transition: 0.3s;
-            box-shadow: 0 0 15px violet;
+            box-shadow: 0 0 10px cyan;
             border: none;
-            position: relative;
-            overflow: hidden;
         }
 
         .btn:hover {
             transform: scale(1.1);
-            box-shadow: 0 0 25px magenta;
+            box-shadow: 0 0 20px cyan;
         }
 
-        /* AI Chatbot */
-        #chatbot {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 60px;
-            height: 60px;
-            background: radial-gradient(circle, violet, purple);
-            border-radius: 50%;
-            box-shadow: 0 0 20px violet;
-            cursor: pointer;
-            transition: transform 0.2s ease-in-out;
-        }
-
-        #chatbot:hover { transform: scale(1.1); }
-
-        /* Chatbox */
-        #chat-container {
-            display: none;
-            position: fixed;
-            bottom: 90px;
-            right: 20px;
-            width: 280px;
-            background: rgba(50, 0, 75, 0.9);
-            border-radius: 10px;
-            box-shadow: 0 0 15px violet;
-            z-index: 1000;
-            padding: 10px;
-            color: white;
-        }
-
-        #chat-header {
-            background: violet;
-            color: black;
-            padding: 10px;
-            text-align: center;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        /* Music Player */
-        #music-control {
+        /* Sound Toggle Button */
+        #sound-toggle {
             position: fixed;
             bottom: 20px;
             left: 20px;
-            background: rgba(50, 0, 75, 0.9);
-            padding: 10px;
+            background: neon cyan;
+            padding: 15px;
+            border-radius: 50%;
+            box-shadow: 0 0 10px cyan;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.3s ease;
+        }
+
+        #sound-toggle.on {
+            background: neon cyan;
+        }
+
+        #sound-toggle.off {
+            background: neon pink;
+        }
+
+        #sound-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        /* Volume Slider */
+        #volume-slider {
+            position: fixed;
+            bottom: 80px;
+            left: 20px;
+            width: 120px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            background: cyan;
             border-radius: 50%;
             cursor: pointer;
-            box-shadow: 0 0 15px violet;
+            transition: background 0.3s;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            background: lime;
         }
 
     </style>
@@ -168,11 +160,10 @@
 <body>
 
     <!-- Background -->
-    <div id="background"></div>
-    <div id="thunder"></div>
+    <div id="dynamic-bg"></div>
 
-    <!-- Navbar -->
-    <div class="navbar">
+    <!-- Navigation -->
+    <div class="nav">
         <a href="#">Home</a>
         <a href="#">Services</a>
         <a href="#">About</a>
@@ -182,55 +173,43 @@
     <!-- Hero Section -->
     <div class="hero">
         <h1>Welcome to ZenoFractal</h1>
-        <p>Experience the Future of Digital Innovation</p>
-        <button class="btn" onclick="alert('Feature coming soon!')">Explore</button>
+        <p>Step into the Future of Digital Innovation</p>
+        <button class="btn">Explore</button>
     </div>
 
-    <!-- Chatbot -->
-    <div id="chatbot"></div>
+    <!-- Sound Toggle Button -->
+    <div id="sound-toggle" class="on"></div>
 
-    <!-- Chat Container -->
-    <div id="chat-container">
-        <div id="chat-header" onclick="toggleChat()">🤖 ZenoBot ✖</div>
-        <div id="chat-content">
-            <div class="faq" onclick="toggleAnswer('faq1')">What is ZenoFractal?</div>
-            <div id="faq1" class="faq-answer">ZenoFractal is a futuristic digital solutions powerhouse. 🚀</div>
+    <!-- Volume Slider -->
+    <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.5">
 
-            <div class="faq" onclick="toggleAnswer('faq2')">What services do you offer?</div>
-            <div id="faq2" class="faq-answer">Web development, branding, AI solutions, and more. ⚡</div>
-
-            <div class="faq" onclick="toggleAnswer('faq3')">Why choose us?</div>
-            <div id="faq3" class="faq-answer">We combine tech, design, and innovation to redefine digital experiences. 🔥</div>
-        </div>
-    </div>
-
-    <!-- Music Player -->
-    <audio id="bg-music" loop>
-        <source src="https://www.dropbox.com/scl/fi/74n4i4nv1dc7e3c1g3yb1/cyberpunk.mp3?rlkey=5qwyz7oy0kg8eg4tm3wy0d36j&raw=1" type="audio/mp3">
+    <!-- Audio -->
+    <audio id="audio" loop>
+        <source src="https://raw.githubusercontent.com/your-github-repo-link/audio.mp4" type="audio/mp4">
+        Your browser does not support the audio element.
     </audio>
-    <button id="music-control" onclick="toggleMusic()">🔊</button>
 
     <script>
-        // Thunder effect
-        setInterval(() => {
-            document.getElementById("thunder").style.animation = "flash 0.3s linear";
-            setTimeout(() => document.getElementById("thunder").style.animation = "", 300);
-        }, Math.random() * 5000 + 3000);
+        // Sound Toggle and Volume Control
+        const soundToggle = document.getElementById("sound-toggle");
+        const audio = document.getElementById("audio");
+        const volumeSlider = document.getElementById("volume-slider");
 
-        // Chatbot Toggle
-        document.getElementById("chatbot").addEventListener("click", () => {
-            document.getElementById("chat-container").style.display = 
-                document.getElementById("chat-container").style.display === "block" ? "none" : "block";
+        soundToggle.addEventListener("click", () => {
+            if (audio.paused) {
+                audio.play();
+                soundToggle.classList.remove("off");
+                soundToggle.classList.add("on");
+            } else {
+                audio.pause();
+                soundToggle.classList.remove("on");
+                soundToggle.classList.add("off");
+            }
         });
 
-        function toggleMusic() {
-            let music = document.getElementById("bg-music");
-            if (music.paused) {
-                music.play();
-            } else {
-                music.pause();
-            }
-        }
+        volumeSlider.addEventListener("input", (e) => {
+            audio.volume = e.target.value;
+        });
     </script>
 
 </body>
