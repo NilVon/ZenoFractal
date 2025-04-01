@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZenoFractal | Cyberpunk Future</title>
+    <title>ZenoFractal | Cyber Future</title>
     <style>
         /* General Styling */
         body {
@@ -14,33 +13,18 @@
             font-family: 'Arial', sans-serif;
             color: white;
             overflow-x: hidden;
-            overflow-y: hidden;
         }
 
-        /* Cyberpunk Gradient Background */
+        /* Background - NO FILTERS */
         #dynamic-bg {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, #00d4ff, #b3006b);
+            background: url('https://media1.tenor.com/m/Z5lIBiOdagsAAAAC/purple-aesthetic-rain.gif') no-repeat center center fixed;
+            background-size: cover;
             z-index: -1;
-            animation: gradientAnimation 5s ease infinite;
-        }
-
-        @keyframes gradientAnimation {
-            0% {
-                background: linear-gradient(135deg, #00d4ff, #b3006b);
-            }
-
-            50% {
-                background: linear-gradient(135deg, #ff007c, #00d4ff);
-            }
-
-            100% {
-                background: linear-gradient(135deg, #00d4ff, #b3006b);
-            }
         }
 
         /* Navigation Bar */
@@ -51,22 +35,22 @@
             transform: translateX(-50%);
             display: flex;
             gap: 20px;
-            background: rgba(0, 0, 50, 0.8);
+            background: rgba(50, 0, 80, 0.8);
             padding: 12px 25px;
             border-radius: 10px;
-            box-shadow: 0 0 20px #b3006b;
+            box-shadow: 0 0 20px purple;
         }
 
         .nav a {
-            color: white;
+            color: violet;
             text-decoration: none;
             font-size: 16px;
             transition: 0.3s;
         }
 
         .nav a:hover {
-            color: #ff007c;
-            text-shadow: 0 0 5px #ff007c;
+            color: cyan;
+            text-shadow: 0 0 5px cyan;
         }
 
         /* Hero Section */
@@ -77,12 +61,11 @@
             align-items: center;
             height: 100vh;
             text-align: center;
-            z-index: 10;
         }
 
         .hero h1 {
             font-size: 3em;
-            text-shadow: 0 0 20px #ff007c;
+            text-shadow: 0 0 10px purple;
         }
 
         .hero p {
@@ -92,7 +75,7 @@
 
         /* Cyberpunk Button */
         .btn {
-            background: linear-gradient(45deg, #ff007c, #00d4ff);
+            background: linear-gradient(45deg, purple, violet);
             padding: 15px 30px;
             color: white;
             font-size: 18px;
@@ -100,32 +83,30 @@
             border-radius: 8px;
             cursor: pointer;
             transition: 0.3s;
-            box-shadow: 0 0 15px #ff007c;
+            box-shadow: 0 0 15px purple;
             border: none;
         }
 
         .btn:hover {
             transform: scale(1.1);
-            box-shadow: 0 0 25px #00d4ff;
+            box-shadow: 0 0 25px violet;
         }
 
-        /* ZenoBot */
+        /* ZenoBot - Now Purple */
         #zenobot {
             position: fixed;
             bottom: 20px;
             right: 20px;
             width: 60px;
             height: 60px;
-            background: radial-gradient(circle, #ff007c, #00d4ff);
+            background: radial-gradient(circle, purple, violet);
             border-radius: 50%;
-            box-shadow: 0 0 15px #ff007c;
+            box-shadow: 0 0 15px violet;
             cursor: pointer;
             transition: transform 0.2s ease-in-out;
         }
 
-        #zenobot:hover {
-            transform: scale(1.1);
-        }
+        #zenobot:hover { transform: scale(1.1); }
 
         /* ZenoBot Chat Window */
         #chat-container {
@@ -134,9 +115,9 @@
             bottom: 90px;
             right: 20px;
             width: 280px;
-            background: rgba(50, 0, 50, 0.8);
+            background: rgba(80, 0, 120, 0.9);
             border-radius: 10px;
-            box-shadow: 0 0 15px #ff007c;
+            box-shadow: 0 0 15px violet;
             z-index: 1000;
             padding: 10px;
             color: white;
@@ -144,7 +125,7 @@
         }
 
         #chat-header {
-            background: #ff007c;
+            background: violet;
             color: black;
             padding: 10px;
             text-align: center;
@@ -155,7 +136,7 @@
         .faq-question {
             padding: 10px;
             background-color: #222;
-            color: #ff007c;
+            color: violet;
             border: none;
             border-radius: 5px;
             cursor: pointer;
@@ -172,23 +153,11 @@
 
         .answer {
             display: none;
-            background-color: rgba(50, 0, 50, 0.9);
+            background-color: rgba(80, 0, 120, 0.9);
             color: white;
             padding: 10px;
             margin-top: 5px;
             border-radius: 5px;
-        }
-
-        /* Stopwatch Animation */
-        #stopwatch {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            font-size: 20px;
-            font-weight: bold;
-            color: #ff007c;
-            text-shadow: 0 0 5px #ff007c;
-            z-index: 1000;
         }
 
         /* Music Player */
@@ -199,20 +168,20 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            background: rgba(50, 0, 50, 0.9);
+            background: rgba(50, 0, 80, 0.9);
             padding: 10px;
             border-radius: 10px;
-            box-shadow: 0 0 15px #ff007c;
+            box-shadow: 0 0 15px purple;
         }
 
         #toggle-music {
             width: 30px;
             height: 30px;
             border-radius: 50%;
-            background: #00d4ff;
+            background: cyan;
             cursor: pointer;
             transition: 0.3s;
-            box-shadow: 0 0 10px #00d4ff;
+            box-shadow: 0 0 10px cyan;
         }
 
         #toggle-music.off {
@@ -226,7 +195,7 @@
             height: 5px;
             -webkit-appearance: none;
             appearance: none;
-            background: #00d4ff;
+            background: cyan;
             outline: none;
             transition: 0.3s;
         }
@@ -236,15 +205,70 @@
             appearance: none;
             width: 15px;
             height: 15px;
-            background: #ff007c;
+            background: violet;
             border-radius: 50%;
             cursor: pointer;
-            box-shadow: 0 0 10px #ff007c;
+            box-shadow: 0 0 10px violet;
         }
+
+
+        /* Stopwatch Style */
+.stopwatch {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    font-size: 20px;
+    font-family: 'Courier New', Courier, monospace;
+    color: neon pink;
+    text-shadow: 0 0 10px pink, 0 0 20px pink;
+    z-index: 1000;
+}
+
+
+        /* Loading Screen */
+#loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+}
+
+.loader {
+    border: 8px solid rgba(255, 255, 255, 0.1);
+    border-top: 8px solid cyan;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1.5s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
     </style>
 </head>
-
 <body>
+
+    
+    <div id="stopwatch" class="stopwatch">
+    00:00
+</div>
+
+
+    <!-- Loading Screen -->
+<div id="loading-screen">
+    <div class="loader"></div>
+    <p>Loading ZenoFractal...</p>
+</div>
+
 
     <!-- Background -->
     <div id="dynamic-bg"></div>
@@ -263,9 +287,6 @@
         <p>Step into the Future of Digital Innovation</p>
         <button class="btn">Explore</button>
     </div>
-
-    <!-- Stopwatch -->
-    <div id="stopwatch">Time Spent: 0s</div>
 
     <!-- ZenoBot -->
     <div id="zenobot"></div>
@@ -300,10 +321,8 @@
 
     <script>
         let audio = document.getElementById("bg-music");
-        let stopwatch = document.getElementById("stopwatch");
-        let seconds = 0;
-        let interval;
 
+        // Toggle music play/pause
         function toggleMusic() {
             let button = document.getElementById("toggle-music");
             if (audio.paused) {
@@ -315,31 +334,50 @@
             }
         }
 
+        // Set music volume
         function setVolume(value) {
             audio.volume = value;
         }
 
+        // Toggle Chat Window
+        const chatbotOrb = document.getElementById("zenobot");
+        const chatContainer = document.getElementById("chat-container");
+
+        chatbotOrb.addEventListener("click", () => {
+            chatContainer.style.display = chatContainer.style.display === "block" ? "none" : "block";
+        });
+
+        // Toggle FAQ Answers
+        function toggleAnswer(id) {
+            const answer = document.getElementById(id);
+            answer.style.display = answer.style.display === "block" ? "none" : "block";
+        }
+
+        // Close Chat on Header Click
         function toggleChat() {
-            let chatContainer = document.getElementById("chat-container");
-            chatContainer.style.display = (chatContainer.style.display === "none") ? "block" : "none";
+            chatContainer.style.display = "none";
         }
 
-        function toggleAnswer(answerId) {
-            let answer = document.getElementById(answerId);
-            answer.style.display = (answer.style.display === "none") ? "block" : "none";
-        }
+        // Stopwatch Logic
+let timeSpent = 0; // in seconds
+const stopwatch = document.getElementById("stopwatch");
 
-        // Stopwatch functionality
-        function startStopwatch() {
-            interval = setInterval(() => {
-                seconds++;
-                stopwatch.innerText = `Time Spent: ${seconds}s`;
-            }, 1000);
-        }
+function updateStopwatch() {
+    timeSpent++;
+    const minutes = Math.floor(timeSpent / 60);
+    const seconds = timeSpent % 60;
+    stopwatch.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+}
 
-        startStopwatch();
+setInterval(updateStopwatch, 1000); // Update every second
+
+        // Hide the loading screen once the page is fully loaded
+window.onload = () => {
+    document.getElementById("loading-screen").style.display = "none";
+};
+
+
     </script>
 
 </body>
-
 </html>
