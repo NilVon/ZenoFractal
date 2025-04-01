@@ -224,22 +224,16 @@
         }
 
         /* Add Song Popup */
-        .popup {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
+        #add-song-popup {
             display: none;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .popup-content {
-            background: rgba(50, 0, 80, 0.9);
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(80, 0, 120, 0.9);
             padding: 20px;
             border-radius: 10px;
+            box-shadow: 0 0 20px purple;
             text-align: center;
         }
 
@@ -248,23 +242,30 @@
             padding: 10px;
             margin: 10px 0;
             border-radius: 5px;
-            border: 1px solid cyan;
-            background: transparent;
-            color: white;
+            border: none;
         }
 
-        button {
-            background: linear-gradient(45deg, purple, violet);
-            color: white;
+        #submit-button {
             padding: 10px 20px;
-            border-radius: 8px;
+            background: linear-gradient(45deg, purple, violet);
+            border: none;
+            color: white;
             cursor: pointer;
+            border-radius: 5px;
+            box-shadow: 0 0 10px violet;
         }
     </style>
 </head>
 <body>
 
+    <!-- Stopwatch -->
     <div id="stopwatch" class="stopwatch">00:00</div>
+
+    <!-- Loading Screen -->
+    <div id="loading-screen">
+        <div class="loader"></div>
+        <p>Loading ZenoFractal...</p>
+    </div>
 
     <!-- Background -->
     <div id="dynamic-bg"></div>
@@ -305,6 +306,12 @@
         </div>
     </div>
 
+    <!-- Add Song Popup -->
+    <div id="add-song-popup">
+        <input type="text" id="youtube-url" placeholder="Enter YouTube URL">
+        <button id="submit-button" onclick="loadYouTubeVideo()">Add Song</button>
+    </div>
+
     <!-- Music Player -->
     <div id="music-container">
         <div id="toggle-music" onclick="toggleMusic()"></div>
@@ -314,15 +321,6 @@
     <audio id="bg-music" loop>
         <source src="audio.mp4" type="audio/mp4">
     </audio>
-
-    <!-- Add Song Popup -->
-    <div id="add-song-popup" class="popup">
-        <div class="popup-content">
-            <h2>Enter YouTube Link</h2>
-            <input type="text" id="youtube-url" placeholder="Paste YouTube link here">
-            <button onclick="loadYouTubeVideo()">Add Song</button>
-        </div>
-    </div>
 
     <script>
         let audio = document.getElementById("bg-music");
@@ -344,42 +342,68 @@
             audio.volume = value;
         }
 
-        // Stopwatch functionality
-        let stopwatch = document.getElementById('stopwatch');
-        let timer;
-        let seconds = 0;
-        let minutes = 0;
-
-        function startStopwatch() {
-            timer = setInterval(() => {
-                seconds++;
-                if (seconds === 60) {
-                    seconds = 0;
-                    minutes++;
-                }
-                stopwatch.textContent = `${formatTime(minutes)}:${formatTime(seconds)}`;
-            }, 1000);
-        }
-
-        function formatTime(time) {
-            return time < 10 ? `0${time}` : time;
-        }
-
-        startStopwatch();  // Start the stopwatch when the page loads
-
         // Toggle Chat Window
+        const chatbotOrb = document.getElementById("zenobot");
+        const chatContainer = document.getElementById("chat-container");
+
+        chatbotOrb.addEventListener("click", () => {
+            chatContainer.style.display = chatContainer.style.display === "block" ? "none" : "block";
+        });
+
+        // Toggle FAQ Answers
+        function toggleAnswer(id) {
+            const answer = document.getElementById(id);
+            answer.style.display = answer.style.display === "block" ? "none" : "block";
+        }
+
+        // Close Chat on Header Click
         function toggleChat() {
-            let chatContainer = document.getElementById("chat-container");
-            chatContainer.style.display = chatContainer.style.display === "none" ? "block" : "none";
+            chatContainer.style.display = "none";
         }
 
-        // Toggle FAQ Answer
-        function toggleAnswer(answerId) {
-            let answer = document.getElementById(answerId);
-            answer.style.display = answer.style.display === "none" ? "block" : "none";
+        // Stopwatch Logic
+        let timeSpent = 0; // in seconds
+        const stopwatch = document.getElementById("stopwatch");
+
+        function updateStopwatch() {
+            timeSpent++;
+            const minutes = Math.floor(timeSpent / 60);
+            const seconds = timeSpent % 60;
+            stopwatch.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
         }
 
-        // YouTube Video Loading
+        setInterval(updateStopwatch, 1000); // Update every second
+
+        // Hide the loading screen once the page is fully loaded
+        window.onload = () => {
+            document.getElementById("loading-screen").style.display = "none";
+        };
+
+        // Create and move the custom cursor
+        const cursor = document.createElement('div');
+        cursor.classList.add('cursor');
+        document.body.appendChild(cursor);
+
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = `${e.pageX}px`;
+            cursor.style.top = `${e.pageY}px`;
+        });
+
+        // Create cursor trail
+        document.addEventListener('mousemove', (e) => {
+            const trail = document.createElement('div');
+            trail.classList.add('cursor-trail');
+            document.body.appendChild(trail);
+
+            trail.style.left = `${e.pageX}px`;
+            trail.style.top = `${e.pageY}px`;
+
+            setTimeout(() => {
+                trail.remove();
+            }, 500); // Remove trail after animation
+        });
+
+        // YouTube Video Handling
         function loadYouTubeVideo() {
             const url = document.getElementById("youtube-url").value;
             if (url) {
@@ -396,30 +420,22 @@
         function extractYouTubeVideoId(url) {
             const regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+|(?:v|e(?:mbed)?)\/?([^"&?/\s]*))|youtu\.be\/([^"&?/\s]*))/;
             const match = url.match(regex);
-            return match ? match[1] || match[2] : null;
+            if (match) {
+                return match[1] || match[2];
+            }
+            return null;
         }
 
         function playYouTubeVideo(videoId) {
-            const videoUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
-            const videoContainer = document.createElement("iframe");
-            videoContainer.src = videoUrl;
-            videoContainer.width = "300";
-            videoContainer.height = "150";
-            videoContainer.style.border = "none";
-            videoContainer.style.borderRadius = "10px";
-            videoContainer.style.boxShadow = "0 0 15px violet";
-
-            const exploreSection = document.querySelector(".hero h1");
-            exploreSection.innerHTML = `Now Playing: <br> <span style="font-size: 1.5em;">${videoId}</span>`;
-
-            document.querySelector(".hero").appendChild(videoContainer);
+            const iframe = document.createElement("iframe");
+            iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+            iframe.width = "100%";
+            iframe.height = "100%";
+            iframe.frameborder = "0";
+            iframe.allow = "accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture";
+            document.body.appendChild(iframe);
         }
-
-        // Show popup for adding song
-        const exploreButton = document.querySelector(".btn");
-        exploreButton.addEventListener("click", () => {
-            document.getElementById("add-song-popup").style.display = "flex";
-        });
     </script>
+
 </body>
 </html>
