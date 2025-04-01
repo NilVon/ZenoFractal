@@ -225,35 +225,6 @@
 }
 
 
-        /* Loading Screen */
-#loading-screen {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.8);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 10000;
-}
-
-.loader {
-    border: 8px solid rgba(255, 255, 255, 0.1);
-    border-top: 8px solid cyan;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    animation: spin 1.5s linear infinite;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-
         /* Custom Cursor */
 body {
     cursor: none;  /* Hide default cursor */
@@ -362,13 +333,6 @@ body {
 </div>
 
 
-    <!-- Loading Screen -->
-<div id="loading-screen">
-    <div class="loader"></div>
-    <p>Loading ZenoFractal...</p>
-</div>
-
-
     <!-- Background -->
     <div id="dynamic-bg"></div>
 
@@ -470,10 +434,7 @@ function updateStopwatch() {
 
 setInterval(updateStopwatch, 1000); // Update every second
 
-        // Hide the loading screen once the page is fully loaded
-window.onload = () => {
-    document.getElementById("loading-screen").style.display = "none";
-};
+
 
         // Create and move the custom cursor
 const cursor = document.createElement('div');
