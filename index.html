@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZenoFractal | Cyber Future</title>
+    <title>ZenoFractal | Cyberpunk Future</title>
     <style>
         /* General Styling */
         body {
@@ -13,25 +14,33 @@
             font-family: 'Arial', sans-serif;
             color: white;
             overflow-x: hidden;
+            overflow-y: hidden;
         }
 
-        /* Dynamic Background Animation */
+        /* Cyberpunk Gradient Background */
         #dynamic-bg {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(45deg, rgba(0, 0, 0, 0.8), rgba(40, 0, 80, 0.8)), url('https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/045656e1-2048-4b39-9f99-ea5eb41d9651/dgr8vrl-06ef161d-fea6-429e-aef1-f656e7ecbe6a.gif?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzA0NTY1NmUxLTIwNDgtNGIzOS05Zjk5LWVhNWViNDFkOTY1MVwvZGdyOHZybC0wNmVmMTYxZC1mZWE2LTQyOWUtYWVmMS1mNjU2ZTdlY2JlNmEuZ2lmIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.W1b_yDMtvwi-S2br6ibU9LJIViSH9UA2uAm0p3GJzbA') no-repeat center center fixed;
-            background-size: cover;
+            background: linear-gradient(135deg, #00d4ff, #b3006b);
             z-index: -1;
-            animation: bgMove 10s ease-in-out infinite;
+            animation: gradientAnimation 5s ease infinite;
         }
 
-        @keyframes bgMove {
-            0% { background-position: 0% 0%; }
-            50% { background-position: 100% 100%; }
-            100% { background-position: 0% 0%; }
+        @keyframes gradientAnimation {
+            0% {
+                background: linear-gradient(135deg, #00d4ff, #b3006b);
+            }
+
+            50% {
+                background: linear-gradient(135deg, #ff007c, #00d4ff);
+            }
+
+            100% {
+                background: linear-gradient(135deg, #00d4ff, #b3006b);
+            }
         }
 
         /* Navigation Bar */
@@ -42,22 +51,22 @@
             transform: translateX(-50%);
             display: flex;
             gap: 20px;
-            background: rgba(40, 0, 80, 0.8);
+            background: rgba(0, 0, 50, 0.8);
             padding: 12px 25px;
             border-radius: 10px;
-            box-shadow: 0 0 20px purple;
+            box-shadow: 0 0 20px #b3006b;
         }
 
         .nav a {
-            color: violet;
+            color: white;
             text-decoration: none;
             font-size: 16px;
             transition: 0.3s;
         }
 
         .nav a:hover {
-            color: cyan;
-            text-shadow: 0 0 5px cyan;
+            color: #ff007c;
+            text-shadow: 0 0 5px #ff007c;
         }
 
         /* Hero Section */
@@ -68,22 +77,22 @@
             align-items: center;
             height: 100vh;
             text-align: center;
-            color: cyan;
+            z-index: 10;
         }
 
         .hero h1 {
-            font-size: 4em;
-            text-shadow: 0 0 10px cyan, 0 0 20px purple;
+            font-size: 3em;
+            text-shadow: 0 0 20px #ff007c;
         }
 
         .hero p {
-            font-size: 1.5em;
+            font-size: 1.2em;
             color: lightgray;
-            text-shadow: 0 0 5px violet;
         }
 
+        /* Cyberpunk Button */
         .btn {
-            background: linear-gradient(45deg, purple, violet);
+            background: linear-gradient(45deg, #ff007c, #00d4ff);
             padding: 15px 30px;
             color: white;
             font-size: 18px;
@@ -91,25 +100,25 @@
             border-radius: 8px;
             cursor: pointer;
             transition: 0.3s;
-            box-shadow: 0 0 15px purple;
+            box-shadow: 0 0 15px #ff007c;
             border: none;
         }
 
         .btn:hover {
             transform: scale(1.1);
-            box-shadow: 0 0 25px violet;
+            box-shadow: 0 0 25px #00d4ff;
         }
 
-        /* ZenoBot - Cyber Orb */
+        /* ZenoBot */
         #zenobot {
             position: fixed;
             bottom: 20px;
             right: 20px;
             width: 60px;
             height: 60px;
-            background: radial-gradient(circle, cyan, violet);
+            background: radial-gradient(circle, #ff007c, #00d4ff);
             border-radius: 50%;
-            box-shadow: 0 0 15px cyan;
+            box-shadow: 0 0 15px #ff007c;
             cursor: pointer;
             transition: transform 0.2s ease-in-out;
         }
@@ -118,16 +127,16 @@
             transform: scale(1.1);
         }
 
-        /* Chatbot */
+        /* ZenoBot Chat Window */
         #chat-container {
             display: none;
             position: fixed;
             bottom: 90px;
             right: 20px;
             width: 280px;
-            background: rgba(80, 0, 120, 0.9);
+            background: rgba(50, 0, 50, 0.8);
             border-radius: 10px;
-            box-shadow: 0 0 15px violet;
+            box-shadow: 0 0 15px #ff007c;
             z-index: 1000;
             padding: 10px;
             color: white;
@@ -135,7 +144,7 @@
         }
 
         #chat-header {
-            background: violet;
+            background: #ff007c;
             color: black;
             padding: 10px;
             text-align: center;
@@ -146,7 +155,7 @@
         .faq-question {
             padding: 10px;
             background-color: #222;
-            color: violet;
+            color: #ff007c;
             border: none;
             border-radius: 5px;
             cursor: pointer;
@@ -163,33 +172,23 @@
 
         .answer {
             display: none;
-            background-color: rgba(80, 0, 120, 0.9);
+            background-color: rgba(50, 0, 50, 0.9);
             color: white;
             padding: 10px;
             margin-top: 5px;
             border-radius: 5px;
         }
 
-        /* Neon Stopwatch */
+        /* Stopwatch Animation */
         #stopwatch {
             position: fixed;
-            top: 10px;
-            left: 10px;
-            background: linear-gradient(45deg, cyan, violet);
-            padding: 8px 15px;
-            border-radius: 10px;
-            font-size: 1.2em;
-            color: white;
-            box-shadow: 0 0 10px cyan;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        #stopwatch .timer {
-            font-size: 1.5em;
-            color: pink;
+            top: 20px;
+            left: 20px;
+            font-size: 20px;
             font-weight: bold;
+            color: #ff007c;
+            text-shadow: 0 0 5px #ff007c;
+            z-index: 1000;
         }
 
         /* Music Player */
@@ -200,20 +199,20 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            background: rgba(50, 0, 80, 0.9);
+            background: rgba(50, 0, 50, 0.9);
             padding: 10px;
             border-radius: 10px;
-            box-shadow: 0 0 15px purple;
+            box-shadow: 0 0 15px #ff007c;
         }
 
         #toggle-music {
             width: 30px;
             height: 30px;
             border-radius: 50%;
-            background: cyan;
+            background: #00d4ff;
             cursor: pointer;
             transition: 0.3s;
-            box-shadow: 0 0 10px cyan;
+            box-shadow: 0 0 10px #00d4ff;
         }
 
         #toggle-music.off {
@@ -227,7 +226,7 @@
             height: 5px;
             -webkit-appearance: none;
             appearance: none;
-            background: cyan;
+            background: #00d4ff;
             outline: none;
             transition: 0.3s;
         }
@@ -237,17 +236,17 @@
             appearance: none;
             width: 15px;
             height: 15px;
-            background: violet;
+            background: #ff007c;
             border-radius: 50%;
             cursor: pointer;
-            box-shadow: 0 0 10px violet;
+            box-shadow: 0 0 10px #ff007c;
         }
-
     </style>
 </head>
+
 <body>
 
-    <!-- Dynamic Background -->
+    <!-- Background -->
     <div id="dynamic-bg"></div>
 
     <!-- Navigation -->
@@ -265,6 +264,9 @@
         <button class="btn">Explore</button>
     </div>
 
+    <!-- Stopwatch -->
+    <div id="stopwatch">Time Spent: 0s</div>
+
     <!-- ZenoBot -->
     <div id="zenobot"></div>
 
@@ -274,19 +276,16 @@
         <div id="chat-content">
             <button class="faq-question" onclick="toggleAnswer('answer1')">What is ZenoFractal?</button>
             <div id="answer1" class="answer">ZenoFractal is a cutting-edge digital solutions provider. 🚀</div>
+
             <button class="faq-question" onclick="toggleAnswer('answer2')">What services do you offer?</button>
             <div id="answer2" class="answer">We specialize in web development, video editing, branding, and more! ⚡</div>
+
             <button class="faq-question" onclick="toggleAnswer('answer3')">Why should I choose ZenoFractal?</button>
             <div id="answer3" class="answer">Because we fuse creativity, cutting-edge technology, and high-quality execution. 🔥</div>
+
             <button class="faq-question" onclick="toggleAnswer('answer4')">How can I get started?</button>
             <div id="answer4" class="answer">Just contact us, and we'll craft a custom digital solution tailored to your needs. 💡</div>
         </div>
-    </div>
-
-    <!-- Neon Stopwatch -->
-    <div id="stopwatch">
-        <span>Time Spent: </span>
-        <span class="timer" id="timer">00:00</span>
     </div>
 
     <!-- Music Player -->
@@ -301,6 +300,9 @@
 
     <script>
         let audio = document.getElementById("bg-music");
+        let stopwatch = document.getElementById("stopwatch");
+        let seconds = 0;
+        let interval;
 
         function toggleMusic() {
             let button = document.getElementById("toggle-music");
@@ -317,29 +319,27 @@
             audio.volume = value;
         }
 
-        // Stopwatch Logic
-        let timeSpent = 0;
-        let timerDisplay = document.getElementById("timer");
-        setInterval(() => {
-            timeSpent++;
-            let minutes = Math.floor(timeSpent / 60);
-            let seconds = timeSpent % 60;
-            timerDisplay.textContent = `${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-        }, 1000);
-
-        // Toggle FAQ Answers
-        function toggleAnswer(id) {
-            const answer = document.getElementById(id);
-            answer.style.display = answer.style.display === "block" ? "none" : "block";
-        }
-
-        // Toggle Chat Window
         function toggleChat() {
-            const chatContainer = document.getElementById("chat-container");
-            chatContainer.style.display = chatContainer.style.display === "none" ? "block" : "none";
+            let chatContainer = document.getElementById("chat-container");
+            chatContainer.style.display = (chatContainer.style.display === "none") ? "block" : "none";
         }
 
+        function toggleAnswer(answerId) {
+            let answer = document.getElementById(answerId);
+            answer.style.display = (answer.style.display === "none") ? "block" : "none";
+        }
+
+        // Stopwatch functionality
+        function startStopwatch() {
+            interval = setInterval(() => {
+                seconds++;
+                stopwatch.innerText = `Time Spent: ${seconds}s`;
+            }, 1000);
+        }
+
+        startStopwatch();
     </script>
 
 </body>
+
 </html>
