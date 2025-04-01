@@ -253,6 +253,41 @@
     100% { transform: rotate(360deg); }
 }
 
+
+        /* Custom Cursor */
+body {
+    cursor: none;  /* Hide default cursor */
+}
+
+.cursor {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: cyan;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s ease;
+    box-shadow: 0 0 10px cyan, 0 0 20px cyan;
+}
+
+/* Cursor Trails */
+.cursor-trail {
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background-color: violet;
+    opacity: 0.7;
+    pointer-events: none;
+    animation: trail 0.5s forwards;
+}
+
+@keyframes trail {
+    0% { opacity: 1; transform: scale(1); }
+    100% { opacity: 0; transform: scale(0); }
+}
+
     </style>
 </head>
 <body>
@@ -375,6 +410,30 @@ setInterval(updateStopwatch, 1000); // Update every second
 window.onload = () => {
     document.getElementById("loading-screen").style.display = "none";
 };
+
+        // Create and move the custom cursor
+const cursor = document.createElement('div');
+cursor.classList.add('cursor');
+document.body.appendChild(cursor);
+
+document.addEventListener('mousemove', (e) => {
+    cursor.style.left = `${e.pageX}px`;
+    cursor.style.top = `${e.pageY}px`;
+});
+
+// Create cursor trail
+document.addEventListener('mousemove', (e) => {
+    const trail = document.createElement('div');
+    trail.classList.add('cursor-trail');
+    document.body.appendChild(trail);
+
+    trail.style.left = `${e.pageX}px`;
+    trail.style.top = `${e.pageY}px`;
+
+    setTimeout(() => {
+        trail.remove();
+    }, 500); // Remove trail after animation
+});
 
 
     </script>
