@@ -3,264 +3,439 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="TechZone Interactive">
-    <meta name="author" content="Zenobot">
-    <title>TechZone Interactive</title>
-    
+    <title>ZenoFractal | Cyber Future</title>
     <style>
-        /* General Styles */
+        /* General Styling */
         body {
-            font-family: 'Arial', sans-serif;
-            background: #121212;
-            color: #fff;
             margin: 0;
             padding: 0;
-            scroll-behavior: smooth;
-            transition: background 0.3s ease, color 0.3s ease;
+            background: black;
+            font-family: 'Arial', sans-serif;
+            color: white;
+            overflow-x: hidden;
         }
 
-        /* Theme Toggle */
-        .theme-toggle {
+        /* Background - NO FILTERS */
+        #dynamic-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://media1.tenor.com/m/Z5lIBiOdagsAAAAC/purple-aesthetic-rain.gif') no-repeat center center fixed;
+            background-size: cover;
+            z-index: -1;
+        }
+
+        /* Navigation Bar */
+        .nav {
             position: fixed;
             top: 10px;
-            right: 10px;
-            background: #00aaff;
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
-            cursor: pointer;
-            transition: background 0.3s ease;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            background: rgba(50, 0, 80, 0.8);
+            padding: 12px 25px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px purple;
         }
 
-        .theme-toggle:hover { background: #0088cc; }
-
-        body.light-mode {
-            background: #f3f3f3;
-            color: #121212;
+        .nav a {
+            color: violet;
+            text-decoration: none;
+            font-size: 16px;
+            transition: 0.3s;
         }
 
-        /* Header Section */
-        header {
-            height: 100vh;
+        .nav a:hover {
+            color: cyan;
+            text-shadow: 0 0 5px cyan;
+        }
+
+        /* Hero Section */
+        .hero {
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            height: 100vh;
             text-align: center;
         }
 
-        header h1 { font-size: 3rem; }
-        header p { font-size: 1.5rem; margin: 10px 0; }
-        header button {
-            background: #00aaff;
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
+        .hero h1 {
+            font-size: 3em;
+            text-shadow: 0 0 10px purple;
+        }
+
+        .hero p {
+            font-size: 1.2em;
+            color: lightgray;
+        }
+
+        /* Cyberpunk Button */
+        .btn {
+            background: linear-gradient(45deg, purple, violet);
+            padding: 15px 30px;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 8px;
             cursor: pointer;
-            transition: background 0.3s ease;
+            transition: 0.3s;
+            box-shadow: 0 0 15px purple;
+            border: none;
         }
 
-        header button:hover { background: #0088cc; }
-
-        /* Navbar */
-        .navbar {
-            display: flex;
-            justify-content: center;
-            list-style: none;
-            background: #1a1a1a;
-            padding: 10px 0;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        .navbar li { margin: 0 15px; }
-        .navbar a {
-            color: #ffffff;
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        .navbar a:hover { color: #00aaff; }
-
-        /* Section Styles */
-        section { padding: 60px 20px; }
-
-        /* Features */
-        .features-grid {
-            display: flex;
-            justify-content: space-around;
-        }
-
-        .feature-item {
-            padding: 20px;
-            border: 1px solid #00aaff;
-            text-align: center;
-            transition: transform 0.3s ease;
-        }
-
-        .feature-item:hover {
+        .btn:hover {
             transform: scale(1.1);
-            background: #00aaff;
-            color: #121212;
+            box-shadow: 0 0 25px violet;
         }
 
-        /* Gallery */
-        .gallery-container {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-        }
-
-        .gallery-item {
-            border: 1px solid #00aaff;
-            padding: 20px;
-            text-align: center;
-            transition: background 0.3s ease, color 0.3s ease;
-        }
-
-        .gallery-item:hover {
-            background: #00aaff;
-            color: #121212;
-        }
-
-        /* Testimonials */
-        .testimonials-container {
-            display: flex;
-            overflow-x: auto;
-            gap: 20px;
-            padding: 20px;
-        }
-
-        .testimonial {
-            border: 1px solid #00aaff;
-            padding: 20px;
-            flex: 0 0 auto;
-            width: 300px;
-            background: #1a1a2e;
-            color: #ffffff;
-            border-radius: 10px;
-            transition: transform 0.3s ease;
-        }
-
-        .testimonial:hover { transform: scale(1.1); }
-
-        /* Blog */
-        .blog-container {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-        }
-
-        .blog-post {
-            border: 1px solid #00aaff;
-            padding: 20px;
-            background: #1a1a2e;
-            color: #ffffff;
-            border-radius: 10px;
-        }
-
-        /* Contact Form */
-        form {
-            display: flex;
-            flex-direction: column;
-            max-width: 500px;
-            margin: auto;
-        }
-
-        form label { margin: 5px 0; }
-        form input,
-        form textarea {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #00aaff;
-            border-radius: 5px;
-            background: #1a1a2e;
-            color: white;
-        }
-
-        form button {
-            background: #00aaff;
-            color: white;
-            padding: 10px;
-            border: none;
+        /* ZenoBot - Now Purple */
+        #zenobot {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: radial-gradient(circle, purple, violet);
+            border-radius: 50%;
+            box-shadow: 0 0 15px violet;
             cursor: pointer;
-            transition: background 0.3s;
+            transition: transform 0.2s ease-in-out;
         }
 
-        form button:hover { background: #0088cc; }
+        #zenobot:hover { transform: scale(1.1); }
 
-        /* Responsive */
-        @media screen and (max-width: 768px) {
-            .gallery-container { grid-template-columns: repeat(2, 1fr); }
-            .blog-container { grid-template-columns: 1fr; }
-            .navbar { flex-direction: column; }
-            .testimonials-container { flex-direction: column; }
+        /* ZenoBot Chat Window */
+        #chat-container {
+            display: none;
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: 280px;
+            background: rgba(80, 0, 120, 0.9);
+            border-radius: 10px;
+            box-shadow: 0 0 15px violet;
+            z-index: 1000;
+            padding: 10px;
+            color: white;
+            overflow-y: auto;
         }
+
+        #chat-header {
+            background: violet;
+            color: black;
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .faq-question {
+            padding: 10px;
+            background-color: #222;
+            color: violet;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 10px;
+            font-size: 16px;
+            text-align: left;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .faq-question:hover {
+            background-color: #333;
+        }
+
+        .answer {
+            display: none;
+            background-color: rgba(80, 0, 120, 0.9);
+            color: white;
+            padding: 10px;
+            margin-top: 5px;
+            border-radius: 5px;
+        }
+
+        /* Music Player */
+        #music-container {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(50, 0, 80, 0.9);
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px purple;
+        }
+
+        #toggle-music {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: cyan;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 0 10px cyan;
+        }
+
+        #toggle-music.off {
+            background: pink;
+            box-shadow: 0 0 10px pink;
+        }
+
+        /* Volume Slider */
+        #volume-slider {
+            width: 100px;
+            height: 5px;
+            -webkit-appearance: none;
+            appearance: none;
+            background: cyan;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        #volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 15px;
+            height: 15px;
+            background: violet;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 10px violet;
+        }
+
+
+        /* Stopwatch Style */
+.stopwatch {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    font-size: 20px;
+    font-family: 'Courier New', Courier, monospace;
+    color: neon pink;
+    text-shadow: 0 0 10px pink, 0 0 20px pink;
+    z-index: 1000;
+}
+
+
+        /* Loading Screen */
+#loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+}
+
+.loader {
+    border: 8px solid rgba(255, 255, 255, 0.1);
+    border-top: 8px solid cyan;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1.5s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+
+        /* Custom Cursor */
+body {
+    cursor: none;  /* Hide default cursor */
+}
+
+.cursor {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: cyan;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s ease;
+    box-shadow: 0 0 10px cyan, 0 0 20px cyan;
+}
+
+/* Cursor Trails */
+.cursor-trail {
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background-color: violet;
+    opacity: 0.7;
+    pointer-events: none;
+    animation: trail 0.5s forwards;
+}
+
+@keyframes trail {
+    0% { opacity: 1; transform: scale(1); }
+    100% { opacity: 0; transform: scale(0); }
+}
+
     </style>
 </head>
 <body>
 
-    <button class="theme-toggle" id="theme-toggle">Toggle Theme</button>
+    
+    <div id="stopwatch" class="stopwatch">
+    00:00
+</div>
 
-    <header id="hero">
-        <h1>Welcome to TechZone</h1>
-        <p>The Future of Technology in Your Hands</p>
-        <button id="scroll-down">Explore</button>
-    </header>
 
-    <nav>
-        <ul class="navbar">
-            <li><a href="#about">About Us</a></li>
-            <li><a href="#features">Features</a></li>
-            <li><a href="#gallery">Gallery</a></li>
-            <li><a href="#testimonials">Testimonials</a></li>
-            <li><a href="#blog">Blog</a></li>
-            <li><a href="#contact">Contact</a></li>
-        </ul>
-    </nav>
+    <!-- Loading Screen -->
+<div id="loading-screen">
+    <div class="loader"></div>
+    <p>Loading ZenoFractal...</p>
+</div>
 
-    <main>
-        <section id="about">
-            <h2>About TechZone</h2>
-            <p>TechZone is your gateway to exploring cutting-edge innovations in the technology world.</p>
-        </section>
 
-        <section id="contact">
-            <h2>Contact Us</h2>
-            <form id="contact-form">
-                <label for="name">Name:</label>
-                <input type="text" id="name" required>
-                <label for="email">Email:</label>
-                <input type="email" id="email" required>
-                <label for="message">Message:</label>
-                <textarea id="message" rows="5" required></textarea>
-                <button type="submit">Submit</button>
-            </form>
-        </section>
-    </main>
+    <!-- Background -->
+    <div id="dynamic-bg"></div>
+
+    <!-- Navigation -->
+    <div class="nav">
+        <a href="#">Home</a>
+        <a href="#">Services</a>
+        <a href="#">About</a>
+        <a href="https://www.instagram.com/zenofractal/?hl=en" target="_blank">Contact</a>
+    </div>
+
+    <!-- Hero Section -->
+    <div class="hero">
+        <h1>Welcome to ZenoFractal</h1>
+        <p>Step into the Future of Digital Innovation</p>
+        <button class="btn">Explore</button>
+    </div>
+
+    <!-- ZenoBot -->
+    <div id="zenobot"></div>
+
+    <!-- Chatbot -->
+    <div id="chat-container">
+        <div id="chat-header" onclick="toggleChat()">🤖 ZenoBot ✖</div>
+        <div id="chat-content">
+            <button class="faq-question" onclick="toggleAnswer('answer1')">What is ZenoFractal?</button>
+            <div id="answer1" class="answer">ZenoFractal is a cutting-edge digital solutions provider. 🚀</div>
+
+            <button class="faq-question" onclick="toggleAnswer('answer2')">What services do you offer?</button>
+            <div id="answer2" class="answer">We specialize in web development, video editing, branding, and more! ⚡</div>
+
+            <button class="faq-question" onclick="toggleAnswer('answer3')">Why should I choose ZenoFractal?</button>
+            <div id="answer3" class="answer">Because we fuse creativity, cutting-edge technology, and high-quality execution. 🔥</div>
+
+            <button class="faq-question" onclick="toggleAnswer('answer4')">How can I get started?</button>
+            <div id="answer4" class="answer">Just contact us, and we'll craft a custom digital solution tailored to your needs. 💡</div>
+        </div>
+    </div>
+
+    <!-- Music Player -->
+    <div id="music-container">
+        <div id="toggle-music" onclick="toggleMusic()"></div>
+        <input type="range" id="volume-slider" min="0" max="1" step="0.1" value="0.5" onchange="setVolume(this.value)">
+    </div>
+
+    <audio id="bg-music" loop>
+        <source src="audio.mp4" type="audio/mp4">
+    </audio>
 
     <script>
-        // Theme Toggle
-        document.getElementById("theme-toggle").addEventListener("click", () => {
-            document.body.classList.toggle("light-mode");
-            document.getElementById("theme-toggle").textContent = 
-                document.body.classList.contains("light-mode") ? "Dark Mode" : "Light Mode";
+        let audio = document.getElementById("bg-music");
+
+        // Toggle music play/pause
+        function toggleMusic() {
+            let button = document.getElementById("toggle-music");
+            if (audio.paused) {
+                audio.play();
+                button.classList.remove("off");
+            } else {
+                audio.pause();
+                button.classList.add("off");
+            }
+        }
+
+        // Set music volume
+        function setVolume(value) {
+            audio.volume = value;
+        }
+
+        // Toggle Chat Window
+        const chatbotOrb = document.getElementById("zenobot");
+        const chatContainer = document.getElementById("chat-container");
+
+        chatbotOrb.addEventListener("click", () => {
+            chatContainer.style.display = chatContainer.style.display === "block" ? "none" : "block";
         });
 
-        // Smooth Scroll
-        document.getElementById("scroll-down").addEventListener("click", () => {
-            document.querySelector("#about").scrollIntoView({ behavior: "smooth" });
-        });
+        // Toggle FAQ Answers
+        function toggleAnswer(id) {
+            const answer = document.getElementById(id);
+            answer.style.display = answer.style.display === "block" ? "none" : "block";
+        }
 
-        // Contact Form
-        document.getElementById("contact-form").addEventListener("submit", function (event) {
-            event.preventDefault();
-            alert("Thanks! Your message has been sent.");
-            this.reset();
-        });
+        // Close Chat on Header Click
+        function toggleChat() {
+            chatContainer.style.display = "none";
+        }
+
+        // Stopwatch Logic
+let timeSpent = 0; // in seconds
+const stopwatch = document.getElementById("stopwatch");
+
+function updateStopwatch() {
+    timeSpent++;
+    const minutes = Math.floor(timeSpent / 60);
+    const seconds = timeSpent % 60;
+    stopwatch.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+}
+
+setInterval(updateStopwatch, 1000); // Update every second
+
+        // Hide the loading screen once the page is fully loaded
+window.onload = () => {
+    document.getElementById("loading-screen").style.display = "none";
+};
+
+        // Create and move the custom cursor
+const cursor = document.createElement('div');
+cursor.classList.add('cursor');
+document.body.appendChild(cursor);
+
+document.addEventListener('mousemove', (e) => {
+    cursor.style.left = `${e.pageX}px`;
+    cursor.style.top = `${e.pageY}px`;
+});
+
+// Create cursor trail
+document.addEventListener('mousemove', (e) => {
+    const trail = document.createElement('div');
+    trail.classList.add('cursor-trail');
+    document.body.appendChild(trail);
+
+    trail.style.left = `${e.pageX}px`;
+    trail.style.top = `${e.pageY}px`;
+
+    setTimeout(() => {
+        trail.remove();
+    }, 500); // Remove trail after animation
+});
+
+
     </script>
 
 </body>
