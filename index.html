@@ -254,18 +254,40 @@
             border-radius: 5px;
             box-shadow: 0 0 10px violet;
         }
+
+        /* Custom Cursor */
+        .cursor {
+            position: absolute;
+            pointer-events: none;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background-color: violet;
+            box-shadow: 0 0 10px violet;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+        }
+
+        .cursor-trail {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background-color: violet;
+            box-shadow: 0 0 10px violet;
+            animation: trail-animation 0.5s ease-out forwards;
+        }
+
+        @keyframes trail-animation {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(0); opacity: 0; }
+        }
     </style>
 </head>
 <body>
 
     <!-- Stopwatch -->
     <div id="stopwatch" class="stopwatch">00:00</div>
-
-    <!-- Loading Screen -->
-    <div id="loading-screen">
-        <div class="loader"></div>
-        <p>Loading ZenoFractal...</p>
-    </div>
 
     <!-- Background -->
     <div id="dynamic-bg"></div>
@@ -379,30 +401,6 @@
             document.getElementById("loading-screen").style.display = "none";
         };
 
-        // Create and move the custom cursor
-        const cursor = document.createElement('div');
-        cursor.classList.add('cursor');
-        document.body.appendChild(cursor);
-
-        document.addEventListener('mousemove', (e) => {
-            cursor.style.left = `${e.pageX}px`;
-            cursor.style.top = `${e.pageY}px`;
-        });
-
-        // Create cursor trail
-        document.addEventListener('mousemove', (e) => {
-            const trail = document.createElement('div');
-            trail.classList.add('cursor-trail');
-            document.body.appendChild(trail);
-
-            trail.style.left = `${e.pageX}px`;
-            trail.style.top = `${e.pageY}px`;
-
-            setTimeout(() => {
-                trail.remove();
-            }, 500); // Remove trail after animation
-        });
-
         // YouTube Video Handling
         function loadYouTubeVideo() {
             const url = document.getElementById("youtube-url").value;
@@ -435,6 +433,30 @@
             iframe.allow = "accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture";
             document.body.appendChild(iframe);
         }
+
+        // Custom Cursor Trail Logic
+        const cursor = document.createElement('div');
+        cursor.classList.add('cursor');
+        document.body.appendChild(cursor);
+
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = `${e.pageX}px`;
+            cursor.style.top = `${e.pageY}px`;
+        });
+
+        // Create cursor trail effect
+        document.addEventListener('mousemove', (e) => {
+            const trail = document.createElement('div');
+            trail.classList.add('cursor-trail');
+            document.body.appendChild(trail);
+
+            trail.style.left = `${e.pageX}px`;
+            trail.style.top = `${e.pageY}px`;
+
+            setTimeout(() => {
+                trail.remove();
+            }, 500); // Remove trail after animation
+        });
     </script>
 
 </body>
