@@ -288,9 +288,8 @@ body {
     100% { opacity: 0; transform: scale(0); }
 }
 
-
-        /* Popup Styles */
-#youtube-popup {
+        /* Music Input Popup */
+#music-popup {
     position: fixed;
     top: 0;
     left: 0;
@@ -303,7 +302,7 @@ body {
     z-index: 1000;
 }
 
-#popup-content {
+#music-popup-content {
     background: rgba(50, 0, 80, 0.9);
     padding: 20px;
     border-radius: 10px;
@@ -311,38 +310,51 @@ body {
     box-shadow: 0 0 20px violet;
 }
 
-#popup-content input {
+#song-url {
     width: 80%;
     padding: 10px;
-    font-size: 16px;
+    margin-top: 10px;
     border: none;
     border-radius: 5px;
 }
 
-#popup-content button {
+#music-popup button {
     margin-top: 10px;
     padding: 10px 20px;
-    font-size: 16px;
-    background: cyan;
-    color: black;
+    background: violet;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    color: black;
+    font-weight: bold;
+}
+
+
+        /* Equalizer */
+.equalizer {
+    display: flex;
+    gap: 4px;
+    position: absolute;
+    bottom: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.equalizer div {
+    width: 5px;
+    height: 20px;
+    background: cyan;
+    animation: bounce 0.5s infinite alternate;
+}
+
+@keyframes bounce {
+    0% { height: 10px; }
+    100% { height: 40px; }
 }
 
     </style>
 </head>
 <body>
-
-    <!-- YouTube Popup -->
-<div id="youtube-popup">
-    <div id="popup-content">
-        <h2>🎵 Add Song Link</h2>
-        <input type="text" id="youtube-link" placeholder="Paste YouTube Link Here...">
-        <button onclick="loadYouTubeAudio()">Play</button>
-    </div>
-</div>
-
 
     
     <div id="stopwatch" class="stopwatch">
@@ -374,10 +386,6 @@ body {
         <p>Step into the Future of Digital Innovation</p>
         <button class="btn">Explore</button>
     </div>
-
-    <!-- Mini YouTube Video Box -->
-<div id="video-container" style="margin-top: 20px; box-shadow: 0 0 15px violet; border-radius: 10px; overflow: hidden;"></div>
-
 
     <!-- ZenoBot -->
     <div id="zenobot"></div>
@@ -491,47 +499,113 @@ document.addEventListener('mousemove', (e) => {
     }, 500); // Remove trail after animation
 });
 
+        let defaultAudio = "audio.mp4"; // Your default song
+let videoContainer = document.createElement("div");
 
-        document.addEventListener("DOMContentLoaded", function() {
-    // Show popup on page load
-    document.getElementById("youtube-popup").style.display = "flex";
-});
-
-function loadYouTubeAudio() {
-    let link = document.getElementById("youtube-link").value;
-    let popup = document.getElementById("youtube-popup");
-
-    if (link.includes("youtube.com") || link.includes("youtu.be")) {
-        let videoId = link.split("v=")[1] || link.split("/").pop();
-        let ampersandPosition = videoId.indexOf("&");
-        if (ampersandPosition !== -1) {
-            videoId = videoId.substring(0, ampersandPosition);
-        }
-
-        // Update Explore Button
-        fetch(`https://noembed.com/embed?url=https://www.youtube.com/watch?v=${videoId}`)
-            .then(res => res.json())
-            .then(data => {
-                document.querySelector(".btn").innerText = data.title;
-                document.querySelector(".btn").style.fontSize = "20px";
-                document.querySelector(".btn").style.color = "cyan";
-            });
-
-        // Show YouTube Video
-        document.getElementById("video-container").innerHTML = `
-            <iframe width="400" height="225" src="https://www.youtube.com/embed/${videoId}?autoplay=1" 
-            frameborder="0" allow="autoplay" allowfullscreen></iframe>
-        `;
-
-        popup.style.display = "none";
-    } else {
-        // If no link, just hide popup
-        popup.style.display = "none";
-    }
+// Close popup after song is set
+function closePopup() {
+    document.getElementById("music-popup").style.display = "none";
 }
 
+// Load YouTube Video and Play Audio
+function loadCustomSong() {
+    let songUrl = document.getElementById("song-url").value;
+    
+    if (songUrl.includes("youtube.com") || songUrl.includes("youtu.be")) {
+        let videoId = extractYouTubeID(songUrl);
+        playYouTubeAudio(videoId);
+        updateBackground(videoId);
+    } else {
+        playDefaultAudio();
+    }
+    
+    closePopup();
+}
+
+// Extract Video ID from YouTube URL
+function extractYouTubeID(url) {
+    let regex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
+    let match = url.match(regex);
+    return match ? match[1] : null;
+}
+
+// Replace Background with YouTube Video (Blurred)
+function updateBackground(videoId) {
+    videoContainer.innerHTML = `
+        <iframe width="100%" height="100%" 
+            src="https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}" 
+            frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>
+        </iframe>`;
+    videoContainer.style.position = "fixed";
+    videoContainer.style.top = "0";
+    videoContainer.style.left = "0";
+    videoContainer.style.width = "100vw";
+    videoContainer.style.height = "100vh";
+    videoContainer.style.zIndex = "-1";
+    videoContainer.style.filter = "blur(10px)";
+    document.body.appendChild(videoContainer);
+}
+
+// Play Audio Only from YouTube (Extracted Sound)
+function playYouTubeAudio(videoId) {
+    let audio = new Audio(`https://www.youtubeinmp3.com/fetch/?video=https://www.youtube.com/watch?v=${videoId}`);
+    audio.loop = true;
+    audio.play();
+}
+
+// Default Fallback Audio
+function playDefaultAudio() {
+    let audio = new Audio(defaultAudio);
+    audio.loop = true;
+    audio.play();
+}
+
+// Run popup on page load
+window.onload = function() {
+    document.getElementById("music-popup").style.display = "flex";
+};
+
+// Change Explore Button to Video Title
+fetch(`https://noembed.com/embed?url=https://www.youtube.com/watch?v=${videoId}`)
+    .then(response => response.json())
+    .then(data => {
+        document.querySelector(".btn").innerText = data.title;
+    })
+    .catch(() => {
+        document.querySelector(".btn").innerText = "Custom Song";
+    });
+
+        // Equalizer effect
+function startEqualizer() {
+    let equalizer = document.createElement("div");
+    equalizer.classList.add("equalizer");
+    
+    for (let i = 0; i < 10; i++) {
+        let bar = document.createElement("div");
+        equalizer.appendChild(bar);
+    }
+    
+    document.body.appendChild(equalizer);
+    
+    setInterval(() => {
+        document.querySelectorAll(".equalizer div").forEach(bar => {
+            bar.style.height = Math.random() * 40 + 10 + "px";
+        });
+    }, 150);
+}
+
+// Call equalizer once the song starts playing
+setTimeout(startEqualizer, 2000);
 
     </script>
+<!-- Music Input Popup -->
+<div id="music-popup">
+    <div id="music-popup-content">
+        <h2>Enter a YouTube Song Link 🎵</h2>
+        <input type="text" id="song-url" placeholder="Paste YouTube URL here...">
+        <button onclick="loadCustomSong()">Add Song</button>
+    </div>
+</div>
 
 </body>
 </html>
