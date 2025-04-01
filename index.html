@@ -304,7 +304,7 @@
     <div class="hero">
         <h1>Welcome to ZenoFractal</h1>
         <p>Step into the Future of Digital Innovation</p>
-        <button class="btn">Explore</button>
+        <button class="btn" onclick="showAddSongPopup()">Add Song</button>
     </div>
 
     <!-- ZenoBot -->
@@ -364,6 +364,45 @@
             audio.volume = value;
         }
 
+        // Show Add Song Popup
+        function showAddSongPopup() {
+            document.getElementById("add-song-popup").style.display = "block";
+        }
+
+        // Hide Add Song Popup after URL is added
+        function loadYouTubeVideo() {
+            const url = document.getElementById("youtube-url").value;
+            if (url) {
+                const videoId = extractYouTubeVideoId(url);
+                if (videoId) {
+                    playYouTubeVideo(videoId);
+                    document.getElementById("add-song-popup").style.display = "none";
+                } else {
+                    alert("Invalid YouTube URL");
+                }
+            }
+        }
+
+        // Extract Video ID from YouTube URL
+        function extractYouTubeVideoId(url) {
+            const regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+|(?:v|e(?:mbed)?)\/?([^"&?/\s]*))|youtu\.be\/([^"&?/\s]*))/;
+            const match = url.match(regex);
+            if (match) {
+                return match[1] || match[2];
+            }
+            return null;
+        }
+
+        function playYouTubeVideo(videoId) {
+            const iframe = document.createElement("iframe");
+            iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+            iframe.width = "100%";
+            iframe.height = "100%";
+            iframe.frameborder = "0";
+            iframe.allow = "accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture";
+            document.body.appendChild(iframe);
+        }
+
         // Toggle Chat Window
         const chatbotOrb = document.getElementById("zenobot");
         const chatContainer = document.getElementById("chat-container");
@@ -394,70 +433,7 @@
             stopwatch.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
         }
 
-        setInterval(updateStopwatch, 1000); // Update every second
-
-        // Hide the loading screen once the page is fully loaded
-        window.onload = () => {
-            document.getElementById("loading-screen").style.display = "none";
-        };
-
-        // YouTube Video Handling
-        function loadYouTubeVideo() {
-            const url = document.getElementById("youtube-url").value;
-            if (url) {
-                const videoId = extractYouTubeVideoId(url);
-                if (videoId) {
-                    playYouTubeVideo(videoId);
-                    document.getElementById("add-song-popup").style.display = "none";
-                } else {
-                    alert("Invalid YouTube URL");
-                }
-            }
-        }
-
-        function extractYouTubeVideoId(url) {
-            const regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+|(?:v|e(?:mbed)?)\/?([^"&?/\s]*))|youtu\.be\/([^"&?/\s]*))/;
-            const match = url.match(regex);
-            if (match) {
-                return match[1] || match[2];
-            }
-            return null;
-        }
-
-        function playYouTubeVideo(videoId) {
-            const iframe = document.createElement("iframe");
-            iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
-            iframe.width = "100%";
-            iframe.height = "100%";
-            iframe.frameborder = "0";
-            iframe.allow = "accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture";
-            document.body.appendChild(iframe);
-        }
-
-        // Custom Cursor Trail Logic
-        const cursor = document.createElement('div');
-        cursor.classList.add('cursor');
-        document.body.appendChild(cursor);
-
-        document.addEventListener('mousemove', (e) => {
-            cursor.style.left = `${e.pageX}px`;
-            cursor.style.top = `${e.pageY}px`;
-        });
-
-        // Create cursor trail effect
-        document.addEventListener('mousemove', (e) => {
-            const trail = document.createElement('div');
-            trail.classList.add('cursor-trail');
-            document.body.appendChild(trail);
-
-            trail.style.left = `${e.pageX}px`;
-            trail.style.top = `${e.pageY}px`;
-
-            setTimeout(() => {
-                trail.remove();
-            }, 500); // Remove trail after animation
-        });
+        setInterval(updateStopwatch, 1000);
     </script>
-
 </body>
 </html>
