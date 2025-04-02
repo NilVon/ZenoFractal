@@ -350,6 +350,84 @@ body {
     box-shadow: 0 0 15px cyan;
 }
 
+
+        /* Cyberpunk "Wanna Draw?" Button */
+#draw-btn {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 15px 30px;
+    font-size: 18px;
+    font-weight: bold;
+    background: linear-gradient(45deg, cyan, blue);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0 0 20px cyan;
+    transition: 0.3s;
+}
+
+#draw-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 30px cyan;
+}
+
+/* Drawing UI */
+#drawing-container {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    height: 80%;
+    background: rgba(0, 0, 0, 0.95);
+    border-radius: 15px;
+    box-shadow: 0 0 40px cyan;
+    z-index: 1000;
+    padding: 20px;
+}
+
+/* Close Button */
+#close-draw {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 20px;
+    cursor: pointer;
+    color: white;
+    background: red;
+    padding: 5px 10px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px red;
+}
+
+/* Camera Feed */
+#video {
+    position: absolute;
+    left: 5%;
+    top: 10%;
+    width: 40%;
+    border: 3px solid cyan;
+    border-radius: 10px;
+    box-shadow: 0 0 15px cyan;
+}
+
+/* Drawing Canvas */
+#canvas {
+    position: absolute;
+    right: 5%;
+    top: 10%;
+    width: 40%;
+    height: 75%;
+    border: 3px solid cyan;
+    border-radius: 10px;
+    box-shadow: 0 0 15px cyan;
+    background: black;
+}
+
     </style>
 </head>
 <body>
@@ -378,6 +456,16 @@ body {
     <canvas id="mazeCanvas"></canvas>
     <button id="startMaze">Start</button>
     <button id="clearMaze">Clear</button>
+</div>
+
+    <!-- Wanna Draw? Button -->
+<button id="draw-btn" onclick="openDrawing()">Wanna Draw?</button>
+
+<!-- Drawing Interface -->
+<div id="drawing-container">
+    <span id="close-draw" onclick="closeDrawing()">❌ Close</span>
+    <video id="video" autoplay></video>
+    <canvas id="canvas"></canvas>
 </div>
 
 
@@ -611,6 +699,74 @@ document.getElementById("clearMaze").addEventListener("click", function () {
 
 // Initial Render
 drawMaze();
+
+
+        let video = document.getElementById("video");
+let canvas = document.getElementById("canvas");
+let ctx = canvas.getContext("2d");
+let drawing = false;
+let prevX = 0, prevY = 0;
+
+// Load Hand Tracking Model
+async function loadHandTracking() {
+    const model = await handPoseDetection.createDetector(handPoseDetection.SupportedModels.MediaPipeHands);
+    return model;
+}
+
+// Open Drawing UI
+function openDrawing() {
+    document.getElementById("drawing-container").style.display = "block";
+    startCamera();
+}
+
+// Close Drawing UI
+function closeDrawing() {
+    document.getElementById("drawing-container").style.display = "none";
+    video.srcObject.getTracks().forEach(track => track.stop());
+}
+
+// Start Camera
+function startCamera() {
+    navigator.mediaDevices.getUserMedia({ video: true }).then(stream => {
+        video.srcObject = stream;
+        video.onloadedmetadata = () => video.play();
+        startDrawing();
+    });
+}
+
+// Start Finger Tracking & Drawing
+async function startDrawing() {
+    const model = await loadHandTracking();
+    drawing = true;
+    canvas.width = canvas.clientWidth;
+    canvas.height = canvas.clientHeight;
+
+    function drawLoop() {
+        if (!drawing) return;
+        model.estimateHands(video).then(hands => {
+            if (hands.length > 0) {
+                let { x, y } = hands[0].keypoints[8]; // Index finger tip
+                x = x / video.videoWidth * canvas.width;
+                y = y / video.videoHeight * canvas.height;
+                
+                ctx.strokeStyle = "cyan";
+                ctx.lineWidth = 5;
+                ctx.lineCap = "round";
+
+                if (prevX !== 0 && prevY !== 0) {
+                    ctx.beginPath();
+                    ctx.moveTo(prevX, prevY);
+                    ctx.lineTo(x, y);
+                    ctx.stroke();
+                }
+                prevX = x;
+                prevY = y;
+            }
+        });
+        requestAnimationFrame(drawLoop);
+    }
+    drawLoop();
+}
 
 
     </script>
