@@ -225,7 +225,33 @@
 }
 
 
-    
+        /* Loading Screen */
+#loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+}
+
+.loader {
+    border: 8px solid rgba(255, 255, 255, 0.1);
+    border-top: 8px solid cyan;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1.5s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
 
 
         /* Custom Cursor */
@@ -263,144 +289,42 @@ body {
 }
 
 
-        /* AI Maze Button */
-#ai-maze-btn {
-    position: fixed;
-    top: 10px;
-    right: 20px;
-    background: linear-gradient(45deg, purple, violet);
-    color: white;
-    padding: 10px 20px;
-    font-size: 16px;
-    border-radius: 8px;
-    border: none;
-    cursor: pointer;
-    box-shadow: 0 0 15px violet;
-    transition: 0.3s;
-}
-
-#ai-maze-btn:hover {
-    box-shadow: 0 0 25px cyan;
-    transform: scale(1.1);
-}
-
-/* Maze Container */
-#maze-container {
-    display: none;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: rgba(20, 20, 20, 0.95);
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 20px purple;
-    text-align: center;
-}
-
-/* Maze Canvas */
-#mazeCanvas {
-    background: black;
-    border: 2px solid violet;
-    box-shadow: 0 0 10px violet;
-    display: block;
-    margin: auto;
-}
-
-/* Maze Buttons */
-#startMaze, #clearMaze {
-    background: violet;
-    color: black;
-    padding: 10px 15px;
-    margin: 10px;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
-    transition: 0.3s;
-}
-
-#startMaze:hover, #clearMaze:hover {
-    background: cyan;
-    box-shadow: 0 0 15px cyan;
-}
-
-
-        /* Cyberpunk "Wanna Draw?" Button */
-#draw-btn {
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    padding: 15px 30px;
-    font-size: 18px;
-    font-weight: bold;
-    background: linear-gradient(45deg, cyan, blue);
-    color: white;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    box-shadow: 0 0 20px cyan;
-    transition: 0.3s;
-}
-
-#draw-btn:hover {
-    transform: scale(1.1);
-    box-shadow: 0 0 30px cyan;
-}
-
-/* Drawing UI */
+        /* Drawing Container */
 #drawing-container {
-    display: none;
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 80%;
-    height: 80%;
-    background: rgba(0, 0, 0, 0.95);
-    border-radius: 15px;
-    box-shadow: 0 0 40px cyan;
-    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.9);
     padding: 20px;
-}
-
-/* Close Button */
-#close-draw {
-    position: absolute;
-    top: 10px;
-    right: 15px;
-    font-size: 20px;
-    cursor: pointer;
-    color: white;
-    background: red;
-    padding: 5px 10px;
-    border-radius: 5px;
-    box-shadow: 0 0 10px red;
+    border-radius: 10px;
+    box-shadow: 0 0 20px cyan;
+    z-index: 1000;
 }
 
 /* Camera Feed */
-#video {
-    position: absolute;
-    left: 5%;
-    top: 10%;
-    width: 40%;
-    border: 3px solid cyan;
+#camera {
+    width: 300px;
+    height: 200px;
+    border: 2px solid cyan;
     border-radius: 10px;
-    box-shadow: 0 0 15px cyan;
+    box-shadow: 0 0 10px cyan;
 }
 
-/* Drawing Canvas */
-#canvas {
-    position: absolute;
-    right: 5%;
-    top: 10%;
-    width: 40%;
-    height: 75%;
-    border: 3px solid cyan;
-    border-radius: 10px;
-    box-shadow: 0 0 15px cyan;
+/* Canvas */
+#draw-canvas {
+    width: 300px;
+    height: 200px;
     background: black;
+    border: 2px solid cyan;
+    border-radius: 10px;
+    box-shadow: 0 0 10px cyan;
+    margin-top: 10px;
 }
+
 
     </style>
 </head>
@@ -412,32 +336,26 @@ body {
 </div>
 
 
- 
+    <!-- Loading Screen -->
+<div id="loading-screen">
+    <div class="loader"></div>
+    <p>Loading ZenoFractal...</p>
+</div>
+
+
+    <!-- Finger Drawing Button -->
+<button id="open-draw" class="btn">Wanna Draw?</button>
+
+<!-- Drawing UI -->
+<div id="drawing-container" style="display: none;">
+    <video id="camera" autoplay playsinline></video>
+    <canvas id="draw-canvas"></canvas>
+    <button id="close-draw" class="btn">❌ Close</button>
+</div>
 
 
     <!-- Background -->
     <div id="dynamic-bg"></div>
-
-    <!-- AI Maze Button (Top Right) -->
-<button id="ai-maze-btn">AI Maze</button>
-
-<!-- Maze Container (Initially Hidden) -->
-<div id="maze-container">
-    <canvas id="mazeCanvas"></canvas>
-    <button id="startMaze">Start</button>
-    <button id="clearMaze">Clear</button>
-</div>
-
-    <!-- Wanna Draw? Button -->
-<button id="draw-btn" onclick="openDrawing()">Wanna Draw?</button>
-
-<!-- Drawing Interface -->
-<div id="drawing-container">
-    <span id="close-draw" onclick="closeDrawing()">❌ Close</span>
-    <video id="video" autoplay></video>
-    <canvas id="canvas"></canvas>
-</div>
-
 
     <!-- Navigation -->
     <div class="nav">
@@ -537,7 +455,10 @@ function updateStopwatch() {
 
 setInterval(updateStopwatch, 1000); // Update every second
 
-
+        // Hide the loading screen once the page is fully loaded
+window.onload = () => {
+    document.getElementById("loading-screen").style.display = "none";
+};
 
         // Create and move the custom cursor
 const cursor = document.createElement('div');
@@ -564,177 +485,73 @@ document.addEventListener('mousemove', (e) => {
 });
 
 
-        document.getElementById("ai-maze-btn").addEventListener("click", function () {
-    document.getElementById("maze-container").style.display = "block";
-});
-
-// Maze Config
-const canvas = document.getElementById("mazeCanvas");
-const ctx = canvas.getContext("2d");
-const gridSize = 10;
-const cellSize = 40;
-canvas.width = gridSize * cellSize;
-canvas.height = gridSize * cellSize;
-
-let maze = new Array(gridSize).fill().map(() => new Array(gridSize).fill(0));
-let start = { x: 0, y: 0 };
-let end = { x: gridSize - 1, y: gridSize - 1 };
-
-// User Draws Walls
-let drawing = false;
-canvas.addEventListener("mousedown", () => drawing = true);
-canvas.addEventListener("mouseup", () => drawing = false);
-canvas.addEventListener("mousemove", function (e) {
-    if (!drawing) return;
-    let rect = canvas.getBoundingClientRect();
-    let x = Math.floor((e.clientX - rect.left) / cellSize);
-    let y = Math.floor((e.clientY - rect.top) / cellSize);
-    if ((x !== start.x || y !== start.y) && (x !== end.x || y !== end.y)) {
-        maze[y][x] = 1;
-        drawMaze();
-    }
-});
-
-// Draw the Maze
-function drawMaze() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    for (let y = 0; y < gridSize; y++) {
-        for (let x = 0; x < gridSize; x++) {
-            ctx.fillStyle = maze[y][x] ? "purple" : "black";
-            ctx.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
-            ctx.strokeStyle = "violet";
-            ctx.strokeRect(x * cellSize, y * cellSize, cellSize, cellSize);
-        }
-    }
-    ctx.fillStyle = "cyan";
-    ctx.fillRect(start.x * cellSize, start.y * cellSize, cellSize, cellSize);
-    ctx.fillStyle = "red";
-    ctx.fillRect(end.x * cellSize, end.y * cellSize, cellSize, cellSize);
-}
-
-// Liquid AI Pathfinding
-function findPath() {
-    let queue = [{ x: start.x, y: start.y, path: [] }];
-    let visited = new Set();
-    
-    while (queue.length) {
-        let { x, y, path } = queue.shift();
-        if (x === end.x && y === end.y) {
-            animatePath([...path, { x, y }]);
-            return;
-        }
-
-        let directions = [
-            { x: 0, y: -1 }, { x: 0, y: 1 },
-            { x: -1, y: 0 }, { x: 1, y: 0 }
-        ];
-        
-        for (let dir of directions) {
-            let nx = x + dir.x, ny = y + dir.y;
-            if (nx >= 0 && ny >= 0 && nx < gridSize && ny < gridSize &&
-                !maze[ny][nx] && !visited.has(`${nx},${ny}`)) {
-                queue.push({ x: nx, y: ny, path: [...path, { x, y }] });
-                visited.add(`${nx},${ny}`);
-            }
-        }
-    }
-}
-
-// Animate Path
-function animatePath(path) {
-    let i = 0;
-    function step() {
-        if (i >= path.length) return;
-        let { x, y } = path[i++];
-        ctx.fillStyle = "cyan";
-        ctx.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
-        setTimeout(step, 100);
-    }
-    step();
-}
-
-// Start Maze Solver
-document.getElementById("startMaze").addEventListener("click", function () {
-    findPath();
-});
-
-// Clear Maze
-document.getElementById("clearMaze").addEventListener("click", function () {
-    maze = new Array(gridSize).fill().map(() => new Array(gridSize).fill(0));
-    drawMaze();
-});
-
-// Initial Render
-drawMaze();
-
-
-        let video = document.getElementById("video");
-let canvas = document.getElementById("canvas");
+        let video = document.getElementById("camera");
+let canvas = document.getElementById("draw-canvas");
 let ctx = canvas.getContext("2d");
 let drawing = false;
 let prevX = 0, prevY = 0;
 
-// Load Hand Tracking Model
-async function loadHandTracking() {
-    const model = await handPoseDetection.createDetector(handPoseDetection.SupportedModels.MediaPipeHands);
-    return model;
-}
-
-// Open Drawing UI
-function openDrawing() {
+// Open Camera and Canvas
+document.getElementById("open-draw").addEventListener("click", function() {
     document.getElementById("drawing-container").style.display = "block";
     startCamera();
-}
+});
 
 // Close Drawing UI
-function closeDrawing() {
+document.getElementById("close-draw").addEventListener("click", function() {
     document.getElementById("drawing-container").style.display = "none";
-    video.srcObject.getTracks().forEach(track => track.stop());
-}
+    stopCamera();
+});
 
 // Start Camera
 function startCamera() {
-    navigator.mediaDevices.getUserMedia({ video: true }).then(stream => {
+    navigator.mediaDevices.getUserMedia({ video: true }).then(function(stream) {
         video.srcObject = stream;
-        video.onloadedmetadata = () => video.play();
-        startDrawing();
+        detectFinger();
+    }).catch(function(error) {
+        console.log("Camera access denied!", error);
     });
 }
 
-// Start Finger Tracking & Drawing
-async function startDrawing() {
-    const model = await loadHandTracking();
-    drawing = true;
-    canvas.width = canvas.clientWidth;
-    canvas.height = canvas.clientHeight;
-
-    function drawLoop() {
-        if (!drawing) return;
-        model.estimateHands(video).then(hands => {
-            if (hands.length > 0) {
-                let { x, y } = hands[0].keypoints[8]; // Index finger tip
-                x = x / video.videoWidth * canvas.width;
-                y = y / video.videoHeight * canvas.height;
-                
-                ctx.strokeStyle = "cyan";
-                ctx.lineWidth = 5;
-                ctx.lineCap = "round";
-
-                if (prevX !== 0 && prevY !== 0) {
-                    ctx.beginPath();
-                    ctx.moveTo(prevX, prevY);
-                    ctx.lineTo(x, y);
-                    ctx.stroke();
-                }
-                prevX = x;
-                prevY = y;
-            }
-        });
-        requestAnimationFrame(drawLoop);
-    }
-    drawLoop();
+// Stop Camera
+function stopCamera() {
+    let stream = video.srcObject;
+    let tracks = stream.getTracks();
+    tracks.forEach(track => track.stop());
+    video.srcObject = null;
 }
 
+// AI Hand Tracking (Using MediaPipe)
+async function detectFinger() {
+    const model = await handPoseDetection.createDetector(handPoseDetection.SupportedModels.MediaPipeHands);
+    
+    async function processFrame() {
+        const predictions = await model.estimateHands(video);
+        if (predictions.length > 0) {
+            let indexFinger = predictions[0].keypoints[8];  // Index Finger Tip
+            
+            let x = indexFinger.x / video.videoWidth * canvas.width;
+            let y = indexFinger.y / video.videoHeight * canvas.height;
+            
+            if (drawing) {
+                ctx.beginPath();
+                ctx.moveTo(prevX, prevY);
+                ctx.lineTo(x, y);
+                ctx.strokeStyle = "cyan";
+                ctx.lineWidth = 3;
+                ctx.stroke();
+            }
+            prevX = x;
+            prevY = y;
+        }
+        requestAnimationFrame(processFrame);
+    }
+    processFrame();
+}
+
+// Toggle Drawing On/Off
+video.addEventListener("touchstart", () => drawing = true);
+video.addEventListener("touchend", () => drawing = false);
 
     </script>
 
