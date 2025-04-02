@@ -261,6 +261,50 @@ body {
     100% { opacity: 0; transform: scale(0); }
 }
 
+        /* Popup Box */
+#popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    background: rgba(50, 0, 80, 0.9);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px violet;
+    text-align: center;
+    z-index: 999;
+    display: none; /* Initially hidden */
+}
+
+/* Input & Button Styling */
+#youtube-url {
+    width: 90%;
+    padding: 8px;
+    border: none;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    font-size: 16px;
+    background: black;
+    color: white;
+    outline: none;
+}
+
+#add-song {
+    background: violet;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: 0.3s;
+}
+
+#add-song:hover {
+    background: cyan;
+    box-shadow: 0 0 10px cyan;
+}
+
     </style>
 </head>
 <body>
@@ -277,6 +321,14 @@ body {
     <!-- Background -->
     <div id="dynamic-bg"></div>
 
+    <!-- Popup for YouTube Link -->
+<div id="popup">
+    <p>Enter YouTube Link for Custom Music:</p>
+    <input type="text" id="youtube-url" placeholder="Paste YouTube link here...">
+    <button id="add-song">Add Song</button>
+</div>
+
+
     <!-- Navigation -->
     <div class="nav">
         <a href="#">Home</a>
@@ -289,7 +341,11 @@ body {
     <div class="hero">
         <h1>Welcome to ZenoFractal</h1>
         <p>Step into the Future of Digital Innovation</p>
-        <button class="btn">Explore</button>
+        <h2 id="video-title">Explore</h2>
+<div id="video-container" style="display: none;">
+    <iframe id="youtube-video" width="400" height="225" frameborder="0" allowfullscreen></iframe>
+</div>
+
     </div>
 
     <!-- ZenoBot -->
@@ -400,7 +456,67 @@ document.addEventListener('mousemove', (e) => {
         trail.remove();
     }, 500); // Remove trail after animation
 });
+document.addEventListener("DOMContentLoaded", function() {
+    const popup = document.getElementById("popup");
+    const addSongBtn = document.getElementById("add-song");
+    const inputField = document.getElementById("youtube-url");
+    const videoTitle = document.getElementById("video-title");
+    const videoContainer = document.getElementById("video-container");
+    const youtubeVideo = document.getElementById("youtube-video");
+    let defaultMusic = true;
 
+    // Show popup when page loads
+    setTimeout(() => {
+        popup.style.display = "block";
+    }, 1000);
+
+    addSongBtn.addEventListener("click", function() {
+        let url = inputField.value.trim();
+        if (url) {
+            let videoId = getYouTubeID(url);
+            if (videoId) {
+                fetchVideoTitle(videoId);
+                youtubeVideo.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&controls=0`;
+                videoContainer.style.display = "block";
+                defaultMusic = false;
+            }
+        }
+        popup.style.display = "none";
+    });
+
+    function getYouTubeID(url) {
+        let match = url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/ ]{11})/);
+        return match ? match[1] : null;
+    }
+
+    function fetchVideoTitle(videoId) {
+        fetch(`https://noembed.com/embed?url=https://www.youtube.com/watch?v=${videoId}`)
+            .then(response => response.json())
+            .then(data => {
+                videoTitle.innerText = data.title || "Playing Music";
+            })
+            .catch(() => {
+                videoTitle.innerText = "Playing Music";
+            });
+    }
+
+    let musicOrb = document.getElementById("toggle-music");
+    let bgMusic = document.getElementById("bg-music");
+
+    musicOrb.addEventListener("click", function() {
+        if (defaultMusic) {
+            if (bgMusic.paused) {
+                bgMusic.play();
+                musicOrb.classList.remove("off");
+            } else {
+                bgMusic.pause();
+                musicOrb.classList.add("off");
+            }
+        }
+    });
+});
+
+        
 
     </script>
 
