@@ -289,167 +289,67 @@ body {
 }
 
 
-
-        /* Self Analyser Button */
-#analyser-btn {
+        /* AI Maze Button */
+#ai-maze-btn {
     position: fixed;
     top: 10px;
-    right: 10px;
-    background: linear-gradient(45deg, purple, cyan);
-    border: none;
-    padding: 10px 20px;
-    font-size: 18px;
-    color: white;
-    cursor: pointer;
-    border-radius: 5px;
-    box-shadow: 0 0 10px cyan;
-}
-
-/* Camera UI */
-#camera-ui {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: rgba(0, 0, 0, 0.9);
-    padding: 20px;
-    border-radius: 10px;
-    display: none;
-    flex-direction: column;
-    align-items: center;
-    box-shadow: 0 0 20px cyan;
-}
-
-video {
-    width: 300px;
-    height: 250px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px violet;
-}
-
-#capture-btn, #analyze-btn, #close-btn {
-    margin-top: 10px;
-    padding: 10px 15px;
-    background: cyan;
-    border: none;
-    cursor: pointer;
-    font-size: 16px;
-    border-radius: 5px;
-    box-shadow: 0 0 10px violet;
-}
-
-canvas {
-    display: none;
-}
-
-#results {
-    color: white;
-    font-size: 16px;
-    margin-top: 10px;
-    text-align: center;
-}
-
-
-/* Call Button */
-#call-button {
-    position: fixed;
-    bottom: 20px;
     right: 20px;
-    padding: 15px 20px;
-    background: linear-gradient(45deg, purple, cyan);
+    background: linear-gradient(45deg, purple, violet);
     color: white;
-    font-size: 18px;
-    border-radius: 10px;
-    cursor: pointer;
-    box-shadow: 0 0 10px cyan;
-}
-
-#call-button:hover { box-shadow: 0 0 20px violet; }
-
-/* Name Input Popup */
-#name-popup {
-    display: none;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: black;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 15px cyan;
-    text-align: center;
-    z-index: 1000;
-}
-
-#name-box input {
-    padding: 10px;
-    border: 1px solid cyan;
-    background: black;
-    color: white;
-    margin: 10px 0;
-    width: 80%;
-}
-
-#name-box button {
-    padding: 10px;
-    background: cyan;
-    color: black;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 8px;
     border: none;
     cursor: pointer;
+    box-shadow: 0 0 15px violet;
+    transition: 0.3s;
 }
 
-#name-box button:hover {
-    background: violet;
+#ai-maze-btn:hover {
+    box-shadow: 0 0 25px cyan;
+    transform: scale(1.1);
 }
 
-/* Sci-Fi Call Grid */
-#call-container {
+/* Maze Container */
+#maze-container {
     display: none;
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 90%;
-    height: 70%;
-    background: rgba(0, 0, 0, 0.9);
-    box-shadow: 0 0 20px cyan;
+    background: rgba(20, 20, 20, 0.95);
+    padding: 20px;
     border-radius: 10px;
-    z-index: 1000;
-    padding: 10px;
+    box-shadow: 0 0 20px purple;
+    text-align: center;
 }
 
-#call-close {
-    position: absolute;
-    top: 5px;
-    right: 10px;
-    color: white;
-    font-size: 20px;
-    cursor: pointer;
-}
-
-/* Video Grid (5x2) */
-#video-grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    grid-template-rows: repeat(2, 1fr);
-    gap: 10px;
-    width: 100%;
-    height: 100%;
-}
-
-.video-slot {
+/* Maze Canvas */
+#mazeCanvas {
     background: black;
-    border: 2px solid cyan;
-    box-shadow: 0 0 10px cyan;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    border-radius: 5px;
+    border: 2px solid violet;
+    box-shadow: 0 0 10px violet;
+    display: block;
+    margin: auto;
 }
 
+/* Maze Buttons */
+#startMaze, #clearMaze {
+    background: violet;
+    color: black;
+    padding: 10px 15px;
+    margin: 10px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: 0.3s;
+}
 
-        
+#startMaze:hover, #clearMaze:hover {
+    background: cyan;
+    box-shadow: 0 0 15px cyan;
+}
+
     </style>
 </head>
 <body>
@@ -459,20 +359,7 @@ canvas {
     00:00
 </div>
 
-<!-- Self Analyser Button (Top Right) -->
-<button id="analyser-btn">🔍 Self Analyser</button>
 
-<!-- Camera UI -->
-<div id="camera-ui">
-    <video id="webcam" autoplay></video>
-    <button id="capture-btn">📸 Capture</button>
-    <canvas id="photo-canvas"></canvas>
-    <button id="analyze-btn">🧠 Analyze</button>
-    <div id="results"></div>
-    <button id="close-btn">❌ Close</button>
-</div>
-
-    
     <!-- Loading Screen -->
 <div id="loading-screen">
     <div class="loader"></div>
@@ -483,24 +370,14 @@ canvas {
     <!-- Background -->
     <div id="dynamic-bg"></div>
 
-    <!-- Call Button -->
-<div id="call-button" onclick="enterName()">📞 Start Call</div>
+    <!-- AI Maze Button (Top Right) -->
+<button id="ai-maze-btn">AI Maze</button>
 
-<!-- Name Input Popup -->
-<div id="name-popup">
-    <div id="name-box">
-        <p>Enter Your Name:</p>
-        <input type="text" id="user-name" placeholder="Your Name">
-        <button onclick="startCall()">Confirm</button>
-    </div>
-</div>
-
-<!-- Sci-Fi Video Grid -->
-<div id="call-container">
-    <div id="call-close" onclick="closeCall()">✖</div>
-    <div id="video-grid">
-        <!-- Video slots will be auto-filled -->
-    </div>
+<!-- Maze Container (Initially Hidden) -->
+<div id="maze-container">
+    <canvas id="mazeCanvas"></canvas>
+    <button id="startMaze">Start</button>
+    <button id="clearMaze">Clear</button>
 </div>
 
 
@@ -632,95 +509,108 @@ document.addEventListener('mousemove', (e) => {
 });
 
 
-    const analyserBtn = document.getElementById("analyser-btn");
-    const cameraUI = document.getElementById("camera-ui");
-    const webcam = document.getElementById("webcam");
-    const captureBtn = document.getElementById("capture-btn");
-    const analyzeBtn = document.getElementById("analyze-btn");
-    const closeBtn = document.getElementById("close-btn");
-    const canvas = document.getElementById("photo-canvas");
-    const results = document.getElementById("results");
-    const ctx = canvas.getContext("2d");
+        document.getElementById("ai-maze-btn").addEventListener("click", function () {
+    document.getElementById("maze-container").style.display = "block";
+});
 
-    let stream;
+// Maze Config
+const canvas = document.getElementById("mazeCanvas");
+const ctx = canvas.getContext("2d");
+const gridSize = 10;
+const cellSize = 40;
+canvas.width = gridSize * cellSize;
+canvas.height = gridSize * cellSize;
 
-    analyserBtn.addEventListener("click", async () => {
-        cameraUI.style.display = "flex";
-        stream = await navigator.mediaDevices.getUserMedia({ video: true });
-        webcam.srcObject = stream;
-    });
+let maze = new Array(gridSize).fill().map(() => new Array(gridSize).fill(0));
+let start = { x: 0, y: 0 };
+let end = { x: gridSize - 1, y: gridSize - 1 };
 
-    captureBtn.addEventListener("click", () => {
-        canvas.width = webcam.videoWidth;
-        canvas.height = webcam.videoHeight;
-        ctx.drawImage(webcam, 0, 0, canvas.width, canvas.height);
-    });
+// User Draws Walls
+let drawing = false;
+canvas.addEventListener("mousedown", () => drawing = true);
+canvas.addEventListener("mouseup", () => drawing = false);
+canvas.addEventListener("mousemove", function (e) {
+    if (!drawing) return;
+    let rect = canvas.getBoundingClientRect();
+    let x = Math.floor((e.clientX - rect.left) / cellSize);
+    let y = Math.floor((e.clientY - rect.top) / cellSize);
+    if ((x !== start.x || y !== start.y) && (x !== end.x || y !== end.y)) {
+        maze[y][x] = 1;
+        drawMaze();
+    }
+});
 
-    analyzeBtn.addEventListener("click", () => {
-        let physiqueScore = Math.floor(Math.random() * 100);
-        let strengthScore = Math.floor(Math.random() * 100);
-        let staminaScore = Math.floor(Math.random() * 100);
-        let advice = physiqueScore < 50 ? "Try working on core strength & posture." : "Looking solid! Keep up the grind!";
-        
-        results.innerHTML = `
-            <p>🏋️ Physique: ${physiqueScore}/100</p>
-            <p>💪 Strength: ${strengthScore}/100</p>
-            <p>⚡ Stamina: ${staminaScore}/100</p>
-            <p>📢 Advice: ${advice}</p>
-        `;
-    });
-
-    closeBtn.addEventListener("click", () => {
-        cameraUI.style.display = "none";
-        stream.getTracks().forEach(track => track.stop());
-    });
-
-
-        let userName = "";
-
-function enterName() {
-    document.getElementById("name-popup").style.display = "block";
+// Draw the Maze
+function drawMaze() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (let y = 0; y < gridSize; y++) {
+        for (let x = 0; x < gridSize; x++) {
+            ctx.fillStyle = maze[y][x] ? "purple" : "black";
+            ctx.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
+            ctx.strokeStyle = "violet";
+            ctx.strokeRect(x * cellSize, y * cellSize, cellSize, cellSize);
+        }
+    }
+    ctx.fillStyle = "cyan";
+    ctx.fillRect(start.x * cellSize, start.y * cellSize, cellSize, cellSize);
+    ctx.fillStyle = "red";
+    ctx.fillRect(end.x * cellSize, end.y * cellSize, cellSize, cellSize);
 }
 
-function startCall() {
-    userName = document.getElementById("user-name").value.trim();
-    if (userName === "") return;
+// Liquid AI Pathfinding
+function findPath() {
+    let queue = [{ x: start.x, y: start.y, path: [] }];
+    let visited = new Set();
     
-    document.getElementById("name-popup").style.display = "none";
-    document.getElementById("call-container").style.display = "block";
-
-    setupGrid();
-}
-
-function closeCall() {
-    document.getElementById("call-container").style.display = "none";
-}
-
-function setupGrid() {
-    let grid = document.getElementById("video-grid");
-    grid.innerHTML = ""; // Clear previous videos
-
-    for (let i = 0; i < 10; i++) {
-        let slot = document.createElement("div");
-        slot.className = "video-slot";
-
-        if (i === 0) {
-            // First slot is for the current user
-            let iframe = document.createElement("iframe");
-            iframe.src = `https://meet.jit.si/ZenoFractalRoom#userInfo.displayName="${userName}"`;
-            iframe.allow = "camera; microphone; fullscreen";
-            iframe.style.width = "100%";
-            iframe.style.height = "100%";
-            slot.appendChild(iframe);
-        } else {
-            // Placeholder for other users
-            slot.innerHTML = `<p style="color: cyan;">Waiting for User ${i + 1}...</p>`;
+    while (queue.length) {
+        let { x, y, path } = queue.shift();
+        if (x === end.x && y === end.y) {
+            animatePath([...path, { x, y }]);
+            return;
         }
 
-        grid.appendChild(slot);
+        let directions = [
+            { x: 0, y: -1 }, { x: 0, y: 1 },
+            { x: -1, y: 0 }, { x: 1, y: 0 }
+        ];
+        
+        for (let dir of directions) {
+            let nx = x + dir.x, ny = y + dir.y;
+            if (nx >= 0 && ny >= 0 && nx < gridSize && ny < gridSize &&
+                !maze[ny][nx] && !visited.has(`${nx},${ny}`)) {
+                queue.push({ x: nx, y: ny, path: [...path, { x, y }] });
+                visited.add(`${nx},${ny}`);
+            }
+        }
     }
 }
 
+// Animate Path
+function animatePath(path) {
+    let i = 0;
+    function step() {
+        if (i >= path.length) return;
+        let { x, y } = path[i++];
+        ctx.fillStyle = "cyan";
+        ctx.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
+        setTimeout(step, 100);
+    }
+    step();
+}
+
+// Start Maze Solver
+document.getElementById("startMaze").addEventListener("click", function () {
+    findPath();
+});
+
+// Clear Maze
+document.getElementById("clearMaze").addEventListener("click", function () {
+    maze = new Array(gridSize).fill().map(() => new Array(gridSize).fill(0));
+    drawMaze();
+});
+
+// Initial Render
+drawMaze();
 
 
     </script>
