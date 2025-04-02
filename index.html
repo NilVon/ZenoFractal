@@ -305,6 +305,20 @@ body {
     box-shadow: 0 0 10px cyan;
 }
 
+
+
+        #visualizer {
+    position: fixed;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80vw;
+    height: 120px;
+    background: transparent;
+    z-index: 999;
+    display: block;
+}
+
     </style>
 </head>
 <body>
@@ -371,6 +385,8 @@ body {
 
     <!-- Music Player -->
     <div id="music-container">
+        <canvas id="visualizer"></canvas>
+
         <div id="toggle-music" onclick="toggleMusic()"></div>
         <input type="range" id="volume-slider" min="0" max="1" step="0.1" value="0.5" onchange="setVolume(this.value)">
     </div>
@@ -378,6 +394,8 @@ body {
     <audio id="bg-music" loop>
         <source src="audio.mp4" type="audio/mp4">
     </audio>
+
+    
 
     <script>
         let audio = document.getElementById("bg-music");
@@ -516,7 +534,71 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 
-        
+
+        // Setup for Visualizer
+const canvas = document.getElementById("visualizer");
+const ctx = canvas.getContext("2d");
+canvas.width = window.innerWidth * 0.8;
+canvas.height = 120;
+
+const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+const analyser = audioContext.createAnalyser();
+analyser.fftSize = 256;
+const bufferLength = analyser.frequencyBinCount;
+const dataArray = new Uint8Array(bufferLength);
+
+let audioSource;
+
+// Function to connect visualizer to audio
+function connectVisualizer(audioElement) {
+    if (!audioElement) return;
+    
+    const track = audioContext.createMediaElementSource(audioElement);
+    track.connect(analyser);
+    analyser.connect(audioContext.destination);
+}
+
+// Visualizer Animation
+function drawVisualizer() {
+    requestAnimationFrame(drawVisualizer);
+    
+    analyser.getByteFrequencyData(dataArray);
+    
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    const barWidth = (canvas.width / bufferLength) * 2.5;
+    let barHeight;
+    let x = 0;
+    
+    for (let i = 0; i < bufferLength; i++) {
+        barHeight = dataArray[i] * 0.8;
+
+        // Create a neon gradient
+        const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+        gradient.addColorStop(0, `hsl(${i * 4}, 100%, 60%)`);
+        gradient.addColorStop(1, `hsl(${i * 2}, 100%, 30%)`);
+
+        ctx.fillStyle = gradient;
+        ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
+
+        x += barWidth + 2;
+    }
+}
+
+// When music plays, start visualizer
+document.getElementById("toggle-music").addEventListener("click", function () {
+    if (audioContext.state === "suspended") {
+        audioContext.resume();
+    }
+
+    if (!audioSource) {
+        audioSource = document.getElementById("bg-music");
+        connectVisualizer(audioSource);
+    }
+
+    drawVisualizer();
+});
+
 
     </script>
 
