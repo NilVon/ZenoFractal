@@ -225,6 +225,33 @@
 }
 
 
+        /* Loading Screen */
+#loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+}
+
+.loader {
+    border: 8px solid rgba(255, 255, 255, 0.1);
+    border-top: 8px solid cyan;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1.5s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
 
 
         /* Custom Cursor */
@@ -261,95 +288,67 @@ body {
     100% { opacity: 0; transform: scale(0); }
 }
 
-        /* Popup Box */
-#popup {
+
+
+        /* Self Analyser Button */
+#analyser-btn {
     position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 300px;
-    background: rgba(50, 0, 80, 0.9);
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 15px violet;
-    text-align: center;
-    z-index: 999;
-    display: none; /* Initially hidden */
-}
-
-/* Input & Button Styling */
-#youtube-url {
-    width: 90%;
-    padding: 8px;
+    top: 10px;
+    right: 10px;
+    background: linear-gradient(45deg, purple, cyan);
     border: none;
-    border-radius: 5px;
-    margin-bottom: 10px;
-    font-size: 16px;
-    background: black;
+    padding: 10px 20px;
+    font-size: 18px;
     color: white;
-    outline: none;
-}
-
-#add-song {
-    background: violet;
-    padding: 10px;
-    border: none;
     cursor: pointer;
     border-radius: 5px;
-    font-size: 16px;
-    transition: 0.3s;
-}
-
-#add-song:hover {
-    background: cyan;
     box-shadow: 0 0 10px cyan;
 }
 
-
-
-        #visualizer {
+/* Camera UI */
+#camera-ui {
     position: fixed;
-    bottom: 100px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 80vw;
-    height: 120px;
-    background: transparent;
-    z-index: 999;
-    display: block;
-}
-
-
-        #graph-container {
-    position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    text-align: center;
-    color: white;
-    z-index: 10;
+    background: rgba(0, 0, 0, 0.9);
+    padding: 20px;
+    border-radius: 10px;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 0 20px cyan;
 }
 
-#function-input {
-    background: black;
-    color: cyan;
-    border: 2px solid cyan;
-    padding: 10px;
+video {
+    width: 300px;
+    height: 250px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px violet;
+}
+
+#capture-btn, #analyze-btn, #close-btn {
+    margin-top: 10px;
+    padding: 10px 15px;
+    background: cyan;
+    border: none;
+    cursor: pointer;
     font-size: 16px;
-    text-align: center;
     border-radius: 5px;
-    box-shadow: 0 0 10px cyan;
+    box-shadow: 0 0 10px violet;
 }
 
-#graph-canvas {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    z-index: -1;
-    background: black;
+canvas {
+    display: none;
 }
+
+#results {
+    color: white;
+    font-size: 16px;
+    margin-top: 10px;
+    text-align: center;
+}
+
 
     </style>
 </head>
@@ -360,26 +359,29 @@ body {
     00:00
 </div>
 
+<!-- Self Analyser Button (Top Right) -->
+<button id="analyser-btn">🔍 Self Analyser</button>
 
-    <div id="graph-container">
-    <input type="text" id="function-input" placeholder="Enter a function (e.g., sin(x), x^2)">
-    <canvas id="graph-canvas"></canvas>
+<!-- Camera UI -->
+<div id="camera-ui">
+    <video id="webcam" autoplay></video>
+    <button id="capture-btn">📸 Capture</button>
+    <canvas id="photo-canvas"></canvas>
+    <button id="analyze-btn">🧠 Analyze</button>
+    <div id="results"></div>
+    <button id="close-btn">❌ Close</button>
 </div>
 
-
-
+    
+    <!-- Loading Screen -->
+<div id="loading-screen">
+    <div class="loader"></div>
+    <p>Loading ZenoFractal...</p>
+</div>
 
 
     <!-- Background -->
     <div id="dynamic-bg"></div>
-
-    <!-- Popup for YouTube Link -->
-<div id="popup">
-    <p>Enter YouTube Link for Custom Music:</p>
-    <input type="text" id="youtube-url" placeholder="Paste YouTube link here...">
-    <button id="add-song">Add Song</button>
-</div>
-
 
     <!-- Navigation -->
     <div class="nav">
@@ -393,11 +395,7 @@ body {
     <div class="hero">
         <h1>Welcome to ZenoFractal</h1>
         <p>Step into the Future of Digital Innovation</p>
-        <h2 id="video-title">Explore</h2>
-<div id="video-container" style="display: none;">
-    <iframe id="youtube-video" width="400" height="225" frameborder="0" allowfullscreen></iframe>
-</div>
-
+        <button class="btn">Explore</button>
     </div>
 
     <!-- ZenoBot -->
@@ -423,8 +421,6 @@ body {
 
     <!-- Music Player -->
     <div id="music-container">
-        <canvas id="visualizer"></canvas>
-
         <div id="toggle-music" onclick="toggleMusic()"></div>
         <input type="range" id="volume-slider" min="0" max="1" step="0.1" value="0.5" onchange="setVolume(this.value)">
     </div>
@@ -432,8 +428,6 @@ body {
     <audio id="bg-music" loop>
         <source src="audio.mp4" type="audio/mp4">
     </audio>
-
-    
 
     <script>
         let audio = document.getElementById("bg-music");
@@ -487,7 +481,10 @@ function updateStopwatch() {
 
 setInterval(updateStopwatch, 1000); // Update every second
 
-
+        // Hide the loading screen once the page is fully loaded
+window.onload = () => {
+    document.getElementById("loading-screen").style.display = "none";
+};
 
         // Create and move the custom cursor
 const cursor = document.createElement('div');
@@ -512,168 +509,51 @@ document.addEventListener('mousemove', (e) => {
         trail.remove();
     }, 500); // Remove trail after animation
 });
-document.addEventListener("DOMContentLoaded", function() {
-    const popup = document.getElementById("popup");
-    const addSongBtn = document.getElementById("add-song");
-    const inputField = document.getElementById("youtube-url");
-    const videoTitle = document.getElementById("video-title");
-    const videoContainer = document.getElementById("video-container");
-    const youtubeVideo = document.getElementById("youtube-video");
-    let defaultMusic = true;
 
-    // Show popup when page loads
-    setTimeout(() => {
-        popup.style.display = "block";
-    }, 1000);
 
-    addSongBtn.addEventListener("click", function() {
-        let url = inputField.value.trim();
-        if (url) {
-            let videoId = getYouTubeID(url);
-            if (videoId) {
-                fetchVideoTitle(videoId);
-                youtubeVideo.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&controls=0`;
-                videoContainer.style.display = "block";
-                defaultMusic = false;
-            }
-        }
-        popup.style.display = "none";
+    const analyserBtn = document.getElementById("analyser-btn");
+    const cameraUI = document.getElementById("camera-ui");
+    const webcam = document.getElementById("webcam");
+    const captureBtn = document.getElementById("capture-btn");
+    const analyzeBtn = document.getElementById("analyze-btn");
+    const closeBtn = document.getElementById("close-btn");
+    const canvas = document.getElementById("photo-canvas");
+    const results = document.getElementById("results");
+    const ctx = canvas.getContext("2d");
+
+    let stream;
+
+    analyserBtn.addEventListener("click", async () => {
+        cameraUI.style.display = "flex";
+        stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        webcam.srcObject = stream;
     });
 
-    function getYouTubeID(url) {
-        let match = url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/ ]{11})/);
-        return match ? match[1] : null;
-    }
-
-    function fetchVideoTitle(videoId) {
-        fetch(`https://noembed.com/embed?url=https://www.youtube.com/watch?v=${videoId}`)
-            .then(response => response.json())
-            .then(data => {
-                videoTitle.innerText = data.title || "Playing Music";
-            })
-            .catch(() => {
-                videoTitle.innerText = "Playing Music";
-            });
-    }
-
-    let musicOrb = document.getElementById("toggle-music");
-    let bgMusic = document.getElementById("bg-music");
-
-    musicOrb.addEventListener("click", function() {
-        if (defaultMusic) {
-            if (bgMusic.paused) {
-                bgMusic.play();
-                musicOrb.classList.remove("off");
-            } else {
-                bgMusic.pause();
-                musicOrb.classList.add("off");
-            }
-        }
+    captureBtn.addEventListener("click", () => {
+        canvas.width = webcam.videoWidth;
+        canvas.height = webcam.videoHeight;
+        ctx.drawImage(webcam, 0, 0, canvas.width, canvas.height);
     });
-});
 
-
-        // Setup for Visualizer
-const canvas = document.getElementById("visualizer");
-const ctx = canvas.getContext("2d");
-canvas.width = window.innerWidth * 0.8;
-canvas.height = 120;
-
-const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-const analyser = audioContext.createAnalyser();
-analyser.fftSize = 256;
-const bufferLength = analyser.frequencyBinCount;
-const dataArray = new Uint8Array(bufferLength);
-
-let audioSource;
-
-// Function to connect visualizer to audio
-function connectVisualizer(audioElement) {
-    if (!audioElement) return;
-    
-    const track = audioContext.createMediaElementSource(audioElement);
-    track.connect(analyser);
-    analyser.connect(audioContext.destination);
-}
-
-// Visualizer Animation
-function drawVisualizer() {
-    requestAnimationFrame(drawVisualizer);
-    
-    analyser.getByteFrequencyData(dataArray);
-    
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
-    const barWidth = (canvas.width / bufferLength) * 2.5;
-    let barHeight;
-    let x = 0;
-    
-    for (let i = 0; i < bufferLength; i++) {
-        barHeight = dataArray[i] * 0.8;
-
-        // Create a neon gradient
-        const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-        gradient.addColorStop(0, `hsl(${i * 4}, 100%, 60%)`);
-        gradient.addColorStop(1, `hsl(${i * 2}, 100%, 30%)`);
-
-        ctx.fillStyle = gradient;
-        ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
-
-        x += barWidth + 2;
-    }
-}
-
-// When music plays, start visualizer
-document.getElementById("toggle-music").addEventListener("click", function () {
-    if (audioContext.state === "suspended") {
-        audioContext.resume();
-    }
-
-    if (!audioSource) {
-        audioSource = document.getElementById("bg-music");
-        connectVisualizer(audioSource);
-    }
-
-    drawVisualizer();
-});
-
-        const canvas = document.getElementById("graph-canvas");
-const ctx = canvas.getContext("2d");
-const inputField = document.getElementById("function-input");
-
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-
-function drawGraph(funcStr) {
-    try {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.strokeStyle = "cyan";
-        ctx.lineWidth = 2;
+    analyzeBtn.addEventListener("click", () => {
+        let physiqueScore = Math.floor(Math.random() * 100);
+        let strengthScore = Math.floor(Math.random() * 100);
+        let staminaScore = Math.floor(Math.random() * 100);
+        let advice = physiqueScore < 50 ? "Try working on core strength & posture." : "Looking solid! Keep up the grind!";
         
-        let func = new Function("x", `return ${funcStr};`);
-        ctx.beginPath();
+        results.innerHTML = `
+            <p>🏋️ Physique: ${physiqueScore}/100</p>
+            <p>💪 Strength: ${strengthScore}/100</p>
+            <p>⚡ Stamina: ${staminaScore}/100</p>
+            <p>📢 Advice: ${advice}</p>
+        `;
+    });
 
-        for (let x = -canvas.width / 2; x < canvas.width / 2; x += 1) {
-            let y = func(x / 50) * 50;
-            if (x === -canvas.width / 2) {
-                ctx.moveTo(canvas.width / 2 + x, canvas.height / 2 - y);
-            } else {
-                ctx.lineTo(canvas.width / 2 + x, canvas.height / 2 - y);
-            }
-        }
+    closeBtn.addEventListener("click", () => {
+        cameraUI.style.display = "none";
+        stream.getTracks().forEach(track => track.stop());
+    });
 
-        ctx.stroke();
-    } catch (error) {
-        console.log("Invalid function:", error);
-    }
-}
-
-inputField.addEventListener("change", () => {
-    drawGraph(inputField.value);
-});
-
-// Default Graph
-drawGraph("Math.sin(x)");
 
 
     </script>
