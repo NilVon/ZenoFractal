@@ -319,6 +319,38 @@ body {
     display: block;
 }
 
+
+        #graph-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: white;
+    z-index: 10;
+}
+
+#function-input {
+    background: black;
+    color: cyan;
+    border: 2px solid cyan;
+    padding: 10px;
+    font-size: 16px;
+    text-align: center;
+    border-radius: 5px;
+    box-shadow: 0 0 10px cyan;
+}
+
+#graph-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    background: black;
+}
+
     </style>
 </head>
 <body>
@@ -326,6 +358,12 @@ body {
     
     <div id="stopwatch" class="stopwatch">
     00:00
+</div>
+
+
+    <div id="graph-container">
+    <input type="text" id="function-input" placeholder="Enter a function (e.g., sin(x), x^2)">
+    <canvas id="graph-canvas"></canvas>
 </div>
 
 
@@ -598,6 +636,44 @@ document.getElementById("toggle-music").addEventListener("click", function () {
 
     drawVisualizer();
 });
+
+        const canvas = document.getElementById("graph-canvas");
+const ctx = canvas.getContext("2d");
+const inputField = document.getElementById("function-input");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+function drawGraph(funcStr) {
+    try {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.strokeStyle = "cyan";
+        ctx.lineWidth = 2;
+        
+        let func = new Function("x", `return ${funcStr};`);
+        ctx.beginPath();
+
+        for (let x = -canvas.width / 2; x < canvas.width / 2; x += 1) {
+            let y = func(x / 50) * 50;
+            if (x === -canvas.width / 2) {
+                ctx.moveTo(canvas.width / 2 + x, canvas.height / 2 - y);
+            } else {
+                ctx.lineTo(canvas.width / 2 + x, canvas.height / 2 - y);
+            }
+        }
+
+        ctx.stroke();
+    } catch (error) {
+        console.log("Invalid function:", error);
+    }
+}
+
+inputField.addEventListener("change", () => {
+    drawGraph(inputField.value);
+});
+
+// Default Graph
+drawGraph("Math.sin(x)");
 
 
     </script>
