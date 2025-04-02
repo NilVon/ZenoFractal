@@ -211,83 +211,68 @@
             box-shadow: 0 0 10px violet;
         }
 
+
         /* Stopwatch Style */
-        .stopwatch {
-            position: fixed;
-            top: 10px;
-            left: 10px;
-            font-size: 20px;
-            font-family: 'Courier New', Courier, monospace;
-            color: neon pink;
-            text-shadow: 0 0 10px pink, 0 0 20px pink;
-            z-index: 1000;
-        }
+.stopwatch {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    font-size: 20px;
+    font-family: 'Courier New', Courier, monospace;
+    color: neon pink;
+    text-shadow: 0 0 10px pink, 0 0 20px pink;
+    z-index: 1000;
+}
 
-        /* Add Song Popup */
-        #add-song-popup {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(80, 0, 120, 0.9);
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 20px purple;
-            text-align: center;
-        }
 
-        #youtube-url {
-            width: 80%;
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 5px;
-            border: none;
-        }
 
-        #submit-button {
-            padding: 10px 20px;
-            background: linear-gradient(45deg, purple, violet);
-            border: none;
-            color: white;
-            cursor: pointer;
-            border-radius: 5px;
-            box-shadow: 0 0 10px violet;
-        }
 
         /* Custom Cursor */
-        .cursor {
-            position: absolute;
-            pointer-events: none;
-            width: 15px;
-            height: 15px;
-            border-radius: 50%;
-            background-color: violet;
-            box-shadow: 0 0 10px violet;
-            transform: translate(-50%, -50%);
-            z-index: 9999;
-        }
+body {
+    cursor: none;  /* Hide default cursor */
+}
 
-        .cursor-trail {
-            position: absolute;
-            width: 15px;
-            height: 15px;
-            border-radius: 50%;
-            background-color: violet;
-            box-shadow: 0 0 10px violet;
-            animation: trail-animation 0.5s ease-out forwards;
-        }
+.cursor {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: cyan;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s ease;
+    box-shadow: 0 0 10px cyan, 0 0 20px cyan;
+}
 
-        @keyframes trail-animation {
-            0% { transform: scale(1); opacity: 1; }
-            100% { transform: scale(0); opacity: 0; }
-        }
+/* Cursor Trails */
+.cursor-trail {
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background-color: violet;
+    opacity: 0.7;
+    pointer-events: none;
+    animation: trail 0.5s forwards;
+}
+
+@keyframes trail {
+    0% { opacity: 1; transform: scale(1); }
+    100% { opacity: 0; transform: scale(0); }
+}
+
     </style>
 </head>
 <body>
 
-    <!-- Stopwatch -->
-    <div id="stopwatch" class="stopwatch">00:00</div>
+    
+    <div id="stopwatch" class="stopwatch">
+    00:00
+</div>
+
+
+
+
 
     <!-- Background -->
     <div id="dynamic-bg"></div>
@@ -304,7 +289,7 @@
     <div class="hero">
         <h1>Welcome to ZenoFractal</h1>
         <p>Step into the Future of Digital Innovation</p>
-        <button class="btn" onclick="showAddSongPopup()">Add Song</button>
+        <button class="btn">Explore</button>
     </div>
 
     <!-- ZenoBot -->
@@ -326,12 +311,6 @@
             <button class="faq-question" onclick="toggleAnswer('answer4')">How can I get started?</button>
             <div id="answer4" class="answer">Just contact us, and we'll craft a custom digital solution tailored to your needs. 💡</div>
         </div>
-    </div>
-
-    <!-- Add Song Popup -->
-    <div id="add-song-popup">
-        <input type="text" id="youtube-url" placeholder="Enter YouTube URL">
-        <button id="submit-button" onclick="loadYouTubeVideo()">Add Song</button>
     </div>
 
     <!-- Music Player -->
@@ -364,45 +343,6 @@
             audio.volume = value;
         }
 
-        // Show Add Song Popup
-        function showAddSongPopup() {
-            document.getElementById("add-song-popup").style.display = "block";
-        }
-
-        // Hide Add Song Popup after URL is added
-        function loadYouTubeVideo() {
-            const url = document.getElementById("youtube-url").value;
-            if (url) {
-                const videoId = extractYouTubeVideoId(url);
-                if (videoId) {
-                    playYouTubeVideo(videoId);
-                    document.getElementById("add-song-popup").style.display = "none";
-                } else {
-                    alert("Invalid YouTube URL");
-                }
-            }
-        }
-
-        // Extract Video ID from YouTube URL
-        function extractYouTubeVideoId(url) {
-            const regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+|(?:v|e(?:mbed)?)\/?([^"&?/\s]*))|youtu\.be\/([^"&?/\s]*))/;
-            const match = url.match(regex);
-            if (match) {
-                return match[1] || match[2];
-            }
-            return null;
-        }
-
-        function playYouTubeVideo(videoId) {
-            const iframe = document.createElement("iframe");
-            iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
-            iframe.width = "100%";
-            iframe.height = "100%";
-            iframe.frameborder = "0";
-            iframe.allow = "accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture";
-            document.body.appendChild(iframe);
-        }
-
         // Toggle Chat Window
         const chatbotOrb = document.getElementById("zenobot");
         const chatContainer = document.getElementById("chat-container");
@@ -423,17 +363,46 @@
         }
 
         // Stopwatch Logic
-        let timeSpent = 0; // in seconds
-        const stopwatch = document.getElementById("stopwatch");
+let timeSpent = 0; // in seconds
+const stopwatch = document.getElementById("stopwatch");
 
-        function updateStopwatch() {
-            timeSpent++;
-            const minutes = Math.floor(timeSpent / 60);
-            const seconds = timeSpent % 60;
-            stopwatch.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-        }
+function updateStopwatch() {
+    timeSpent++;
+    const minutes = Math.floor(timeSpent / 60);
+    const seconds = timeSpent % 60;
+    stopwatch.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+}
 
-        setInterval(updateStopwatch, 1000);
+setInterval(updateStopwatch, 1000); // Update every second
+
+
+
+        // Create and move the custom cursor
+const cursor = document.createElement('div');
+cursor.classList.add('cursor');
+document.body.appendChild(cursor);
+
+document.addEventListener('mousemove', (e) => {
+    cursor.style.left = `${e.pageX}px`;
+    cursor.style.top = `${e.pageY}px`;
+});
+
+// Create cursor trail
+document.addEventListener('mousemove', (e) => {
+    const trail = document.createElement('div');
+    trail.classList.add('cursor-trail');
+    document.body.appendChild(trail);
+
+    trail.style.left = `${e.pageX}px`;
+    trail.style.top = `${e.pageY}px`;
+
+    setTimeout(() => {
+        trail.remove();
+    }, 500); // Remove trail after animation
+});
+
+
     </script>
+
 </body>
 </html>
