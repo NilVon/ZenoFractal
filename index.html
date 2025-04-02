@@ -366,6 +366,16 @@
             font-size: 16px;
             cursor: pointer;
         }
+        #finger-cursor { /* New cursor for finger tracking */
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: red; /* Visible cursor for tracking */
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            z-index: 1001; /* Above canvas */
+        }
     </style>
 </head>
 <body>
@@ -432,7 +442,7 @@
         </div>
         <button id="close-btn">Close</button>
     </div>
-
+    <div id="finger-cursor"></div>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/handpose"></script>
 
@@ -511,6 +521,7 @@
         let video = document.getElementById("video");
         let canvas = document.getElementById("canvas");
         let ctx = canvas.getContext("2d");
+        let fingerCursor = document.getElementById("finger-cursor");
 
         let drawBtn = document.getElementById("draw-btn");
         let drawPanel = document.getElementById("draw-panel");
@@ -537,14 +548,20 @@
         }
 
         async function trackFinger() {
-            if (!model) return; // Check if the model is loaded
+            if (!model) return;
 
             const predictions = await model.estimateHands(video);
             if (predictions.length > 0) {
                 let x = predictions[0].landmarks[8][0];
                 let y = predictions[0].landmarks[8][1];
 
-                if (scanned) { // Only draw if scanning is complete
+                fingerCursor.style.left = `${x}px`;
+                fingerCursor.style.top = `${y}px`;
+
+                const canvasRect = canvas.getBoundingClientRect();
+                const isInsideCanvas = x > canvasRect.left && x < canvasRect.right && y > canvasRect.top && y < canvasRect.bottom;
+
+                if (scanned && isInsideCanvas) {
                     if (drawing) {
                         ctx.beginPath();
                         ctx.moveTo(prevX, prevY);
@@ -556,10 +573,13 @@
                     prevX = x;
                     prevY = y;
                     drawing = true;
+                } else {
+                    drawing = false;
                 }
             } else {
                 drawing = false;
             }
+
             requestAnimationFrame(trackFinger);
         }
 
