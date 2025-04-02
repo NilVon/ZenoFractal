@@ -211,187 +211,173 @@
             box-shadow: 0 0 10px violet;
         }
 
-
         /* Stopwatch Style */
-.stopwatch {
-    position: fixed;
-    top: 10px;
-    left: 10px;
-    font-size: 20px;
-    font-family: 'Courier New', Courier, monospace;
-    color: neon pink;
-    text-shadow: 0 0 10px pink, 0 0 20px pink;
-    z-index: 1000;
-}
-
+        .stopwatch {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            font-size: 20px;
+            font-family: 'Courier New', Courier, monospace;
+            color: neon pink;
+            text-shadow: 0 0 10px pink, 0 0 20px pink;
+            z-index: 1000;
+        }
 
         /* Loading Screen */
-#loading-screen {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.8);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 10000;
-}
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+        }
 
-.loader {
-    border: 8px solid rgba(255, 255, 255, 0.1);
-    border-top: 8px solid cyan;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    animation: spin 1.5s linear infinite;
-}
+        .loader {
+            border: 8px solid rgba(255, 255, 255, 0.1);
+            border-top: 8px solid cyan;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1.5s linear infinite;
+        }
 
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
 
         /* Custom Cursor */
-body {
-    cursor: none;  /* Hide default cursor */
-}
+        body {
+            cursor: none; /* Hide default cursor */
+        }
 
-.cursor {
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background-color: cyan;
-    pointer-events: none;
-    transform: translate(-50%, -50%);
-    transition: transform 0.1s ease;
-    box-shadow: 0 0 10px cyan, 0 0 20px cyan;
-}
+        .cursor {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: cyan;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease;
+            box-shadow: 0 0 10px cyan, 0 0 20px cyan;
+        }
 
-/* Cursor Trails */
-.cursor-trail {
-    position: absolute;
-    width: 5px;
-    height: 5px;
-    border-radius: 50%;
-    background-color: violet;
-    opacity: 0.7;
-    pointer-events: none;
-    animation: trail 0.5s forwards;
-}
+        /* Cursor Trails */
+        .cursor-trail {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background-color: violet;
+            opacity: 0.7;
+            pointer-events: none;
+            animation: trail 0.5s forwards;
+        }
 
-@keyframes trail {
-    0% { opacity: 1; transform: scale(1); }
-    100% { opacity: 0; transform: scale(0); }
-}
+        @keyframes trail {
+            0% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0); }
+        }
 
+        /* Cyberpunk Draw Button */
+        #draw-btn {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(45deg, purple, cyan);
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 0 15px cyan;
+            border: none;
+            color: white;
+        }
 
-        /* --- Cyberpunk Button Styling --- */
-#draw-btn {
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: linear-gradient(45deg, cyan, blue);
-    padding: 15px 30px;
-    color: white;
-    font-size: 18px;
-    font-weight: bold;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: 0.3s;
-    box-shadow: 0 0 15px cyan;
-    border: none;
-}
+        #draw-btn:hover { transform: scale(1.1); box-shadow: 0 0 25px violet; }
 
-#draw-btn:hover {
-    transform: scale(1.1);
-    box-shadow: 0 0 25px cyan;
-}
+        /* Draw Panel */
+        #draw-panel {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            height: 80%;
+            background: rgba(0, 0, 0, 0.9);
+            box-shadow: 0 0 20px cyan;
+            border-radius: 10px;
+            padding: 20px;
+            color: white;
+            text-align: center;
+            z-index: 1000;
+        }
 
-/* --- Hidden Drawing Area --- */
-#draw-container {
-    display: none;
-    position: fixed;
-    bottom: 50px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 90%;
-    height: 70%;
-    background: rgba(0, 0, 0, 0.9);
-    border-radius: 10px;
-    box-shadow: 0 0 20px cyan;
-    padding: 10px;
-    text-align: center;
-}
+        /* Scanner Text */
+        #scanner {
+            font-size: 18px;
+            color: cyan;
+            text-shadow: 0 0 10px cyan;
+            margin-bottom: 10px;
+        }
 
-/* --- Close Button --- */
-#close-draw {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: red;
-    color: white;
-    padding: 5px 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    box-shadow: 0 0 10px red;
-}
+        /* Draw Container */
+        #draw-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+        }
 
-#close-draw:hover {
-    background: darkred;
-}
+        /* Camera Feed */
+        #video {
+            width: 40%;
+            border: 2px solid cyan;
+            box-shadow: 0 0 10px cyan;
+        }
 
-/* --- Camera Feed --- */
-#camera-view {
-    width: 40%;
-    height: 100%;
-    float: left;
-    border-right: 2px solid cyan;
-}
+        /* Neon Canvas */
+        #canvas {
+            width: 40%;
+            height: 300px;
+            background: black;
+            border: 2px solid cyan;
+            box-shadow: 0 0 15px cyan;
+        }
 
-/* --- Drawing Canvas --- */
-#draw-canvas {
-    width: 58%;
-    height: 100%;
-    float: right;
-    background: black;
-    border: 2px solid cyan;
-}
-
+        /* Close Button */
+        #close-btn {
+            margin-top: 10px;
+            background: red;
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
 
-    
     <div id="stopwatch" class="stopwatch">
-    00:00
-</div>
+        00:00
+    </div>
 
+    <div id="loading-screen">
+        <div class="loader"></div>
+        <p>Loading ZenoFractal...</p>
+    </div>
 
-    <!-- Loading Screen -->
-<div id="loading-screen">
-    <div class="loader"></div>
-    <p>Loading ZenoFractal...</p>
-</div>
-
-<!-- Wanna Draw? Button -->
-<button id="draw-btn">Wanna Draw?</button>
-
-<!-- Drawing UI -->
-<div id="draw-container">
-    <button id="close-draw">✖</button>
-    <video id="camera-view" autoplay></video>
-    <canvas id="draw-canvas"></canvas>
-</div>
-
-    <!-- Background -->
     <div id="dynamic-bg"></div>
 
-    <!-- Navigation -->
     <div class="nav">
         <a href="#">Home</a>
         <a href="#">Services</a>
@@ -399,17 +385,14 @@ body {
         <a href="https://www.instagram.com/zenofractal/?hl=en" target="_blank">Contact</a>
     </div>
 
-    <!-- Hero Section -->
     <div class="hero">
         <h1>Welcome to ZenoFractal</h1>
         <p>Step into the Future of Digital Innovation</p>
         <button class="btn">Explore</button>
     </div>
 
-    <!-- ZenoBot -->
     <div id="zenobot"></div>
 
-    <!-- Chatbot -->
     <div id="chat-container">
         <div id="chat-header" onclick="toggleChat()">🤖 ZenoBot ✖</div>
         <div id="chat-content">
@@ -427,7 +410,6 @@ body {
         </div>
     </div>
 
-    <!-- Music Player -->
     <div id="music-container">
         <div id="toggle-music" onclick="toggleMusic()"></div>
         <input type="range" id="volume-slider" min="0" max="1" step="0.1" value="0.5" onchange="setVolume(this.value)">
@@ -436,6 +418,20 @@ body {
     <audio id="bg-music" loop>
         <source src="audio.mp4" type="audio/mp4">
     </audio>
+
+    <button id="draw-btn">Wanna Draw?</button>
+
+    <div id="draw-panel">
+        <div id="scanner">Scanning your finger... Keep fingering!</div>
+        <div id="draw-container">
+            <video id="video" autoplay></video>
+            <canvas id="canvas"></canvas>
+        </div>
+        <button id="close-btn">Close</button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/handpose"></script>
 
     <script>
         let audio = document.getElementById("bg-music");
@@ -477,137 +473,119 @@ body {
         }
 
         // Stopwatch Logic
-let timeSpent = 0; // in seconds
-const stopwatch = document.getElementById("stopwatch");
+        let timeSpent = 0; // in seconds
+        const stopwatch = document.getElementById("stopwatch");
 
-function updateStopwatch() {
-    timeSpent++;
-    const minutes = Math.floor(timeSpent / 60);
-    const seconds = timeSpent % 60;
-    stopwatch.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-}
-
-setInterval(updateStopwatch, 1000); // Update every second
-
-        // Hide the loading screen once the page is fully loaded
-window.onload = () => {
-    document.getElementById("loading-screen").style.display = "none";
-};
-
-        // Create and move the custom cursor
-const cursor = document.createElement('div');
-cursor.classList.add('cursor');
-document.body.appendChild(cursor);
-
-document.addEventListener('mousemove', (e) => {
-    cursor.style.left = `${e.pageX}px`;
-    cursor.style.top = `${e.pageY}px`;
-});
-
-// Create cursor trail
-document.addEventListener('mousemove', (e) => {
-    const trail = document.createElement('div');
-    trail.classList.add('cursor-trail');
-    document.body.appendChild(trail);
-
-    trail.style.left = `${e.pageX}px`;
-    trail.style.top = `${e.pageY}px`;
-
-    setTimeout(() => {
-        trail.remove();
-    }, 500); // Remove trail after animation
-})
-
-        // Load TensorFlow Hand Pose Model
-const script = document.createElement('script');
-script.src = 'https://cdn.jsdelivr.net/npm/@tensorflow-models/handpose';
-document.head.appendChild(script);
-
-let model, ctx, video, canvas, running = false, handDetected = false;
-
-// Load Model When Ready
-script.onload = async () => {
-    model = await handpose.load();
-    console.log("✅ Hand Tracking Model Loaded");
-};
-
-// Open Drawing UI
-document.getElementById("draw-btn").onclick = () => {
-    document.getElementById("draw-container").style.display = "block";
-    startDrawing();
-};
-
-// Close Drawing UI
-document.getElementById("close-draw").onclick = () => {
-    document.getElementById("draw-container").style.display = "none";
-    stopDrawing();
-};
-
-// Start Camera & Canvas
-async function startDrawing() {
-    if (running) return;
-    running = true;
-
-    // Start Video Feed
-    video = document.getElementById("camera-view");
-    canvas = document.getElementById("draw-canvas");
-    ctx = canvas.getContext("2d");
-
-    navigator.mediaDevices.getUserMedia({ video: true }).then(stream => {
-        video.srcObject = stream;
-    });
-
-    // Resize Canvas
-    canvas.width = canvas.clientWidth;
-    canvas.height = canvas.clientHeight;
-
-    // Show Message to Hold Hand
-    ctx.fillStyle = "white";
-    ctx.font = "20px Arial";
-    ctx.fillText("Hold Hand Up to Start Drawing", 20, 50);
-
-    trackHand();
-}
-
-// Track Finger for Drawing
-async function trackHand() {
-    while (running) {
-        if (!model) continue;
-
-        const predictions = await model.estimateHands(video);
-
-        if (predictions.length > 0) {
-            handDetected = true;
-            draw(predictions[0].landmarks[8]); // Index Finger Tip
-        } else {
-            handDetected = false;
+        function updateStopwatch() {
+            timeSpent++;
+            const minutes = Math.floor(timeSpent / 60);
+            const seconds = timeSpent % 60;
+            stopwatch.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
         }
 
-        await new Promise(r => setTimeout(r, 100)); // Reduce CPU usage
-    }
-}
+        setInterval(updateStopwatch, 1000); // Update every second
 
-// Draw on Canvas
-function draw(finger) {
-    ctx.fillStyle = "cyan";
-    ctx.shadowBlur = 15;
-    ctx.shadowColor = "cyan";
+        // Hide the loading screen once the page is fully loaded
+        window.onload = () => {
+            document.getElementById("loading-screen").style.display = "none";
+        };
 
-    ctx.beginPath();
-    ctx.arc(finger[0] / 2, finger[1] / 2, 5, 0, Math.PI * 2);
-    ctx.fill();
-}
+        // Create and move the custom cursor
+        const cursor = document.createElement('div');
+        cursor.classList.add('cursor');
+        document.body.appendChild(cursor);
 
-// Stop Everything
-function stopDrawing() {
-    running = false;
-    if (video.srcObject) {
-        video.srcObject.getTracks().forEach(track => track.stop());
-    }
-}
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = `${e.pageX}px`;
+            cursor.style.top = `${e.pageY}px`;
+        });
 
+        // Create cursor trail
+        document.addEventListener('mousemove', (e) => {
+            const trail = document.createElement('div');
+            trail.classList.add('cursor-trail');
+            document.body.appendChild(trail);
 
+            trail.style.left = `${e.pageX}px`;
+            trail.style.top = `${e.pageY}px`;
 
+            setTimeout(() => {
+                trail.remove();
+            }, 500); // Remove trail after animation
+        });
+
+        let video = document.getElementById("video");
+        let canvas = document.getElementById("canvas");
+        let ctx = canvas.getContext("2d");
+
+        let drawBtn = document.getElementById("draw-btn");
+        let drawPanel = document.getElementById("draw-panel");
+        let closeBtn = document.getElementById("close-btn");
+        let scanner = document.getElementById("scanner");
+
+        let model;
+        let drawing = false;
+        let scanned = false;
+        let prevX, prevY;
+
+        // Open Camera & Start Hand Tracking
+        async function startCamera() {
+            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+            video.srcObject = stream;
+            model = await handpose.load();
+            scanFinger();
+        }
+
+        // Scan Finger for 10s
+        function scanFinger() {
+            setTimeout(() => {
+                scanner.innerHTML = "Done! Now Draw.";
+                scanned = true;
+            }, 10000);
+        }
+
+        // Track Finger & Draw
+        async function trackFinger() {
+            if (!model || !scanned) return;
+
+            const predictions = await model.estimateHands(video);
+            if (predictions.length > 0) {
+                let x = predictions[0].landmarks[8][0];
+                let y = predictions[0].landmarks[8][1];
+
+                if (drawing) {
+                    ctx.beginPath();
+                    ctx.moveTo(prevX, prevY);
+                    ctx.lineTo(x, y);
+                    ctx.strokeStyle = "cyan";
+                    ctx.lineWidth = 4;
+                    ctx.shadowBlur = 10;
+                    ctx.shadowColor = "cyan";
+                    ctx.stroke();
+                }
+
+                prevX = x;
+                prevY = y;
+                drawing = true;
+            } else {
+                drawing = false;
+            }
+
+            requestAnimationFrame(trackFinger);
+        }
+
+        // Open Drawing Panel
+        drawBtn.onclick = () => {
+            drawPanel.style.display = "block";
+            startCamera();
+            trackFinger();
+        };
+
+        // Close Panel
+        closeBtn.onclick = () => {
+            drawPanel.style.display = "none";
+            video.srcObject.getTracks().forEach(track => track.stop());
+        };
     </script>
 
 </body>
