@@ -284,98 +284,27 @@
             0% { opacity: 1; transform: scale(1); }
             100% { opacity: 0; transform: scale(0); }
         }
-
-        /* Cyberpunk Draw Button */
-        #draw-btn {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: linear-gradient(45deg, purple, cyan);
-            padding: 15px 30px;
-            font-size: 18px;
-            font-weight: bold;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: 0.3s;
-            box-shadow: 0 0 15px cyan;
-            border: none;
-            color: white;
-        }
-
-        #draw-btn:hover {
-            transform: translateX(-50%) scale(1.1);
-            box-shadow: 0 0 25px violet;
-        }
-
-        /* Draw Panel */
-        #draw-panel {
+        #youtube-popup {
             display: none;
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 80%;
-            height: 80%;
-            background: rgba(0, 0, 0, 0.9);
-            box-shadow: 0 0 20px cyan;
-            border-radius: 10px;
+            background: rgba(80, 0, 120, 0.9);
             padding: 20px;
-            color: white;
-            text-align: center;
-            z-index: 1000;
+            border-radius: 10px;
+            box-shadow: 0 0 15px violet;
+            z-index: 1001;
         }
-
-        /* Scanner Text */
-        #scanner {
-            font-size: 18px;
-            color: cyan;
-            text-shadow: 0 0 10px cyan;
-            margin-bottom: 10px;
-        }
-
-        /* Draw Container */
-        #draw-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 20px;
-        }
-
-        /* Camera Feed */
-        #video {
-            width: 40%;
-            border: 2px solid cyan;
-            box-shadow: 0 0 10px cyan;
-        }
-
-        /* Neon Canvas */
-        #canvas {
-            width: 40%;
-            height: 300px;
-            background: white; /* Changed to white */
-            border: 2px solid cyan;
-            box-shadow: 0 0 15px cyan;
-        }
-
-        /* Close Button */
-        #close-btn {
-            margin-top: 10px;
-            background: red;
-            padding: 10px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-        #finger-cursor { /* New cursor for finger tracking */
+        #visualizer {
             position: absolute;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background-color: red; /* Visible cursor for tracking */
-            pointer-events: none;
-            transform: translate(-50%, -50%);
-            z-index: 1001; /* Above canvas */
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 100px;
         }
+
     </style>
 </head>
 <body>
@@ -401,7 +330,7 @@
     <div class="hero">
         <h1>Welcome to ZenoFractal</h1>
         <p>Step into the Future of Digital Innovation</p>
-        <button class="btn">Explore</button>
+        <button class="btn" id="exploreBtn">Explore</button>
     </div>
 
     <div id="zenobot"></div>
@@ -411,13 +340,10 @@
         <div id="chat-content">
             <button class="faq-question" onclick="toggleAnswer('answer1')">What is ZenoFractal?</button>
             <div id="answer1" class="answer">ZenoFractal is a cutting-edge digital solutions provider. 🚀</div>
-
             <button class="faq-question" onclick="toggleAnswer('answer2')">What services do you offer?</button>
             <div id="answer2" class="answer">We specialize in web development, video editing, branding, and more! ⚡</div>
-
             <button class="faq-question" onclick="toggleAnswer('answer3')">Why should I choose ZenoFractal?</button>
             <div id="answer3" class="answer">Because we fuse creativity, cutting-edge technology, and high-quality execution. 🔥</div>
-
             <button class="faq-question" onclick="toggleAnswer('answer4')">How can I get started?</button>
             <div id="answer4" class="answer">Just contact us, and we'll craft a custom digital solution tailored to your needs. 💡</div>
         </div>
@@ -427,28 +353,16 @@
         <div id="toggle-music" onclick="toggleMusic()"></div>
         <input type="range" id="volume-slider" min="0" max="1" step="0.1" value="0.5" onchange="setVolume(this.value)">
     </div>
-
     <audio id="bg-music" loop>
         <source src="audio.mp4" type="audio/mp4">
     </audio>
-
-    <button id="draw-btn">Wanna Draw?</button>
-
-    <div id="draw-panel">
-        <div id="scanner">Scanning your finger... Keep fingering!</div>
-        <div id="draw-container">
-            <video id="video" autoplay></video>
-            <canvas id="canvas"></canvas>
-        </div>
-        <button id="close-btn">Close</button>
+    <div id="youtube-popup">
+        <input type="text" id="youtubeLink" placeholder="Enter YouTube Link">
+        <button id="submitLink">Enter</button>
     </div>
-    <div id="finger-cursor"></div>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/handpose"></script>
-
+    <canvas id="visualizer"></canvas>
     <script>
         let audio = document.getElementById("bg-music");
-
         function toggleMusic() {
             let button = document.getElementById("toggle-music");
             if (audio.paused) {
@@ -459,145 +373,129 @@
                 button.classList.add("off");
             }
         }
-
         function setVolume(value) {
             audio.volume = value;
         }
-
         const chatbotOrb = document.getElementById("zenobot");
         const chatContainer = document.getElementById("chat-container");
-
         chatbotOrb.addEventListener("click", () => {
             chatContainer.style.display = chatContainer.style.display === "block" ? "none" : "block";
         });
-
         function toggleAnswer(id) {
             const answer = document.getElementById(id);
             answer.style.display = answer.style.display === "block" ? "none" : "block";
         }
-
         function toggleChat() {
             chatContainer.style.display = "none";
         }
-
         let timeSpent = 0;
         const stopwatch = document.getElementById("stopwatch");
-
         function updateStopwatch() {
             timeSpent++;
             const minutes = Math.floor(timeSpent / 60);
             const seconds = timeSpent % 60;
             stopwatch.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
         }
-
         setInterval(updateStopwatch, 1000);
-
         window.onload = () => {
             document.getElementById("loading-screen").style.display = "none";
         };
-
         const cursor = document.createElement('div');
         cursor.classList.add('cursor');
         document.body.appendChild(cursor);
-
         document.addEventListener('mousemove', (e) => {
             cursor.style.left = `${e.pageX}px`;
             cursor.style.top = `${e.pageY}px`;
         });
-
         document.addEventListener('mousemove', (e) => {
             const trail = document.createElement('div');
             trail.classList.add('cursor-trail');
             document.body.appendChild(trail);
-
             trail.style.left = `${e.pageX}px`;
             trail.style.top = `${e.pageY}px`;
-
             setTimeout(() => {
                 trail.remove();
             }, 500);
         });
 
-        let video = document.getElementById("video");
-        let canvas = document.getElementById("canvas");
-        let ctx = canvas.getContext("2d");
-        let fingerCursor = document.getElementById("finger-cursor");
+        const exploreBtn = document.getElementById('exploreBtn');
+        const youtubePopup = document.getElementById('youtube-popup');
+        const submitLink = document.getElementById('submitLink');
+        const visualizer = document.getElementById('visualizer');
+        const visualizerCtx = visualizer.getContext('2d');
+        let videoTitle = "";
+        let videoID = "";
 
-        let drawBtn = document.getElementById("draw-btn");
-        let drawPanel = document.getElementById("draw-panel");
-        let closeBtn = document.getElementById("close-btn");
-        let scanner = document.getElementById("scanner");
+        exploreBtn.addEventListener('click', () => {
+            youtubePopup.style.display = 'block';
+        });
 
-        let model;
-        let drawing = false;
-        let scanned = false;
-        let prevX, prevY;
+        submitLink.addEventListener('click', () => {
+            const youtubeLink = document.getElementById('youtubeLink').value;
+            videoID = youtubeLink.split('v=')[1];
+            if(videoID){
+                youtubePopup.style.display = 'none';
+                fetch(`https://www.youtube.com/oembed?url=${youtubeLink}&format=json`)
+                .then(response => response.json())
+                .then(data => {
+                    videoTitle = data.title;
+                    exploreBtn.textContent = videoTitle;
+                    createVideoBackground(videoID);
+                    createVisualizer(videoID);
+                }).catch(error=>{
+                    console.log(error);
+                });
+            }
+        });
 
-        async function startCamera() {
-            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-            video.srcObject = stream;
-            model = await handpose.load();
-            scanFinger();
+        function createVideoBackground(videoID) {
+            const iframe = document.createElement('iframe');
+            iframe.src = `https://www.youtube.com/embed/${videoID}?autoplay=1&mute=1`;
+            iframe.style.display = 'none';
+            document.body.appendChild(iframe);
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            function updateBackground() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                ctx.drawImage(iframe, 0, 0, canvas.width, canvas.height);
+                const blurred = canvas.toDataURL();
+                document.body.style.backgroundImage = `url(${blurred})`;
+                document.body.style.filter = 'blur(5px)';
+                requestAnimationFrame(updateBackground);
+            }
+            updateBackground();
         }
 
-        function scanFinger() {
-            setTimeout(() => {
-                scanner.innerHTML = "Done! Now Draw.";
-                scanned = true;
-            }, 10000);
-        }
-
-        async function trackFinger() {
-            if (!model) return;
-
-            const predictions = await model.estimateHands(video);
-            if (predictions.length > 0) {
-                let x = predictions[0].landmarks[8][0];
-                let y = predictions[0].landmarks[8][1];
-
-                fingerCursor.style.left = `${x}px`;
-                fingerCursor.style.top = `${y}px`;
-
-                const canvasRect = canvas.getBoundingClientRect();
-                const isInsideCanvas = x > canvasRect.left && x < canvasRect.right && y > canvasRect.top && y < canvasRect.bottom;
-
-                if (scanned && isInsideCanvas) {
-                    if (drawing) {
-                        ctx.beginPath();
-                        ctx.moveTo(prevX, prevY);
-                        ctx.lineTo(x, y);
-                        ctx.strokeStyle = "black";
-                        ctx.lineWidth = 4;
-                        ctx.stroke();
-                    }
-                    prevX = x;
-                    prevY = y;
-                    drawing = true;
-                } else {
-                    drawing = false;
+        function createVisualizer(videoID) {
+            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const analyser = audioCtx.createAnalyser();
+            const iframe = document.querySelector(`iframe[src*="${videoID}"]`);
+            const source = audioCtx.createMediaElementSource(iframe);
+            source.connect(analyser);
+            analyser.connect(audioCtx.destination);
+            analyser.fftSize = 256;
+            const bufferLength = analyser.frequencyBinCount;
+            const dataArray = new Uint8Array(bufferLength);
+            let hue = 0;
+            function drawVisualizer() {
+                visualizer.width = window.innerWidth * 0.8;
+                visualizer.height = 100;
+                visualizerCtx.clearRect(0, 0, visualizer.width, visualizer.height);
+                analyser.getByteFrequencyData(dataArray);
+                const barWidth = (visualizer.width / bufferLength) * 2.5;
+                let x = 0;
+                for (let i = 0; i < bufferLength; i++) {
+                    const barHeight = dataArray[i];
+                    visualizerCtx.fillStyle = `hsl(${hue + i * 2}, 100%, 50%)`;
+                    visualizerCtx.fillRect(x, visualizer.height - barHeight / 2, barWidth, barHeight / 2);
+                    x += barWidth + 1;
                 }
-            } else {
-                drawing = false;
+                hue = (hue + 1) % 360;
+                requestAnimationFrame(drawVisualizer);
             }
-
-            requestAnimationFrame(trackFinger);
+            drawVisualizer();
         }
-
-        drawBtn.onclick = () => {
-            drawPanel.style.display = "block";
-            startCamera();
-            trackFinger();
-        };
-
-        closeBtn.onclick = () => {
-            drawPanel.style.display = "none";
-            if (video.srcObject) {
-                video.srcObject.getTracks().forEach(track => track.stop());
-            }
-        };
-
-        canvas.width = canvas.offsetWidth;
-        canvas.height = canvas.offsetHeight;
     </script>
 </body>
 </html>
