@@ -350,6 +350,106 @@ canvas {
 }
 
 
+/* Call Button */
+#call-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 15px 20px;
+    background: linear-gradient(45deg, purple, cyan);
+    color: white;
+    font-size: 18px;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0 0 10px cyan;
+}
+
+#call-button:hover { box-shadow: 0 0 20px violet; }
+
+/* Name Input Popup */
+#name-popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: black;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px cyan;
+    text-align: center;
+    z-index: 1000;
+}
+
+#name-box input {
+    padding: 10px;
+    border: 1px solid cyan;
+    background: black;
+    color: white;
+    margin: 10px 0;
+    width: 80%;
+}
+
+#name-box button {
+    padding: 10px;
+    background: cyan;
+    color: black;
+    border: none;
+    cursor: pointer;
+}
+
+#name-box button:hover {
+    background: violet;
+}
+
+/* Sci-Fi Call Grid */
+#call-container {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    height: 70%;
+    background: rgba(0, 0, 0, 0.9);
+    box-shadow: 0 0 20px cyan;
+    border-radius: 10px;
+    z-index: 1000;
+    padding: 10px;
+}
+
+#call-close {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+/* Video Grid (5x2) */
+#video-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 10px;
+    width: 100%;
+    height: 100%;
+}
+
+.video-slot {
+    background: black;
+    border: 2px solid cyan;
+    box-shadow: 0 0 10px cyan;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: 5px;
+}
+
+
+        
     </style>
 </head>
 <body>
@@ -382,6 +482,27 @@ canvas {
 
     <!-- Background -->
     <div id="dynamic-bg"></div>
+
+    <!-- Call Button -->
+<div id="call-button" onclick="enterName()">📞 Start Call</div>
+
+<!-- Name Input Popup -->
+<div id="name-popup">
+    <div id="name-box">
+        <p>Enter Your Name:</p>
+        <input type="text" id="user-name" placeholder="Your Name">
+        <button onclick="startCall()">Confirm</button>
+    </div>
+</div>
+
+<!-- Sci-Fi Video Grid -->
+<div id="call-container">
+    <div id="call-close" onclick="closeCall()">✖</div>
+    <div id="video-grid">
+        <!-- Video slots will be auto-filled -->
+    </div>
+</div>
+
 
     <!-- Navigation -->
     <div class="nav">
@@ -553,6 +674,52 @@ document.addEventListener('mousemove', (e) => {
         cameraUI.style.display = "none";
         stream.getTracks().forEach(track => track.stop());
     });
+
+
+        let userName = "";
+
+function enterName() {
+    document.getElementById("name-popup").style.display = "block";
+}
+
+function startCall() {
+    userName = document.getElementById("user-name").value.trim();
+    if (userName === "") return;
+    
+    document.getElementById("name-popup").style.display = "none";
+    document.getElementById("call-container").style.display = "block";
+
+    setupGrid();
+}
+
+function closeCall() {
+    document.getElementById("call-container").style.display = "none";
+}
+
+function setupGrid() {
+    let grid = document.getElementById("video-grid");
+    grid.innerHTML = ""; // Clear previous videos
+
+    for (let i = 0; i < 10; i++) {
+        let slot = document.createElement("div");
+        slot.className = "video-slot";
+
+        if (i === 0) {
+            // First slot is for the current user
+            let iframe = document.createElement("iframe");
+            iframe.src = `https://meet.jit.si/ZenoFractalRoom#userInfo.displayName="${userName}"`;
+            iframe.allow = "camera; microphone; fullscreen";
+            iframe.style.width = "100%";
+            iframe.style.height = "100%";
+            slot.appendChild(iframe);
+        } else {
+            // Placeholder for other users
+            slot.innerHTML = `<p style="color: cyan;">Waiting for User ${i + 1}...</p>`;
+        }
+
+        grid.appendChild(slot);
+    }
+}
 
 
 
