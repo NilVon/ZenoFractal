@@ -303,7 +303,10 @@
             color: white;
         }
 
-        #draw-btn:hover { transform: scale(1.1); box-shadow: 0 0 25px violet; }
+        #draw-btn:hover {
+            transform: translateX(-50%) scale(1.1);
+            box-shadow: 0 0 25px violet;
+        }
 
         /* Draw Panel */
         #draw-panel {
@@ -436,7 +439,6 @@
     <script>
         let audio = document.getElementById("bg-music");
 
-        // Toggle music play/pause
         function toggleMusic() {
             let button = document.getElementById("toggle-music");
             if (audio.paused) {
@@ -448,12 +450,10 @@
             }
         }
 
-        // Set music volume
         function setVolume(value) {
             audio.volume = value;
         }
 
-        // Toggle Chat Window
         const chatbotOrb = document.getElementById("zenobot");
         const chatContainer = document.getElementById("chat-container");
 
@@ -461,19 +461,16 @@
             chatContainer.style.display = chatContainer.style.display === "block" ? "none" : "block";
         });
 
-        // Toggle FAQ Answers
         function toggleAnswer(id) {
             const answer = document.getElementById(id);
             answer.style.display = answer.style.display === "block" ? "none" : "block";
         }
 
-        // Close Chat on Header Click
         function toggleChat() {
             chatContainer.style.display = "none";
         }
 
-        // Stopwatch Logic
-        let timeSpent = 0; // in seconds
+        let timeSpent = 0;
         const stopwatch = document.getElementById("stopwatch");
 
         function updateStopwatch() {
@@ -483,14 +480,12 @@
             stopwatch.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
         }
 
-        setInterval(updateStopwatch, 1000); // Update every second
+        setInterval(updateStopwatch, 1000);
 
-        // Hide the loading screen once the page is fully loaded
         window.onload = () => {
             document.getElementById("loading-screen").style.display = "none";
         };
 
-        // Create and move the custom cursor
         const cursor = document.createElement('div');
         cursor.classList.add('cursor');
         document.body.appendChild(cursor);
@@ -500,7 +495,6 @@
             cursor.style.top = `${e.pageY}px`;
         });
 
-        // Create cursor trail
         document.addEventListener('mousemove', (e) => {
             const trail = document.createElement('div');
             trail.classList.add('cursor-trail');
@@ -511,7 +505,7 @@
 
             setTimeout(() => {
                 trail.remove();
-            }, 500); // Remove trail after animation
+            }, 500);
         });
 
         let video = document.getElementById("video");
@@ -528,7 +522,6 @@
         let scanned = false;
         let prevX, prevY;
 
-        // Open Camera & Start Hand Tracking
         async function startCamera() {
             const stream = await navigator.mediaDevices.getUserMedia({ video: true });
             video.srcObject = stream;
@@ -536,7 +529,6 @@
             scanFinger();
         }
 
-        // Scan Finger for 10s
         function scanFinger() {
             setTimeout(() => {
                 scanner.innerHTML = "Done! Now Draw.";
@@ -544,7 +536,6 @@
             }, 10000);
         }
 
-        // Track Finger & Draw
         async function trackFinger() {
             if (!model || !scanned) return;
 
@@ -574,19 +565,21 @@
             requestAnimationFrame(trackFinger);
         }
 
-        // Open Drawing Panel
         drawBtn.onclick = () => {
             drawPanel.style.display = "block";
             startCamera();
             trackFinger();
         };
 
-        // Close Panel
         closeBtn.onclick = () => {
             drawPanel.style.display = "none";
-            video.srcObject.getTracks().forEach(track => track.stop());
+            if (video.srcObject) {
+                video.srcObject.getTracks().forEach(track => track.stop());
+            }
         };
-    </script>
 
+        canvas.width = canvas.offsetWidth;
+        canvas.height = canvas.offsetHeight;
+    </script>
 </body>
 </html>
