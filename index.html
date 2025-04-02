@@ -353,7 +353,7 @@
         #canvas {
             width: 40%;
             height: 300px;
-            background: black;
+            background: white; /* Changed to white */
             border: 2px solid cyan;
             box-shadow: 0 0 15px cyan;
         }
@@ -548,10 +548,10 @@
                     ctx.beginPath();
                     ctx.moveTo(prevX, prevY);
                     ctx.lineTo(x, y);
-                    ctx.strokeStyle = "cyan";
+                    ctx.strokeStyle = "black"; /* Changed to black */
                     ctx.lineWidth = 4;
-                    ctx.shadowBlur = 10;
-                    ctx.shadowColor = "cyan";
+                    ctx.shadowBlur = 0; /* Removed shadow for clean black line */
+                    ctx.shadowColor = "black";
                     ctx.stroke();
                 }
 
