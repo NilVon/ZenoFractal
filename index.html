@@ -516,20 +516,19 @@ document.addEventListener('mousemove', (e) => {
     setTimeout(() => {
         trail.remove();
     }, 500); // Remove trail after animation
-});
+})
 
-
-        // Load TensorFlow.js Hand Pose Detection
+        // Load TensorFlow Hand Pose Model
 const script = document.createElement('script');
 script.src = 'https://cdn.jsdelivr.net/npm/@tensorflow-models/handpose';
 document.head.appendChild(script);
 
-let model, ctx, video, canvas, running = false;
+let model, ctx, video, canvas, running = false, handDetected = false;
 
-// Load Hand Pose Model
+// Load Model When Ready
 script.onload = async () => {
     model = await handpose.load();
-    console.log("Hand Tracking Model Loaded ✅");
+    console.log("✅ Hand Tracking Model Loaded");
 };
 
 // Open Drawing UI
@@ -548,12 +547,12 @@ document.getElementById("close-draw").onclick = () => {
 async function startDrawing() {
     if (running) return;
     running = true;
-    
+
     // Start Video Feed
     video = document.getElementById("camera-view");
     canvas = document.getElementById("draw-canvas");
     ctx = canvas.getContext("2d");
-    
+
     navigator.mediaDevices.getUserMedia({ video: true }).then(stream => {
         video.srcObject = stream;
     });
@@ -561,25 +560,30 @@ async function startDrawing() {
     // Resize Canvas
     canvas.width = canvas.clientWidth;
     canvas.height = canvas.clientHeight;
-    
+
+    // Show Message to Hold Hand
+    ctx.fillStyle = "white";
+    ctx.font = "20px Arial";
+    ctx.fillText("Hold Hand Up to Start Drawing", 20, 50);
+
     trackHand();
 }
 
 // Track Finger for Drawing
 async function trackHand() {
-    let timeout = setTimeout(() => console.log("🔍 Scanning for hand..."), 10000);
-
     while (running) {
         if (!model) continue;
-        
+
         const predictions = await model.estimateHands(video);
-        
+
         if (predictions.length > 0) {
-            clearTimeout(timeout);
+            handDetected = true;
             draw(predictions[0].landmarks[8]); // Index Finger Tip
+        } else {
+            handDetected = false;
         }
-        
-        await new Promise(r => setTimeout(r, 50)); // Reduce Lag
+
+        await new Promise(r => setTimeout(r, 100)); // Reduce CPU usage
     }
 }
 
@@ -588,7 +592,7 @@ function draw(finger) {
     ctx.fillStyle = "cyan";
     ctx.shadowBlur = 15;
     ctx.shadowColor = "cyan";
-    
+
     ctx.beginPath();
     ctx.arc(finger[0] / 2, finger[1] / 2, 5, 0, Math.PI * 2);
     ctx.fill();
@@ -601,6 +605,7 @@ function stopDrawing() {
         video.srcObject.getTracks().forEach(track => track.stop());
     }
 }
+
 
 
     </script>
