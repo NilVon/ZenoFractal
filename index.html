@@ -223,41 +223,6 @@
             z-index: 1000;
         }
 
-        /* Custom Cursor */
-        body {
-            cursor: none; /* Hide default cursor */
-        }
-
-        .cursor {
-            position: fixed; /* Changed to fixed */
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background-color: cyan;
-            pointer-events: none;
-            transform: translate(-50%, -50%);
-            transition: transform 0.1s ease;
-            box-shadow: 0 0 10px cyan, 0 0 20px cyan;
-            z-index: 9999; /* ensure it's on top */
-        }
-
-        /* Cursor Trails */
-        .cursor-trail {
-            position: absolute;
-            width: 5px;
-            height: 5px;
-            border-radius: 50%;
-            background-color: violet;
-            opacity: 0.7;
-            pointer-events: none;
-            animation: trail 0.5s forwards;
-        }
-
-        @keyframes trail {
-            0% { opacity: 1; transform: scale(1); }
-            100% { opacity: 0; transform: scale(0); }
-        }
-
         #pokemon-button {
             position: fixed;
             top: 20px;
@@ -463,7 +428,7 @@
             <button class="faq-question" onclick="toggleAnswer('answer2')">What services do you offer?</button>
             <div id="answer2" class="answer">We specialize in web development, video editing, branding, and more! ⚡</div>
 
-            <button class="faq-question" onclick="toggleAnswer('answer3')">Why should I choose ZenoFractal?</button>
+            <button class.faq-question" onclick="toggleAnswer('answer3')">Why should I choose ZenoFractal?</button>
             <div id="answer3" class="answer">Because we fuse creativity, cutting-edge technology, and high-quality execution. 🔥</div>
 
             <button class="faq-question" onclick="toggleAnswer('answer4')">How can I get started?</button>
@@ -557,30 +522,6 @@
         }
 
         setInterval(updateStopwatch, 1000); // Update every second
-
-        // Create and move the custom cursor
-        const cursor = document.createElement('div');
-        cursor.classList.add('cursor');
-        document.body.appendChild(cursor);
-
-        document.addEventListener('mousemove', (e) => {
-            cursor.style.left = `${e.pageX}px`;
-            cursor.style.top = `${e.pageY}px`;
-        });
-
-        // Create cursor trail
-        document.addEventListener('mousemove', (e) => {
-            const trail = document.createElement('div');
-            trail.classList.add('cursor-trail');
-            document.body.appendChild(trail);
-
-            trail.style.left = `${e.pageX}px`;
-            trail.style.top = `${e.pageY}px`;
-
-            setTimeout(() => {
-                trail.remove();
-            }, 500); // Remove trail after animation
-        });
 
         const pokemonButton = document.getElementById('pokemon-button');
         const pokemonNav = document.getElementById('pokemon-nav');
