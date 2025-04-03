@@ -218,7 +218,7 @@
             left: 10px;
             font-size: 20px;
             font-family: 'Courier New', Courier, monospace;
-            color: neon pink;
+            color: pink;
             text-shadow: 0 0 10px pink, 0 0 20px pink;
             z-index: 1000;
         }
@@ -357,6 +357,40 @@
             margin-top: 10px;
             text-align: center;
         }
+        #recipe-search-container {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(80, 0, 120, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px violet;
+            z-index: 1002;
+            width: 80%;
+            max-width: 600px;
+        }
+        #recipe-search-container input, #recipe-search-container button {
+            padding: 10px;
+            margin: 5px;
+            border-radius: 5px;
+            border: none;
+        }
+        #recipe-list {
+            list-style: none;
+            padding: 0;
+        }
+        .recipe-item {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 5px;
+            cursor: pointer;
+        }
+        #recipe-details {
+            margin-top: 10px;
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -373,6 +407,7 @@
         <a href="#">Services</a>
         <a href="#">About</a>
         <a href="https://www.instagram.com/zenofractal/?hl=en" target="_blank">Contact</a>
+        <a href="#" id="recipes-btn">Recipes</a>
     </div>
     <div class="hero">
         <h1>Welcome to ZenoFractal</h1>
@@ -414,6 +449,14 @@
         <button id="analyze-btn">🧠 Analyze</button>
         <div id="results"></div>
         <button id="close-btn">❌ Close</button>
+    </div>
+    <div id="recipe-search-container">
+        <h2>Recipe Search</h2>
+        <input type="text" id="recipe-search-input" placeholder="Search recipes...">
+        <button id="search-recipe-btn">Search</button>
+        <ul id="recipe-list"></ul>
+        <div id="recipe-details"></div>
+        <button id="close-recipes-btn">Close</button>
     </div>
     <script>
         let audio = document.getElementById("bg-music");
@@ -581,6 +624,61 @@
         closeBtn.addEventListener("click", () => {
             cameraUI.style.display = "none";
             stream.getTracks().forEach(track => track.stop());
+        });
+
+        const recipesBtn = document.getElementById('recipes-btn');
+        const recipeSearchContainer = document.getElementById('recipe-search-container');
+        const recipeSearchInput = document.getElementById('recipe-search-input');
+        const searchRecipeBtn = document.getElementById('search-recipe-btn');
+        const recipeList = document.getElementById('recipe-list');
+        const recipeDetailsDiv = document.getElementById('recipe-details');
+        const closeRecipesBtn = document.getElementById('close-recipes-btn');
+
+        recipesBtn.addEventListener('click', () => {
+            recipeSearchContainer.style.display = 'block';
+        });
+
+        searchRecipeBtn.addEventListener('click', () => {
+            const searchTerm = recipeSearchInput.value;
+            fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${searchTerm}`)
+                .then(response => response.json())
+                .then(data => displayRecipes(data.meals))
+                .catch(error => console.error('Error fetching recipes:', error));
+        });
+
+        function displayRecipes(recipes) {
+            recipeList.innerHTML = '';
+            if (recipes) {
+                recipes.forEach(recipe => {
+                    const recipeItem = document.createElement('li');
+                    recipeItem.classList.add('recipe-item');
+                    recipeItem.textContent = recipe.strMeal;
+                    recipeItem.addEventListener('click', () => displayRecipeDetails(recipe.idMeal));
+                    recipeList.appendChild(recipeItem);
+                });
+            } else {
+                recipeList.innerHTML = '<li>No recipes found.</li>';
+            }
+        }
+
+        function displayRecipeDetails(mealId) {
+            fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${mealId}`)
+                .then(response => response.json())
+                .then(data => {
+                    const meal = data.meals[0];
+                    recipeDetailsDiv.innerHTML = `
+                        <h3>${meal.strMeal}</h3>
+                        <img src="${meal.strMealThumb}" alt="${meal.strMeal}" style="max-width: 200px;">
+                        <p>${meal.strInstructions}</p>
+                    `;
+                    recipeDetailsDiv.style.display = 'block';
+                })
+                .catch(error => console.error('Error fetching recipe details:', error));
+        }
+
+        closeRecipesBtn.addEventListener('click', () => {
+            recipeSearchContainer.style.display = 'none';
+            recipeDetailsDiv.style.display = 'none';
         });
     </script>
 </body>
