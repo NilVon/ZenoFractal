@@ -13,6 +13,9 @@
             font-family: 'Arial', sans-serif;
             color: white;
             overflow-x: hidden;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
         }
 
         /* Background - NO FILTERS */
@@ -22,8 +25,6 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: url('https://media1.tenor.com/m/Z5lIBiOdagsAAAAC/purple-aesthetic-rain.gif') no-repeat center center fixed;
-            background-size: cover;
             z-index: -1;
         }
 
@@ -680,6 +681,17 @@
             recipeSearchContainer.style.display = 'none';
             recipeDetailsDiv.style.display = 'none';
         });
+
+        function setRandomBackgroundImage() {
+            fetch('https://api.nekos.cat/api/v1/random/image')
+                .then(response => response.json())
+                .then(data => {
+                    document.body.style.backgroundImage = `url('${data.url}')`;
+                })
+                .catch(error => console.error('Error fetching random image:', error));
+        }
+
+        setRandomBackgroundImage(); // Call the function on page load
     </script>
 </body>
 </html>
