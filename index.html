@@ -304,37 +304,82 @@
             width: 80%;
             height: 100px;
         }
-
+        /* Self Analyser Button */
+        #analyser-btn {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: linear-gradient(45deg, purple, cyan);
+            border: none;
+            padding: 10px 20px;
+            font-size: 18px;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            box-shadow: 0 0 10px cyan;
+        }
+        /* Camera UI */
+        #camera-ui {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 0 20px cyan;
+        }
+        video {
+            width: 300px;
+            height: 250px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px violet;
+        }
+        #capture-btn, #analyze-btn, #close-btn {
+            margin-top: 10px;
+            padding: 10px 15px;
+            background: cyan;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px violet;
+        }
+        canvas {
+            display: none;
+        }
+        #results {
+            color: white;
+            font-size: 16px;
+            margin-top: 10px;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
-
     <div id="stopwatch" class="stopwatch">
         00:00
     </div>
-
     <div id="loading-screen">
         <div class="loader"></div>
         <p>Loading ZenoFractal...</p>
     </div>
-
     <div id="dynamic-bg"></div>
-
     <div class="nav">
         <a href="#">Home</a>
         <a href="#">Services</a>
         <a href="#">About</a>
         <a href="https://www.instagram.com/zenofractal/?hl=en" target="_blank">Contact</a>
     </div>
-
     <div class="hero">
         <h1>Welcome to ZenoFractal</h1>
         <p>Step into the Future of Digital Innovation</p>
         <button class="btn" id="exploreBtn">Explore</button>
     </div>
-
     <div id="zenobot"></div>
-
     <div id="chat-container">
         <div id="chat-header" onclick="toggleChat()">🤖 ZenoBot ✖</div>
         <div id="chat-content">
@@ -348,7 +393,6 @@
             <div id="answer4" class="answer">Just contact us, and we'll craft a custom digital solution tailored to your needs. 💡</div>
         </div>
     </div>
-
     <div id="music-container">
         <div id="toggle-music" onclick="toggleMusic()"></div>
         <input type="range" id="volume-slider" min="0" max="1" step="0.1" value="0.5" onchange="setVolume(this.value)">
@@ -361,6 +405,16 @@
         <button id="submitLink">Enter</button>
     </div>
     <canvas id="visualizer"></canvas>
+
+    <button id="analyser-btn">🔍 Self Analyser</button>
+    <div id="camera-ui">
+        <video id="webcam" autoplay></video>
+        <button id="capture-btn">📸 Capture</button>
+        <canvas id="photo-canvas"></canvas>
+        <button id="analyze-btn">🧠 Analyze</button>
+        <div id="results"></div>
+        <button id="close-btn">❌ Close</button>
+    </div>
     <script>
         let audio = document.getElementById("bg-music");
         function toggleMusic() {
@@ -417,7 +471,6 @@
                 trail.remove();
             }, 500);
         });
-
         const exploreBtn = document.getElementById('exploreBtn');
         const youtubePopup = document.getElementById('youtube-popup');
         const submitLink = document.getElementById('submitLink');
@@ -425,17 +478,15 @@
         const visualizerCtx = visualizer.getContext('2d');
         let videoTitle = "";
         let videoID = "";
-
         exploreBtn.addEventListener('click', () => {
             youtubePopup.style.display = 'block';
         });
-
         submitLink.addEventListener('click', () => {
             const youtubeLink = document.getElementById('youtubeLink').value;
             videoID = youtubeLink.split('v=')[1];
             if(videoID){
                 youtubePopup.style.display = 'none';
-                fetch(`https://www.youtube.com/oembed?url=${youtubeLink}&format=json`)
+                fetch(`https://www.youtube.com/embed/${youtubeLink}&format=json`)
                 .then(response => response.json())
                 .then(data => {
                     videoTitle = data.title;
@@ -447,7 +498,6 @@
                 });
             }
         });
-
         function createVideoBackground(videoID) {
             const iframe = document.createElement('iframe');
             iframe.src = `https://www.youtube.com/embed/${videoID}?autoplay=1&mute=1`;
@@ -466,7 +516,6 @@
             }
             updateBackground();
         }
-
         function createVisualizer(videoID) {
             const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             const analyser = audioCtx.createAnalyser();
@@ -496,6 +545,43 @@
             }
             drawVisualizer();
         }
+
+        const analyserBtn = document.getElementById("analyser-btn");
+        const cameraUI = document.getElementById("camera-ui");
+        const webcam = document.getElementById("webcam");
+        const captureBtn = document.getElementById("capture-btn");
+        const analyzeBtn = document.getElementById("analyze-btn");
+        const closeBtn = document.getElementById("close-btn");
+        const canvasPhoto = document.getElementById("photo-canvas");
+        const results = document.getElementById("results");
+        const ctxPhoto = canvasPhoto.getContext("2d");
+        let stream;
+        analyserBtn.addEventListener("click", async () => {
+            cameraUI.style.display = "flex";
+            stream = await navigator.mediaDevices.getUserMedia({ video: true });
+            webcam.srcObject = stream;
+        });
+        captureBtn.addEventListener("click", () => {
+            canvasPhoto.width = webcam.videoWidth;
+            canvasPhoto.height = webcam.videoHeight;
+            ctxPhoto.drawImage(webcam, 0, 0, canvasPhoto.width, canvasPhoto.height);
+        });
+        analyzeBtn.addEventListener("click", () => {
+            let physiqueScore = Math.floor(Math.random() * 100);
+            let strengthScore = Math.floor(Math.random() * 100);
+            let staminaScore = Math.floor(Math.random() * 100);
+            let advice = physiqueScore < 50 ? "Try working on core strength & posture." : "Looking solid! Keep up the grind!";
+            results.innerHTML = `
+                <p>🏋️ Physique: ${physiqueScore}/100</p>
+                <p>💪 Strength: ${strengthScore}/100</p>
+                <p>⚡ Stamina: ${staminaScore}/100</p>
+                <p>📢 Advice: ${advice}</p>
+            `;
+        });
+        closeBtn.addEventListener("click", () => {
+            cameraUI.style.display = "none";
+            stream.getTracks().forEach(track => track.stop());
+        });
     </script>
 </body>
 </html>
