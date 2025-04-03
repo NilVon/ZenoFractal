@@ -284,6 +284,7 @@
             0% { opacity: 1; transform: scale(1); }
             100% { opacity: 0; transform: scale(0); }
         }
+
         #pokemon-button {
             position: fixed;
             top: 20px;
@@ -411,51 +412,6 @@
             text-align: center;
             display: none;
         }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            #pokemon-content {
-                flex-direction: column;
-            }
-            #pokemon-text-container {
-                padding-left: 0;
-            }
-        }
-
-        #shiny-toggle {
-            margin-left: 5px;
-        }
-
-        #random-pokemon {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            padding: 10px 20px;
-            background: linear-gradient(45deg, purple, violet);
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        #evolution-chain, #pokemon-abilities, #pokemon-moves, #pokemon-flavor-text, #pokemon-type-effectiveness {
-            margin-top: 20px;
-        }
-
-        .move-detail {
-            cursor: pointer;
-            text-decoration: underline;
-        }
-
-        .move-detail-info {
-            display: none;
-            background-color: rgba(50, 0, 80, 0.9);
-            padding: 10px;
-            margin-top: 5px;
-            border-radius: 5px;
-        }
-
     </style>
 </head>
 <body>
@@ -522,21 +478,14 @@
         <div id="pokemon-content">
             <div id="pokemon-image-container">
                 <img id="pokemon-image" src="" alt="">
-                <label>Shiny: <input type="checkbox" id="shiny-toggle"></label>
             </div>
             <div id="pokemon-text-container">
                 <h2 id="pokemon-name"></h2>
                 <div id="pokemon-details"></div>
-                <div id="evolution-chain"></div>
-                <div id="pokemon-abilities"></div>
-                <div id="pokemon-moves"></div>
-                <div id="pokemon-flavor-text"></div>
-                <div id="pokemon-type-effectiveness"></div>
             </div>
         </div>
     </div>
     <div id="pokemon-error"></div>
-    <button id="random-pokemon">Random Pokemon</button>
 
     <script>
         let audio = document.getElementById("bg-music");
@@ -629,14 +578,6 @@
         const pokemonName = document.getElementById('pokemon-name');
         const pokemonDetails = document.getElementById('pokemon-details');
         const pokemonError = document.getElementById('pokemon-error');
-        const shinyToggle = document.getElementById('shiny-toggle');
-        const randomPokemonButton = document.getElementById('random-pokemon');
-        const evolutionChainDiv = document.getElementById('evolution-chain');
-        const pokemonAbilitiesDiv = document.getElementById('pokemon-abilities');
-        const pokemonMovesDiv = document.getElementById('pokemon-moves');
-        const pokemonFlavorTextDiv = document.getElementById('pokemon-flavor-text');
-        const pokemonTypeEffectivenessDiv = document.getElementById('pokemon-type-effectiveness');
-        const exploreButton = document.querySelector('.btn')
 
         pokemonButton.addEventListener('click', () => {
             pokemonNav.style.display = 'block';
@@ -644,30 +585,17 @@
 
         fetchPokemonButton.addEventListener('click', () => {
             const pokedexId = pokedexIdInput.value.toLowerCase();
-            fetchPokemonData(pokedexId);
-        });
-
-        closePokemon.addEventListener('click', () => {
-            pokemonDisplay.style.display = 'none';
-        });
-
-        shinyToggle.addEventListener('change', () => {
-            fetchPokemonData(pokedexIdInput.value);
-        });
-
-        randomPokemonButton.addEventListener('click', () => {
-            const randomId = Math.floor(Math.random() * 898) + 1; // Number of Pokemon in PokeAPI
-            pokedexIdInput.value = randomId;
-            fetchPokemonData(randomId);
-        });
-
-        function fetchPokemonData(id) {
-            fetch(`https://pokeapi.co/api/v2/pokemon/${id}`)
-                .then(response => response.json())
+            fetch(`https://pokeapi.co/api/v2/pokemon/${pokedexId}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Pokemon not found!');
+                    }
+                    return response.json();
+                })
                 .then(data => {
                     displayPokemon(data);
-                    fetchSpeciesData(data.species.url);
-                    fetchTypeEffectiveness(data.types.map(type => type.type.url));
+                    pokemonError.style.display = 'none';
+                    pokemonDisplay.style.display = 'block';
                 })
                 .catch(error => {
                     console.error('Error:', error);
@@ -675,98 +603,26 @@
                     pokemonError.style.display = 'block';
                     pokemonDisplay.style.display = 'none';
                 });
-        }
+        });
 
-        function fetchSpeciesData(speciesUrl) {
-            fetch(speciesUrl)
-                .then(response => response.json())
-                .then(speciesData => {
-                    fetchEvolutionChain(speciesData.evolution_chain.url);
-                    displayFlavorText(speciesData.flavor_text_entries);
-                });
-        }
-
-        function fetchEvolutionChain(evolutionChainUrl) {
-            fetch(evolutionChainUrl)
-                .then(response => response.json())
-                .then(evolutionChainData => {
-                    displayEvolutionChain(evolutionChainData.chain);
-                });
-        }
-
-        function fetchTypeEffectiveness(typeUrls) {
-            Promise.all(typeUrls.map(url => fetch(url).then(response => response.json())))
-                .then(typesData => {
-                    displayTypeEffectiveness(typesData);
-                });
-        }
+        closePokemon.addEventListener('click', () => {
+            pokemonDisplay.style.display = 'none';
+        });
 
         function displayPokemon(pokemon) {
-            const imageUrl = shinyToggle.checked ? pokemon.sprites.front_shiny : pokemon.sprites.front_default;
+            const imageUrl = pokemon.sprites.front_default;
+            const name = pokemon.name;
+            const types = pokemon.types.map(type => type.type.name).join(', ');
+            const moves = pokemon.moves.map(move => move.move.name).join(', ');
+            const stats = pokemon.stats.map(stat => `${stat.stat.name}: ${stat.base_stat}`).join('<br>');
+
             pokemonImage.src = imageUrl;
-            pokemonName.textContent = pokemon.name;
+            pokemonName.textContent = name;
             pokemonDetails.innerHTML = `
-                <p>Types: ${pokemon.types.map(type => type.type.name).join(', ')}</p>
-                <p>Stats:<br>${pokemon.stats.map(stat => `${stat.stat.name}: ${stat.base_stat}`).join('<br>')}</p>
+                <p>Types: ${types}</p>
+                <p>Moves: ${moves}</p>
+                <p>Stats:<br>${stats}</p>
             `;
-            displayAbilities(pokemon.abilities);
-            displayMoves(pokemon.moves);
-        }
-
-        function displayAbilities(abilities) {
-            pokemonAbilitiesDiv.innerHTML = `<h3>Abilities</h3><p>${abilities.map(ability => ability.ability.name).join(', ')}</p>`;
-        }
-
-        function displayMoves(moves) {
-            pokemonMovesDiv.innerHTML = `<h3>Moves</h3><p>${moves.map(move => `<span class="move-detail" data-url="${move.move.url}">${move.move.name}</span>`).join(', ')}</p>`;
-
-            document.querySelectorAll('.move-detail').forEach(moveSpan => {
-                moveSpan.addEventListener('click', () => {
-                    fetch(moveSpan.dataset.url)
-                        .then(response => response.json())
-                        .then(moveData => {
-                            const moveInfo = `<div class="move-detail-info"><p>Power: ${moveData.power || 'N/A'}</p><p>Accuracy: ${moveData.accuracy || 'N/A'}</p><p>Type: ${moveData.type.name}</p></div>`;
-                            moveSpan.insertAdjacentHTML('afterend', moveInfo);
-                            moveSpan.addEventListener('click', () => {
-                                moveSpan.nextElementSibling.remove();
-                            }, { once: true });
-                        });
-                });
-            });
-        }
-
-        function displayEvolutionChain(chain) {
-            let evolutionChainHtml = '<h3>Evolution Chain</h3>';
-            let current = chain;
-            while (current) {
-                evolutionChainHtml += `<p>${current.species.name}</p>`;
-                current = current.evolves_to[0];
-            }
-            evolutionChainDiv.innerHTML = evolutionChainHtml;
-        }
-
-        function displayFlavorText(flavorTexts) {
-            const englishFlavorText = flavorTexts.find(text => text.language.name === 'en');
-            pokemonFlavorTextDiv.innerHTML = `<h3>Flavor Text</h3><p>${englishFlavorText ? englishFlavorText.flavor_text : 'N/A'}</p>`;
-        }
-
-        function displayTypeEffectiveness(typesData) {
-            let effectivenessHtml = '<h3>Type Effectiveness</h3>`;
-            const damageRelations = {};
-            typesData.forEach(typeData => {
-                Object.entries(typeData.damage_relations).forEach(([relation, types]) => {
-                    types.forEach(type => {
-                        damageRelations[type.name] = damageRelations[type.name] || {};
-                        damageRelations[type.name][typeData.name] = relation;
-                    });
-                });
-            });
-            effectivenessHtml += '<p>';
-            Object.entries(damageRelations).forEach(([type, relations]) => {
-                effectivenessHtml += `${type}: ${Object.entries(relations).map(([relationType, relation]) => `${relationType} (${relation})`).join(', ')}<br>`;
-            });
-            effectivenessHtml += '</p>';
-            pokemonTypeEffectivenessDiv.innerHTML = effectivenessHtml;
         }
     </script>
 
