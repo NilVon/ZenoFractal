@@ -229,7 +229,7 @@
         }
 
         .cursor {
-            position: absolute;
+            position: fixed; /* Changed to fixed */
             width: 20px;
             height: 20px;
             border-radius: 50%;
@@ -238,6 +238,7 @@
             transform: translate(-50%, -50%);
             transition: transform 0.1s ease;
             box-shadow: 0 0 10px cyan, 0 0 20px cyan;
+            z-index: 9999; /* ensure it's on top */
         }
 
         /* Cursor Trails */
