@@ -347,26 +347,63 @@
             left: 50%;
             transform: translateX(-50%);
             width: 80%;
-            max-width: 600px;
+            max-width: 800px;
             background: rgba(50, 0, 80, 0.9);
             padding: 20px;
             border-radius: 10px;
             color: white;
             display: none;
+            max-height: 80vh; /* Set a maximum height */
+            overflow-y: auto; /* Enable vertical scrolling */
         }
 
-        #pokemon-display img {
+        #close-pokemon {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            font-size: 20px;
+            color: red;
+        }
+
+        #pokemon-content {
+            display: flex;
+            border-left: 1px solid;
+            animation: neonBorder 5s linear infinite;
+        }
+
+        #pokemon-image-container {
+            flex: 1;
+            text-align: center;
+        }
+
+        #pokemon-image {
             max-width: 200px;
             display: block;
             margin: 0 auto 20px;
         }
 
-        #pokemon-display h2 {
-            text-align: center;
-            color: cyan;
+        #pokemon-text-container {
+            flex: 2;
+            padding-left: 20px;
         }
 
-        #pokemon-display p {
+        #pokemon-name {
+            text-align: center;
+            color: cyan;
+            animation: neonText 5s linear infinite;
+        }
+
+        @keyframes neonText {
+            0% { color: rgb(255, 0, 0); text-shadow: 0 0 10px rgb(255, 0, 0); }
+            20% { color: rgb(255, 255, 0); text-shadow: 0 0 10px rgb(255, 255, 0); }
+            40% { color: rgb(0, 255, 0); text-shadow: 0 0 10px rgb(0, 255, 0); }
+            60% { color: rgb(0, 255, 255); text-shadow: 0 0 10px rgb(0, 255, 255); }
+            80% { color: rgb(0, 0, 255); text-shadow: 0 0 10px rgb(0, 0, 255); }
+            100% { color: rgb(255, 0, 255); text-shadow: 0 0 10px rgb(255, 0, 255); }
+        }
+
+        #pokemon-details p {
             margin-bottom: 10px;
         }
 
@@ -436,7 +473,18 @@
         <input type="text" id="pokedex-id" placeholder="Pokedex ID">
         <button id="fetch-pokemon">Fetch Pokemon</button>
     </div>
-    <div id="pokemon-display"></div>
+    <div id="pokemon-display">
+        <span id="close-pokemon">❌</span>
+        <div id="pokemon-content">
+            <div id="pokemon-image-container">
+                <img id="pokemon-image" src="" alt="">
+            </div>
+            <div id="pokemon-text-container">
+                <h2 id="pokemon-name"></h2>
+                <div id="pokemon-details"></div>
+            </div>
+        </div>
+    </div>
     <div id="pokemon-error"></div>
 
     <script>
@@ -525,6 +573,10 @@
         const pokedexIdInput = document.getElementById('pokedex-id');
         const fetchPokemonButton = document.getElementById('fetch-pokemon');
         const pokemonDisplay = document.getElementById('pokemon-display');
+        const closePokemon = document.getElementById('close-pokemon');
+        const pokemonImage = document.getElementById('pokemon-image');
+        const pokemonName = document.getElementById('pokemon-name');
+        const pokemonDetails = document.getElementById('pokemon-details');
         const pokemonError = document.getElementById('pokemon-error');
 
         pokemonButton.addEventListener('click', () => {
@@ -553,6 +605,10 @@
                 });
         });
 
+        closePokemon.addEventListener('click', () => {
+            pokemonDisplay.style.display = 'none';
+        });
+
         function displayPokemon(pokemon) {
             const imageUrl = pokemon.sprites.front_default;
             const name = pokemon.name;
@@ -560,9 +616,9 @@
             const moves = pokemon.moves.map(move => move.move.name).join(', ');
             const stats = pokemon.stats.map(stat => `${stat.stat.name}: ${stat.base_stat}`).join('<br>');
 
-            pokemonDisplay.innerHTML = `
-                <h2>${name}</h2>
-                <img src="${imageUrl}" alt="${name}">
+            pokemonImage.src = imageUrl;
+            pokemonName.textContent = name;
+            pokemonDetails.innerHTML = `
                 <p>Types: ${types}</p>
                 <p>Moves: ${moves}</p>
                 <p>Stats:<br>${stats}</p>
